@@ -430,6 +430,7 @@ footer {
     <li><a href="#how">How It Works</a></li>
     <li><a href="#pricing">Pricing</a></li>
         <li><a href="#admin">License Admin</a></li>
+    <li><a href="smithcut_education.html" style="color:#60a5fa;">For Educators</a></li>
   </ul>
   <a href="#pricing" class="nav-cta">Get Started</a>
 </nav>
@@ -571,10 +572,10 @@ footer {
     <div class="pricing-card" data-delay="0">
       <div class="pricing-name">Core Plan</div>
       <div class="pricing-price">$20<span>/month</span></div>
-      <div class="pricing-desc">Everything you need for fast, professional beat-sync editing. Unlimited simple generations and 10 AI generations per month.</div>
+      <div class="pricing-desc">Everything you need for fast, professional beat-sync editing. Unlimited simple generations and 5 AI generations per month.</div>
       <ul class="pricing-features">
         <li class="highlight">Unlimited Simple Generations</li>
-        <li class="highlight">10 AI Generations / month</li>
+        <li class="highlight">5 AI Generations / month</li>
         <li>Beat detection (librosa)</li>
         <li>Clip metadata sorting</li>
         <li>Loop, shuffle, chop controls</li>
@@ -590,7 +591,7 @@ footer {
       <div class="pricing-badge">Most Popular</div>
       <div class="pricing-name">AI Add-On</div>
       <div class="pricing-price">$3<span>/generation</span></div>
-      <div class="pricing-desc">Need more than 10 AI generations in a month? Top up instantly. Each AI generation runs the full story analysis pipeline.</div>
+      <div class="pricing-desc">Need more than 5 AI generations in a month? Top up instantly. Each AI generation runs the full story analysis pipeline.</div>
       <div class="pricing-ai-note">
         <strong>What an AI generation includes:</strong><br><br>
         Imports your Premiere Pro project → extracts frames from every clip → describes each clip visually using moondream → generates a 3-paragraph story narrative → suggests optimal clip order, chop positions, and beat sensitivity → fires the full pipeline with one click.
@@ -609,6 +610,43 @@ footer {
   </div>
   <div style="margin-top:24px; font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--lgray);">
     CANCEL ANYTIME &nbsp;·&nbsp; MONTHLY BILLING &nbsp;·&nbsp; LICENSE KEY DELIVERED BY EMAIL
+  </div>
+</section>
+
+
+<!-- EDUCATION TEASER -->
+<section id="education" style="padding:120px 60px; position:relative; z-index:1;">
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; max-width:1100px;">
+    <div>
+      <p class="section-label" style="color:#60a5fa;">Also available</p>
+      <h2 class="section-title">SMITH CUT:<br><span style="color:#1E6EFF;">EDUCATION</span><br>EDITION.</h2>
+      <p style="font-family:'DM Sans'; font-size:17px; color:var(--xlgray); line-height:1.75; margin-top:24px; margin-bottom:40px;">
+        A classroom version built for media teachers. Not just a simpler Smith Cut — a pedagogically restructured one. Decision checkpoints, lesson reports, three learning modes, and a 12-week curriculum built in.
+      </p>
+      <a href="smithcut_education.html" class="btn-primary" style="background:#1E6EFF; display:inline-block;">Learn About Education Edition →</a>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px;">
+      <div style="background:rgba(10,10,30,0.85); border:1px solid #1a1a2e; border-top:2px solid #1E6EFF; padding:28px 24px;">
+        <div style="font-family:'Bebas Neue'; font-size:40px; color:#60a5fa; line-height:1;">3</div>
+        <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--xlgray); text-transform:uppercase; margin-top:4px;">Learning Modes</div>
+        <div style="font-family:'DM Sans'; font-size:12px; color:var(--lgray); margin-top:8px; line-height:1.5;">Guided · Assisted · Pro</div>
+      </div>
+      <div style="background:rgba(10,10,30,0.85); border:1px solid #1a1a2e; padding:28px 24px;">
+        <div style="font-family:'Bebas Neue'; font-size:40px; color:#60a5fa; line-height:1;">12</div>
+        <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--xlgray); text-transform:uppercase; margin-top:4px;">Week Curriculum</div>
+        <div style="font-family:'DM Sans'; font-size:12px; color:var(--lgray); margin-top:8px; line-height:1.5;">Ready to teach from day one</div>
+      </div>
+      <div style="background:rgba(10,10,30,0.85); border:1px solid #1a1a2e; padding:28px 24px;">
+        <div style="font-family:'Bebas Neue'; font-size:40px; color:#60a5fa; line-height:1;">30</div>
+        <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--xlgray); text-transform:uppercase; margin-top:4px;">Student Seats</div>
+        <div style="font-family:'DM Sans'; font-size:12px; color:var(--lgray); margin-top:8px; line-height:1.5;">Classroom plan from $49/mo</div>
+      </div>
+      <div style="background:rgba(10,10,30,0.85); border:1px solid #1a1a2e; padding:28px 24px;">
+        <div style="font-family:'Bebas Neue'; font-size:40px; color:#60a5fa; line-height:1;">PDF</div>
+        <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--xlgray); text-transform:uppercase; margin-top:4px;">Lesson Reports</div>
+        <div style="font-family:'DM Sans'; font-size:12px; color:var(--lgray); margin-top:8px; line-height:1.5;">Per student, per session</div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -642,7 +680,9 @@ footer {
           <label class="admin-label">Plan Type</label>
           <select class="admin-select" id="gen-plan">
             <option value="core">Core Plan — $20/mo</option>
-            <option value="ai">AI Add-On Pack (10 credits)</option>
+            <option value="ai">AI Add-On Pack (5 credits)</option>
+            <option value="edu-classroom">Education Classroom — $49/mo</option>
+            <option value="edu-dept">Education Department — $149/mo</option>
             <option value="lifetime">Lifetime — no expiry</option>
           </select>
         </div>
@@ -738,6 +778,7 @@ footer {
     <div class="footer-col-title">Support</div>
     <a href="#how">How It Works</a>
     <a href="#pricing">Pricing</a>
+    <a href="smithcut_education.html" style="color:#60a5fa;">Education Edition</a>
     <a href="mailto:support@smithcut.app">support@smithcut.app</a>
   </div>
   <div class="footer-col">
