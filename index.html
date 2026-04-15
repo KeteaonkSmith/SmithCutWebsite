@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smith Cut — Beat-Sync Video Editing Automation</title>
+<title>Smith Cut</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+
 :root {
   --black: #000;
   --white: #fff;
@@ -416,21 +417,229 @@ footer {
   .steps-grid { grid-template-columns: 1fr; }
   footer { grid-template-columns: 1fr; }
 }
+
+
+/* ── EDU SCOPED ── */
+
+:root {
+#page-edu   --black: #000;
+#page-edu   --white: #fff;
+#page-edu   --blue: #1E6EFF;
+#page-edu   --blue-dim: #1e3a8a;
+#page-edu   --blue-bright: #60a5fa;
+#page-edu   --gray: #0a0a0f;
+#page-edu   --mgray: #1a1a2e;
+#page-edu   --lgray: #444;
+#page-edu   --xlgray: #777;
+#page-edu }
+#page-edu *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+#page-edu html { scroll-behavior: smooth; }
+#page-edu body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; overflow-x: hidden; cursor: none; }
+
+#page-edu #cursor { width:12px; height:12px; background:var(--blue); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width 0.2s, height 0.2s; mix-blend-mode:difference; }
+#page-edu #cursor.hover { width:40px; height:40px; background:var(--white); }
+
+/* ── CANVAS ── */
+#edu-canvas { position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:-1; opacity:0.55; }
+
+/* ── NAV ── */
+#page-edu nav { position:fixed; top:0; left:0; right:0; z-index:1000; display:flex; justify-content:space-between; align-items:center; padding:20px 60px; transition:background 0.3s, border-color 0.3s; border-bottom:1px solid transparent; }
+#page-edu nav.scrolled { background:rgba(0,0,0,0.94); border-color:var(--mgray); backdrop-filter:blur(12px); }
+#page-edu .nav-logo { font-family:'Bebas Neue'; font-size:24px; letter-spacing:0.12em; color:var(--white); text-decoration:none; }
+#page-edu .nav-logo .cut { color:var(--blue); }
+#page-edu .nav-logo .edu { font-size:14px; vertical-align:middle; color:var(--blue-bright); letter-spacing:0.2em; margin-left:6px; }
+#page-edu .nav-back { font-family:'Space Mono'; font-size:9px; letter-spacing:0.2em; color:var(--xlgray); text-decoration:none; text-transform:uppercase; transition:color 0.2s; }
+#page-edu .nav-back:hover { color:var(--white); }
+#page-edu .nav-cta { font-family:'Space Mono'; font-size:10px; letter-spacing:0.15em; background:var(--blue); color:var(--white); border:none; padding:10px 24px; cursor:none; text-decoration:none; text-transform:uppercase; transition:background 0.2s; }
+#page-edu .nav-cta:hover { background:#1d4ed8; }
+
+/* ── HERO ── */
+#page-edu #hero { min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:120px 60px 80px; position:relative; z-index:1; }
+#page-edu .hero-eyebrow { font-family:'Space Mono'; font-size:10px; letter-spacing:0.3em; color:var(--blue-bright); text-transform:uppercase; margin-bottom:24px; opacity:0; animation:fadeUp 0.8s 0.2s forwards; }
+#page-edu .hero-title { font-family:'Bebas Neue'; font-size:clamp(64px,10vw,150px); line-height:0.9; letter-spacing:0.02em; opacity:0; animation:fadeUp 0.8s 0.4s forwards; }
+#page-edu .hero-title .accent { color:var(--blue); }
+#page-edu .hero-sub { font-family:'DM Sans'; font-size:18px; font-weight:300; color:var(--xlgray); max-width:560px; margin-top:32px; line-height:1.75; opacity:0; animation:fadeUp 0.8s 0.6s forwards; }
+#page-edu .hero-actions { display:flex; gap:16px; margin-top:48px; flex-wrap:wrap; opacity:0; animation:fadeUp 0.8s 0.8s forwards; }
+#page-edu .btn-primary { font-family:'Space Mono'; font-size:11px; letter-spacing:0.15em; background:var(--blue); color:var(--white); border:none; padding:16px 40px; cursor:none; text-decoration:none; text-transform:uppercase; transition:background 0.2s, transform 0.15s; display:inline-block; }
+#page-edu .btn-primary:hover { background:#1d4ed8; transform:translateY(-2px); }
+#page-edu .btn-secondary { font-family:'Space Mono'; font-size:11px; letter-spacing:0.15em; background:none; color:var(--white); border:1px solid var(--lgray); padding:16px 40px; cursor:none; text-decoration:none; text-transform:uppercase; transition:border-color 0.2s, transform 0.15s; display:inline-block; }
+#page-edu .btn-secondary:hover { border-color:var(--white); transform:translateY(-2px); }
+
+/* ── PHILOSOPHY ── */
+#page-edu #philosophy { padding:120px 60px; position:relative; z-index:1; }
+#page-edu .two-col { display:grid; grid-template-columns:1fr 1fr; gap:100px; align-items:start; margin-top:80px; }
+#page-edu .phil-block { }
+#page-edu .phil-num { font-family:'Bebas Neue'; font-size:120px; color:var(--mgray); line-height:1; margin-bottom:8px; }
+#page-edu .phil-title { font-family:'Space Mono'; font-size:12px; letter-spacing:0.2em; color:var(--blue-bright); text-transform:uppercase; margin-bottom:16px; }
+#page-edu .phil-body { font-family:'DM Sans'; font-size:16px; color:var(--xlgray); line-height:1.8; }
+#page-edu .phil-body strong { color:var(--white); font-weight:500; }
+
+/* ── MODES ── */
+#page-edu #modes { padding:120px 60px; position:relative; z-index:1; }
+#page-edu .modes-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px; margin-top:80px; }
+#page-edu .mode-card { background:rgba(10,10,15,0.9); border:1px solid var(--mgray); padding:40px 32px; border-top:2px solid var(--mgray); transition:border-color 0.2s, transform 0.2s; opacity:0; transform:translateY(24px); }
+#page-edu .mode-card.visible { opacity:1; transform:translateY(0); }
+#page-edu .mode-card:hover { border-color:var(--blue); }
+#page-edu .mode-card.featured { border-top-color:var(--blue); }
+#page-edu .mode-tag { font-family:'Space Mono'; font-size:8px; letter-spacing:0.25em; color:var(--blue-bright); text-transform:uppercase; margin-bottom:20px; }
+#page-edu .mode-title { font-family:'Bebas Neue'; font-size:36px; margin-bottom:12px; }
+#page-edu .mode-desc { font-family:'DM Sans'; font-size:14px; color:var(--xlgray); line-height:1.7; margin-bottom:24px; }
+#page-edu .mode-features { list-style:none; }
+#page-edu .mode-features li { font-family:'Space Mono'; font-size:9px; letter-spacing:0.1em; color:var(--xlgray); padding:8px 0; border-bottom:1px solid var(--mgray); display:flex; gap:10px; align-items:flex-start; }
+#page-edu .mode-features li::before { content:'→'; color:var(--blue); flex-shrink:0; }
+#page-edu .mode-features li.dim { color:var(--lgray); }
+#page-edu .mode-features li.dim::before { color:var(--lgray); }
+
+/* ── COMPARE TABLE ── */
+#page-edu #compare { padding:120px 60px; position:relative; z-index:1; }
+#page-edu .compare-table { width:100%; max-width:900px; border-collapse:collapse; margin-top:80px; }
+#page-edu .compare-table th { font-family:'Space Mono'; font-size:9px; letter-spacing:0.2em; color:var(--xlgray); text-transform:uppercase; padding:16px 24px; text-align:left; border-bottom:1px solid var(--mgray); }
+#page-edu .compare-table th.col-pro { color:white; border-bottom-color:red; }
+#page-edu .compare-table th.col-edu { color:var(--blue-bright); border-bottom-color:var(--blue); }
+#page-edu .compare-table td { font-family:'DM Sans'; font-size:14px; color:var(--xlgray); padding:14px 24px; border-bottom:1px solid #0d0d0d; }
+#page-edu .compare-table td.feature-name { font-family:'Space Mono'; font-size:10px; letter-spacing:0.1em; color:var(--white); }
+#page-edu .compare-table tr:hover td { background:rgba(30,110,255,0.04); }
+#page-edu .check { color:#4ade80; font-size:16px; }
+#page-edu .cross { color:var(--lgray); font-size:16px; }
+#page-edu .partial { color:var(--blue-bright); font-size:12px; font-family:'Space Mono'; letter-spacing:0.1em; }
+
+/* ── CURRICULUM ── */
+#page-edu #curriculum { padding:120px 60px; position:relative; z-index:1; }
+#page-edu .curriculum-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:80px; max-width:900px; }
+#page-edu .lesson-card { background:rgba(10,10,15,0.9); border:1px solid var(--mgray); padding:32px; transition:border-color 0.2s; opacity:0; transform:translateY(20px); }
+#page-edu .lesson-card.visible { opacity:1; transform:translateY(0); }
+#page-edu .lesson-card:hover { border-color:var(--blue); }
+#page-edu .lesson-week { font-family:'Space Mono'; font-size:8px; letter-spacing:0.3em; color:var(--blue-bright); text-transform:uppercase; margin-bottom:12px; }
+#page-edu .lesson-title { font-family:'Bebas Neue'; font-size:28px; margin-bottom:10px; color:var(--white); }
+#page-edu .lesson-objective { font-family:'DM Sans'; font-size:13px; color:var(--xlgray); line-height:1.7; margin-bottom:16px; }
+#page-edu .lesson-outcome { font-family:'Space Mono'; font-size:9px; letter-spacing:0.1em; color:var(--blue-bright); border-left:2px solid var(--blue); padding-left:10px; line-height:1.6; }
+
+/* ── PRICING ── */
+#page-edu #pricing { padding:120px 60px; position:relative; z-index:1; }
+#page-edu .edu-pricing-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; max-width:900px; margin-top:80px; }
+#page-edu .edu-price-card { background:rgba(10,10,15,0.9); border:1px solid var(--mgray); padding:48px 40px; position:relative; opacity:0; transform:translateY(20px); transition:opacity 0.6s, transform 0.6s; }
+#page-edu .edu-price-card.visible { opacity:1; transform:translateY(0); }
+#page-edu .edu-price-card.featured { border-color:var(--blue); }
+#page-edu .edu-price-badge { position:absolute; top:-1px; right:32px; font-family:'Space Mono'; font-size:9px; letter-spacing:0.2em; background:var(--blue); color:var(--white); padding:6px 14px; text-transform:uppercase; }
+#page-edu .edu-price-name { font-family:'Space Mono'; font-size:10px; letter-spacing:0.3em; color:var(--blue-bright); text-transform:uppercase; margin-bottom:24px; }
+#page-edu .edu-price-price { font-family:'Bebas Neue'; font-size:72px; line-height:1; color:var(--white); }
+#page-edu .edu-price-price span { font-family:'DM Sans'; font-size:16px; color:var(--xlgray); font-weight:300; }
+#page-edu .edu-price-desc { font-family:'DM Sans'; font-size:14px; color:var(--xlgray); line-height:1.6; margin:16px 0 32px; }
+#page-edu .edu-price-features { list-style:none; margin-bottom:40px; }
+#page-edu .edu-price-features li { font-family:'Space Mono'; font-size:10px; letter-spacing:0.1em; color:var(--xlgray); padding:10px 0; border-bottom:1px solid var(--mgray); display:flex; gap:12px; align-items:flex-start; }
+#page-edu .edu-price-features li::before { content:'—'; color:var(--blue); flex-shrink:0; }
+#page-edu .edu-price-features li.highlight { color:var(--white); }
+#page-edu .edu-note { background:rgba(30,110,255,0.08); border:1px solid rgba(30,110,255,0.2); padding:16px; margin-bottom:32px; font-family:'Space Mono'; font-size:9px; letter-spacing:0.1em; color:var(--xlgray); line-height:1.6; }
+
+/* ── CTA ── */
+#page-edu #cta { padding:120px 60px; text-align:center; position:relative; z-index:1; }
+#page-edu .cta-inner { max-width:700px; margin:0 auto; }
+#page-edu .cta-title { font-family:'Bebas Neue'; font-size:clamp(56px,7vw,100px); line-height:0.92; }
+#page-edu .cta-title .accent { color:var(--blue); }
+#page-edu .cta-sub { font-family:'DM Sans'; font-size:17px; color:var(--xlgray); margin:24px auto 48px; max-width:480px; line-height:1.7; }
+
+/* ── FOOTER ── */
+#page-edu footer { background:rgba(0,0,0,0.9); border-top:1px solid var(--mgray); padding:60px; display:flex; justify-content:space-between; align-items:center; position:relative; z-index:1; }
+#page-edu .footer-left .logo { font-family:'Bebas Neue'; font-size:24px; letter-spacing:0.1em; }
+#page-edu .footer-left .logo .cut { color:var(--blue); }
+#page-edu .footer-left p { font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--xlgray); margin-top:8px; text-transform:uppercase; }
+#page-edu .footer-right { display:flex; gap:32px; }
+#page-edu .footer-right a { font-family:'DM Sans'; font-size:14px; color:var(--xlgray); text-decoration:none; transition:color 0.2s; }
+#page-edu .footer-right a:hover { color:var(--white); }
+#page-edu .footer-bottom { background:rgba(0,0,0,0.9); border-top:1px solid #0d0d0d; padding:16px 60px; display:flex; justify-content:space-between; font-family:'Space Mono'; font-size:9px; color:var(--lgray); text-transform:uppercase; letter-spacing:0.1em; position:relative; z-index:1; }
+
+/* ── MODAL ── */
+#page-edu .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.94); z-index:2000; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
+#page-edu .modal-overlay.open { display:flex; }
+#page-edu .modal { background:#0a0a0f; border:1px solid var(--mgray); max-width:520px; width:90%; padding:48px; position:relative; }
+#page-edu .modal-close { position:absolute; top:20px; right:20px; background:none; border:none; color:var(--xlgray); font-size:20px; cursor:none; font-family:monospace; transition:color 0.2s; }
+#page-edu .modal-close:hover { color:var(--white); }
+#page-edu .modal-title { font-family:'Bebas Neue'; font-size:40px; margin-bottom:8px; }
+#page-edu .modal-sub { font-family:'Space Mono'; font-size:9px; letter-spacing:0.2em; color:var(--blue-bright); text-transform:uppercase; margin-bottom:32px; }
+#page-edu .field-label { font-family:'Space Mono'; font-size:9px; letter-spacing:0.2em; color:var(--xlgray); text-transform:uppercase; margin-bottom:8px; display:block; }
+#page-edu .field-input { width:100%; background:#111; border:1px solid var(--mgray); color:var(--white); font-family:'Space Mono'; font-size:12px; padding:12px 16px; outline:none; margin-bottom:16px; transition:border-color 0.2s; }
+#page-edu .field-input:focus { border-color:var(--blue); }
+#page-edu .btn-submit { font-family:'Space Mono'; font-size:10px; letter-spacing:0.15em; background:var(--blue); color:var(--white); border:none; padding:14px; width:100%; cursor:none; text-transform:uppercase; transition:background 0.2s; margin-top:8px; }
+#page-edu .btn-submit:hover { background:#1d4ed8; }
+
+/* ── SECTION LABEL ── */
+#page-edu .section-label { font-family:'Space Mono'; font-size:9px; letter-spacing:0.3em; color:var(--blue-bright); text-transform:uppercase; margin-bottom:16px; }
+#page-edu .section-title { font-family:'Bebas Neue'; font-size:clamp(48px,6vw,96px); line-height:0.95; letter-spacing:0.02em; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+
+@media (max-width:900px) {
+#page-edu   nav { padding:16px 24px; }
+#page-edu   #hero, #philosophy, #modes, #compare, #curriculum, #pricing, #cta { padding:80px 24px; }
+#page-edu   .two-col, .modes-grid, .curriculum-grid, .edu-pricing-grid { grid-template-columns:1fr; }
+#page-edu   footer { flex-direction:column; gap:32px; padding:40px 24px; text-align:center; }
+#page-edu   .footer-right { flex-wrap:wrap; justify-content:center; }
+#page-edu   .footer-bottom { padding:16px 24px; flex-direction:column; gap:8px; text-align:center; }
+#page-edu }
+
+/* ── ROUTER ── */
+.page { width:100%; min-height:100vh; }
+.page.hidden { display:none; }
+
+/* ── HYPERSPACE ── */
+#hs-canvas {
+  position:fixed; inset:0;
+  z-index:5000; pointer-events:none;
+  opacity:0; transition:opacity .1s;
+}
+#hs-canvas.active { opacity:1; }
+#hs-flash {
+  position:fixed; inset:0;
+  z-index:5001; background:#fff;
+  opacity:0; pointer-events:none;
+}
+#hs-flash.on { opacity:1; transition:opacity 0s; }
+#hs-flash.off { opacity:0; transition:opacity .15s; }
+
+/* ── EDU PAGE SECTION TRANSPARENCY ── */
+#page-edu { position: relative; }
+#page-edu section,
+#page-edu #philosophy,
+#page-edu #modes,
+#page-edu #compare,
+#page-edu #curriculum,
+#page-edu #pricing,
+#page-edu #cta,
+#page-edu footer {
+  background: transparent;
+  position: relative;
+  z-index: 1;
+}
+/* Cards keep dark backgrounds so text is readable */
+#page-edu .mode-card { background: rgba(10,10,20,0.88); }
+#page-edu .lesson-card { background: rgba(10,10,20,0.88); }
+#page-edu .edu-price-card { background: rgba(10,10,20,0.88); }
+#page-edu .compare-table td { background: transparent; }
+#page-edu .compare-table tr:hover td { background: rgba(30,110,255,0.06); }
+#page-edu footer { background: rgba(0,0,8,0.88) !important; }
+
 </style>
 </head>
 <body>
 
+<canvas id="hs-canvas"></canvas>
+<div id="hs-flash"></div>
+<div id="cursor"></div>
+
+<div id="page-pro" class="page">
+
+
 <div id="cursor"></div>
 
 <!-- NAV -->
-<nav id="nav">
+<nav id="pro-nav">
   <a href="#" class="nav-logo">SMITH<span>CUT</span></a>
   <ul class="nav-links">
     <li><a href="#usecases">Use Cases</a></li>
     <li><a href="#how">How It Works</a></li>
     <li><a href="#pricing">Pricing</a></li>
         <li><a href="#admin">License Admin</a></li>
-    <li><a href="smithcut_education.html" style="color:#60a5fa;">For Educators</a></li>
+    <li><a href="#" onclick="goTo('edu');return false;" style="color:#60a5fa;">For Educators</a></li>
   </ul>
   <a href="#pricing" class="nav-cta">Get Started</a>
 </nav>
@@ -623,7 +832,7 @@ footer {
       <p style="font-family:'DM Sans'; font-size:17px; color:var(--xlgray); line-height:1.75; margin-top:24px; margin-bottom:40px;">
         A classroom version built for media teachers. Not just a simpler Smith Cut — a pedagogically restructured one. Decision checkpoints, lesson reports, three learning modes, and a 12-week curriculum built in.
       </p>
-      <a href="smithcut_education.html" class="btn-primary" style="background:#1E6EFF; display:inline-block;">Learn About Education Edition →</a>
+      <a href="#" onclick="goTo('edu');return false;" class="btn-primary" style="background:#1E6EFF; display:inline-block;">Learn About Education Edition →</a>
     </div>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px;">
       <div style="background:rgba(10,10,30,0.85); border:1px solid #1a1a2e; border-top:2px solid #1E6EFF; padding:28px 24px;">
@@ -778,7 +987,7 @@ footer {
     <div class="footer-col-title">Support</div>
     <a href="#how">How It Works</a>
     <a href="#pricing">Pricing</a>
-    <a href="smithcut_education.html" style="color:#60a5fa;">Education Edition</a>
+    <a href="#" onclick="goTo('edu');return false;" style="color:#60a5fa;">Education Edition</a>
     <a href="mailto:support@smithcut.app">support@smithcut.app</a>
   </div>
   <div class="footer-col">
@@ -869,13 +1078,431 @@ footer {
   </div>
 </div>
 
+
+</div>
+
+<div id="page-edu" class="page hidden">
+
+
+
+<canvas id="edu-canvas"></canvas>
+
+<!-- NAV -->
+<nav id="edu-nav">
+  <a href="#" class="nav-logo">SMITH<span class="cut">CUT</span><span class="edu">EDU</span></a>
+  <a href="#" onclick="goTo('pro');return false;" class="nav-back">← Back to Smith Cut Pro</a>
+  <a href="#pricing" class="nav-cta">Request Access</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-eyebrow">Smith Cut: Education Edition — Built for classrooms</p>
+  <h1 class="hero-title">
+    TEACH <span class="accent">MEDIA.</span><br>
+    NOT JUST<br>
+    TOOLS.
+  </h1>
+  <p class="hero-sub">A classroom version of Smith Cut that shows students how beat-sync editing works — without letting the software make the creative decisions for them.</p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn-primary">Request Classroom Access</a>
+    <a href="#modes" class="btn-secondary">See Guided Mode</a>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section id="philosophy">
+  <p class="section-label">Design philosophy</p>
+  <h2 class="section-title">THE TOOL TEACHES.<br>THE STUDENT DECIDES.</h2>
+  <div class="two-col">
+    <div>
+      <div class="phil-block" style="margin-bottom:60px;">
+        <div class="phil-num">01</div>
+        <div class="phil-title">Show the Analysis</div>
+        <div class="phil-body">Before a single cut is made, Education Edition surfaces everything: the waveform, the detected BPM, every beat timestamp, the energy level of each beat. Students see <strong>what the algorithm found and why</strong> — not just the result. This is the part professional Smith Cut skips. Here, it's the entire first lesson.</div>
+      </div>
+      <div class="phil-block">
+        <div class="phil-num">02</div>
+        <div class="phil-title">Decision Checkpoints</div>
+        <div class="phil-body">In Guided Mode, the software pauses before each clip placement and asks the student a question: <strong>"This beat is loud and percussive. Which of your clips would feel most dynamic here?"</strong> The student makes the choice. The tool executes it. Decisions are logged for the teacher to review.</div>
+      </div>
+    </div>
+    <div>
+      <div class="phil-block" style="margin-bottom:60px;">
+        <div class="phil-num">03</div>
+        <div class="phil-title">No AI Story Mode</div>
+        <div class="phil-body">The AI Story Assistant — which analyzes footage and suggests a narrative — is intentionally absent from Education Edition. <strong>Narrative thinking is the skill being taught.</strong> Students must write their own story brief before they can run the pipeline. The brief becomes part of their lesson report.</div>
+      </div>
+      <div class="phil-block">
+        <div class="phil-num">04</div>
+        <div class="phil-title">Lesson Reports</div>
+        <div class="phil-body">Every session generates a structured report: decisions made at each checkpoint, time spent, reasoning provided, and the final edit settings used. <strong>Teachers receive this as a PDF.</strong> It replaces the old "show me your timeline" review with something quantifiable and discussable.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODES -->
+<section id="modes">
+  <p class="section-label">Learning modes</p>
+  <h2 class="section-title">THREE MODES.<br>ONE TOOL.</h2>
+  <p style="font-family:'DM Sans'; font-size:17px; color:var(--xlgray); max-width:580px; line-height:1.75; margin-top:24px; margin-bottom:80px;">Teachers assign a mode based on where students are in the curriculum. Students progress through all three as they develop confidence.</p>
+  <div class="modes-grid">
+
+    <div class="mode-card featured" data-delay="0">
+      <div class="mode-tag">Year 1 · Beginner</div>
+      <div class="mode-title">GUIDED MODE</div>
+      <div class="mode-desc">Every step explained. Every decision prompted. The student is guided through beat analysis, clip selection rationale, and timeline review. The tool does nothing until the student answers a question.</div>
+      <ul class="mode-features">
+        <li>Beat waveform shown before any cut</li>
+        <li>BPM, timestamps, energy map displayed</li>
+        <li>Clip selection prompts at each beat</li>
+        <li>Student must type a reason for each choice</li>
+        <li>Post-run reflection prompt ("What would you change?")</li>
+        <li>Full session exported to teacher dashboard</li>
+        <li class="dim">Automation disabled — no one-click RUN</li>
+      </ul>
+    </div>
+
+    <div class="mode-card" data-delay="120">
+      <div class="mode-tag">Year 2 · Intermediate</div>
+      <div class="mode-title">ASSISTED MODE</div>
+      <div class="mode-desc">The tool suggests. The student approves or overrides. Beat detection and clip order are shown as recommendations, not instructions. Students learn to critique algorithmic decisions.</div>
+      <ul class="mode-features">
+        <li>Suggested clip order shown, editable</li>
+        <li>Beat sensitivity slider with visual feedback</li>
+        <li>Override any assignment before running</li>
+        <li>Comparison view: AI suggestion vs student edit</li>
+        <li>Written justification for overrides logged</li>
+        <li>Reduced checkpoint frequency</li>
+        <li class="dim">RUN button enabled — after review step</li>
+      </ul>
+    </div>
+
+    <div class="mode-card" data-delay="240">
+      <div class="mode-tag">Year 3 · Advanced</div>
+      <div class="mode-title">PRO MODE</div>
+      <div class="mode-desc">Full Smith Cut functionality with classroom logging. Students work at professional pace — all settings available. Session data still sent to teacher dashboard for portfolio and assessment.</div>
+      <ul class="mode-features">
+        <li>All settings unlocked</li>
+        <li>Beat subdivision, variation, loop controls</li>
+        <li>Full Premiere Pro automation</li>
+        <li>Silent background session logging</li>
+        <li>Portfolio export of completed edits</li>
+        <li>Peer review sharing via teacher dashboard</li>
+        <li class="dim">No AI Story Mode (student must self-direct)</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section id="compare">
+  <p class="section-label">Pro vs Education</p>
+  <h2 class="section-title">WHAT'S DIFFERENT.</h2>
+  <p style="font-family:'DM Sans'; font-size:17px; color:var(--xlgray); max-width:580px; line-height:1.75; margin-top:24px; margin-bottom:0;">Education Edition is not a stripped-down version. It's a pedagogically restructured version.</p>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th style="width:40%;">Feature</th>
+        <th class="col-pro">Smith Cut Pro</th>
+        <th class="col-edu">Education Edition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="feature-name">Beat detection (librosa)</td><td><span class="check">✓</span></td><td><span class="check">✓</span> <span class="partial">+ shown to student</span></td></tr>
+      <tr><td class="feature-name">Clip metadata sorting</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td class="feature-name">Premiere Pro automation</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td class="feature-name">One-click RUN</td><td><span class="check">✓</span></td><td><span class="partial">Guided/Assisted: gated · Pro: ✓</span></td></tr>
+      <tr><td class="feature-name">Beat waveform display</td><td><span class="check">✓</span> <span class="partial">audio preview</span></td><td><span class="check">✓</span> <span class="partial">+ annotated BPM map</span></td></tr>
+      <tr><td class="feature-name">Beat subdivision controls</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td class="feature-name">AI Story Assistant</td><td><span class="check">✓</span> <span class="partial">5 credits/mo</span></td><td><span class="cross">✗</span> <span class="partial">intentionally excluded</span></td></tr>
+      <tr><td class="feature-name">Decision checkpoints</td><td><span class="cross">✗</span></td><td><span class="check">✓</span> <span class="partial">Guided + Assisted modes</span></td></tr>
+      <tr><td class="feature-name">Student session logging</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td class="feature-name">Lesson report PDF</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td class="feature-name">Teacher dashboard</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td class="feature-name">Story brief requirement</td><td><span class="cross">✗</span></td><td><span class="check">✓</span> <span class="partial">before running</span></td></tr>
+      <tr><td class="feature-name">Peer review sharing</td><td><span class="cross">✗</span></td><td><span class="check">✓</span> <span class="partial">Pro mode</span></td></tr>
+      <tr><td class="feature-name">Classroom seat management</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td class="feature-name">License type</td><td><span class="partial">Per user</span></td><td><span class="partial">Per classroom / institution</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- CURRICULUM ALIGNMENT -->
+<section id="curriculum">
+  <p class="section-label">Curriculum alignment</p>
+  <h2 class="section-title">A SEMESTER<br>OF LESSONS.</h2>
+  <p style="font-family:'DM Sans'; font-size:17px; color:var(--xlgray); max-width:580px; line-height:1.75; margin-top:24px; margin-bottom:0;">Education Edition is structured around a 12-week media production curriculum. Each session builds on the last.</p>
+  <div class="curriculum-grid" style="margin-top:60px;">
+    <div class="lesson-card" data-delay="0">
+      <div class="lesson-week">Weeks 1–2</div>
+      <div class="lesson-title">What is a Beat?</div>
+      <div class="lesson-objective">Students load a track and observe the waveform. They manually identify beats by tapping, then compare to what Smith Cut detected. Objective: understand that rhythm is measurable.</div>
+      <div class="lesson-outcome">Outcome: Student can explain BPM and describe the relationship between musical beats and visual cuts.</div>
+    </div>
+    <div class="lesson-card" data-delay="100">
+      <div class="lesson-week">Weeks 3–4</div>
+      <div class="lesson-title">Clip Selection Logic</div>
+      <div class="lesson-objective">In Guided Mode, students make clip-per-beat decisions and write a justification for each. They compare their edit to the default algorithm output. Objective: understand that clip choice creates meaning.</div>
+      <div class="lesson-outcome">Outcome: Student can articulate why a specific clip feels right or wrong at a given beat position.</div>
+    </div>
+    <div class="lesson-card" data-delay="200">
+      <div class="lesson-week">Weeks 5–6</div>
+      <div class="lesson-title">Pacing and Energy</div>
+      <div class="lesson-objective">Students adjust beat sensitivity and subdivision to create two contrasting edits from the same material — one high-energy, one slow. Objective: understand that pacing is a creative choice, not a default.</div>
+      <div class="lesson-outcome">Outcome: Student can describe how beat density affects emotional tone in a video edit.</div>
+    </div>
+    <div class="lesson-card" data-delay="300">
+      <div class="lesson-week">Weeks 7–8</div>
+      <div class="lesson-title">Story Before the Edit</div>
+      <div class="lesson-objective">Students write a story brief before touching the tool: who is the audience, what is the feeling, what happens first and last. They then build the edit to match their brief in Assisted Mode.</div>
+      <div class="lesson-outcome">Outcome: Student produces an edit that matches a written creative brief, evaluated by teacher and peers.</div>
+    </div>
+    <div class="lesson-card" data-delay="400">
+      <div class="lesson-week">Weeks 9–10</div>
+      <div class="lesson-title">Critique and Override</div>
+      <div class="lesson-objective">In Assisted Mode, students receive the AI's suggested clip order and must override at least 30% of decisions with written justifications. Objective: learning to critique algorithmic suggestions critically.</div>
+      <div class="lesson-outcome">Outcome: Student demonstrates editorial judgment by improving on the default algorithmic output.</div>
+    </div>
+    <div class="lesson-card" data-delay="500">
+      <div class="lesson-week">Weeks 11–12</div>
+      <div class="lesson-title">Professional Workflow</div>
+      <div class="lesson-objective">Students work in Pro Mode with full settings, building a final project to a client brief. Session logged, edit exported to portfolio. Peer review session using teacher dashboard.</div>
+      <div class="lesson-outcome">Outcome: Student produces a portfolio-ready beat-sync edit and can walk through every decision made in the session log.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <p class="section-label">Pricing</p>
+  <h2 class="section-title">BUILT FOR<br>INSTITUTIONS.</h2>
+  <p style="font-family:'DM Sans'; font-size:17px; color:var(--xlgray); max-width:560px; line-height:1.75; margin-top:24px; margin-bottom:0;">
+    One teacher license covers the whole classroom. No per-student billing until you scale to multiple classes.
+  </p>
+  <div class="edu-pricing-grid">
+    <div class="edu-price-card" data-delay="0">
+      <div class="edu-price-name">Classroom</div>
+      <div class="edu-price-price">$49<span>/month</span></div>
+      <div class="edu-price-desc">One teacher. Up to 30 student seats. Everything you need for a single media production class.</div>
+      <ul class="edu-price-features">
+        <li class="highlight">1 teacher license</li>
+        <li class="highlight">Up to 30 student seats</li>
+        <li class="highlight">All three learning modes</li>
+        <li>Lesson report PDFs</li>
+        <li>Teacher dashboard</li>
+        <li>Decision checkpoint logs</li>
+        <li>Portfolio export per student</li>
+        <li>12-week curriculum guide included</li>
+        <li>Setup support included</li>
+      </ul>
+      <button class="btn-primary" style="width:100%;" onclick="openEduModal('classroom')">Request Access</button>
+    </div>
+    <div class="edu-price-card featured" data-delay="150">
+      <div class="edu-price-badge">Best Value</div>
+      <div class="edu-price-name">Department</div>
+      <div class="edu-price-price">$149<span>/month</span></div>
+      <div class="edu-price-desc">Multiple teachers, multiple classes, one institution. Centralised dashboard, shared student portfolios.</div>
+      <div class="edu-note">
+        <strong style="color:var(--white);">Includes everything in Classroom, plus:</strong><br><br>
+        Unlimited teacher licenses · Unlimited student seats · Department-wide analytics · Cross-class peer review · Priority setup and onboarding call · Custom curriculum alignment on request
+      </div>
+      <ul class="edu-price-features">
+        <li class="highlight">Unlimited teacher licenses</li>
+        <li class="highlight">Unlimited student seats</li>
+        <li class="highlight">Department-wide analytics</li>
+        <li>Cross-class peer review</li>
+        <li>Priority onboarding call</li>
+        <li>Custom curriculum alignment</li>
+      </ul>
+      <button class="btn-primary" style="width:100%;" onclick="openEduModal('department')">Request Access</button>
+    </div>
+  </div>
+  <div style="margin-top:24px; font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--lgray);">
+    FREE 30-DAY TRIAL FOR EDUCATORS &nbsp;·&nbsp; ANNUAL BILLING AVAILABLE (2 MONTHS FREE) &nbsp;·&nbsp; PURCHASE ORDERS ACCEPTED
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-inner">
+    <p class="section-label" style="text-align:center;">Get started</p>
+    <h2 class="cta-title">READY TO<br>BRING <span class="accent">SMITH CUT</span><br>TO YOUR CLASS?</h2>
+    <p class="cta-sub">Request access and we'll set up your classroom within 48 hours. Free 30-day trial, no credit card required.</p>
+    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+      <button class="btn-primary" onclick="openEduModal('trial')">Start Free Trial</button>
+      <a href="mailto:edu@smithcut.app" class="btn-secondary">Email Us Directly</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <div class="logo">SMITH<span class="cut">CUT</span></div>
+    <p>Education Edition · For media classrooms</p>
+  </div>
+  <div class="footer-right">
+    <a href="#" onclick="goTo('pro');return false;">Smith Cut Pro</a>
+    <a href="#modes">Learning Modes</a>
+    <a href="#pricing">Pricing</a>
+    <a href="mailto:edu@smithcut.app">edu@smithcut.app</a>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <span>© 2026 Smith Cut. All rights reserved.</span>
+  <span>macOS only · Premiere Pro 2022+</span>
+</div>
+
+<!-- REQUEST MODAL -->
+<div class="modal-overlay" id="edu-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeEduModal()">×</button>
+    <div class="modal-title">REQUEST ACCESS</div>
+    <div class="modal-sub" id="edu-modal-sub">Education Edition — Classroom Plan</div>
+    <label class="field-label">Your Name</label>
+    <input class="field-input" id="edu-name" placeholder="Ms. Johnson" />
+    <label class="field-label">School / Institution</label>
+    <input class="field-input" id="edu-school" placeholder="Riverside High School" />
+    <label class="field-label">Email Address</label>
+    <input class="field-input" id="edu-email" type="email" placeholder="teacher@school.edu" />
+    <label class="field-label">Number of Students</label>
+    <input class="field-input" id="edu-students" type="number" placeholder="25" />
+    <label class="field-label">How do you plan to use Smith Cut?</label>
+    <textarea class="field-input" id="edu-use" rows="3" placeholder="e.g. Year 10 media production class, beat-sync editing unit..."></textarea>
+    <button class="btn-submit" onclick="submitEduRequest()">SUBMIT REQUEST</button>
+    <div style="font-family:'Space Mono'; font-size:8px; color:var(--lgray); margin-top:16px; text-align:center;">
+      FREE 30-DAY TRIAL · WE'LL RESPOND WITHIN 24 HOURS
+    </div>
+  </div>
+</div>
+
+
+</div>
+
 <script>
-// ── CURSOR ──────────────────────────────────────────────────────────────────
+
+// ── SHARED: CURSOR ────────────────────────────────────────────────────────────
 const cursor = document.getElementById('cursor')
 document.addEventListener('mousemove', e => {
   cursor.style.left = e.clientX + 'px'
   cursor.style.top  = e.clientY + 'px'
 })
+function bindCursor() {
+  document.querySelectorAll('a,button').forEach(el => {
+    if (el._cursorBound) return
+    el._cursorBound = true
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'))
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'))
+  })
+}
+bindCursor()
+
+// ── SHARED: NAV SCROLL ────────────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const s = window.scrollY > 60
+  const pn = document.getElementById('pro-nav')
+  const en = document.getElementById('edu-nav')
+  if (pn) pn.classList.toggle('scrolled', s)
+  if (en) en.classList.toggle('scrolled', s)
+})
+
+// ── SHARED: SCROLL REVEAL ─────────────────────────────────────────────────────
+function initReveals() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), +(e.target.dataset.delay||0))
+        obs.unobserve(e.target)
+      }
+    })
+  }, { threshold: 0.08 })
+  document.querySelectorAll('.step,.pricing-card,.use-card,.lesson-card,.mode-card,.edu-price-card,.download-card').forEach(el => {
+    obs.observe(el)
+  })
+}
+initReveals()
+
+// ── HYPERSPACE ────────────────────────────────────────────────────────────────
+const hsC   = document.getElementById('hs-canvas')
+const hsF   = document.getElementById('hs-flash')
+const hsX   = hsC.getContext('2d')
+let hsW, hsH, hsRunning = false
+
+function hsResize() { hsW = hsC.width = innerWidth; hsH = hsC.height = innerHeight }
+hsResize(); window.addEventListener('resize', hsResize)
+
+function goTo(page) {
+  if (hsRunning) return
+  if (!document.getElementById('page-' + page).classList.contains('hidden')) return
+  hsRunning = true
+
+  // Build 400 stars near centre
+  const stars = Array.from({length: 400}, () => ({
+    a: Math.random() * Math.PI * 2,
+    d: Math.random() * 0.06 + 0.01,
+    s: Math.random() * 0.03 + 0.015,
+    len: Math.random() * 2 + 1,
+    col: Math.random() > 0.4 ? [255,255,255] : [170,212,255],
+  }))
+
+  hsC.classList.add('active')
+  const t0 = performance.now()
+  const DUR = 850
+
+  ;(function tick(now) {
+    const p = Math.min((now - t0) / DUR, 1)
+    hsX.clearRect(0, 0, hsW, hsH)
+
+    // Dark overlay that builds up
+    hsX.fillStyle = `rgba(0,0,0,${p < 0.7 ? p * 0.85 : 0.85 - (p-0.7)*2.5})`
+    hsX.fillRect(0, 0, hsW, hsH)
+
+    const cx = hsW/2, cy = hsH/2
+    stars.forEach(s => {
+      s.d += s.s * (0.008 + p * 0.07)
+      const stretch = 1 + p*p * 50
+      const r1 = s.d * Math.min(hsW,hsH) * 0.5
+      const r2 = r1 + s.len * stretch
+      const x1 = cx + Math.cos(s.a)*r1, y1 = cy + Math.sin(s.a)*r1
+      const x2 = cx + Math.cos(s.a)*r2, y2 = cy + Math.sin(s.a)*r2
+      const alpha = Math.min(1, 0.3 + p * 0.7)
+      const [r,g,b] = s.col
+      hsX.beginPath()
+      hsX.moveTo(x1,y1); hsX.lineTo(x2,y2)
+      hsX.strokeStyle = `rgba(${r},${g},${b},${alpha})`
+      hsX.lineWidth = 0.6 + p * 2
+      hsX.stroke()
+    })
+
+    if (p < 0.92) {
+      requestAnimationFrame(tick)
+    } else {
+      // FLASH — swap page while white
+      hsF.classList.add('on')
+      setTimeout(() => {
+        document.querySelectorAll('.page').forEach(pg => pg.classList.add('hidden'))
+        document.getElementById('page-' + page).classList.remove('hidden')
+        window.scrollTo(0, 0)
+        initReveals()
+        bindCursor()
+        hsF.classList.remove('on')
+        hsF.classList.add('off')
+        setTimeout(() => {
+          hsF.classList.remove('off')
+          hsC.classList.remove('active')
+          hsX.clearRect(0, 0, hsW, hsH)
+          hsRunning = false
+        }, 200)
+      }, 70)
+    }
+  })(t0)
+}
+
+
+// ── PRO JS ──
+
 document.querySelectorAll('a, button, .step, .pricing-card').forEach(el => {
   el.addEventListener('mouseenter', () => cursor.classList.add('hover'))
   el.addEventListener('mouseleave', () => cursor.classList.remove('hover'))
@@ -883,7 +1510,7 @@ document.querySelectorAll('a, button, .step, .pricing-card').forEach(el => {
 
 // ── NAV SCROLL ───────────────────────────────────────────────────────────────
 window.addEventListener('scroll', () => {
-  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60)
+  document.getElementById('pro-nav').classList.toggle('scrolled', window.scrollY > 60)
 })
 
 // ── HERO CANVAS (particle grid) ──────────────────────────────────────────────
@@ -951,7 +1578,7 @@ const observer = new IntersectionObserver(entries => {
   })
 }, { threshold: 0.1 })
 
-document.querySelectorAll('.step, .pricing-card, .download-card').forEach(el => observer.observe(el))
+
 
 // ── MODALS ────────────────────────────────────────────────────────────────────
 function openSubscribeModal() { document.getElementById('subscribe-modal').classList.add('open') }
@@ -1119,6 +1746,88 @@ function exportGistJSON() {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'))
 })
+
+
+// ── EDU JS ──
+
+document.querySelectorAll('a,button,.mode-card,.lesson-card,.edu-price-card').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hover'))
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hover'))
+})
+
+
+
+// ── CANVAS (blue particles) ──────────────────────────────────────────────────
+const eduCanvas = document.getElementById('edu-canvas')
+const eduCtx = eduCanvas.getContext('2d')
+let eduW, eduH, pts = []
+
+function eduResize() {
+  eduW = eduCanvas.width = window.innerWidth
+  eduH = eduCanvas.height = window.innerHeight
+}
+eduResize()
+window.addEventListener('resize', eduResize)
+
+for (let i = 0; i < 180; i++) {
+  pts.push({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    vx: (Math.random() - 0.5) * 0.25,
+    vy: (Math.random() - 0.5) * 0.25,
+    r: Math.random() * 1.5 + 0.5,
+  })
+}
+
+;(function draw() {
+  eduCtx.clearRect(0, 0, eduW, eduH)
+  pts.forEach((p, i) => {
+    p.x += p.vx; p.y += p.vy
+    if (p.x < 0) p.x = eduW; if (p.x > eduW) p.x = 0
+    if (p.y < 0) p.y = eduH; if (p.y > eduH) p.y = 0
+    eduCtx.beginPath()
+    eduCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+    eduCtx.fillStyle = 'rgba(96,165,250,0.85)'
+    eduCtx.fill()
+    for (let j = i + 1; j < pts.length; j++) {
+      const dx = p.x - pts[j].x, dy = p.y - pts[j].y
+      const d  = Math.sqrt(dx * dx + dy * dy)
+      if (d < 150) {
+        eduCtx.beginPath()
+        eduCtx.moveTo(p.x, p.y)
+        eduCtx.lineTo(pts[j].x, pts[j].y)
+        eduCtx.strokeStyle = `rgba(30,110,255,${0.35 * (1 - d / 150)})`
+        eduCtx.lineWidth = 0.5
+        eduCtx.stroke()
+      }
+    }
+  })
+  requestAnimationFrame(draw)
+})()
+
+
+
+// ── MODAL ─────────────────────────────────────────────────────────────────────
+let selectedPlan = 'classroom'
+function openEduModal(plan) {
+  selectedPlan = plan
+  const subs = { classroom:'Education Edition — Classroom Plan', department:'Education Edition — Department Plan', trial:'Education Edition — Free 30-Day Trial' }
+  document.getElementById('edu-modal-sub').textContent = subs[plan] || subs.classroom
+  document.getElementById('edu-modal').classList.add('open')
+}
+function closeEduModal() { document.getElementById('edu-modal').classList.remove('open') }
+document.getElementById('edu-modal').addEventListener('click', e => { if (e.target === document.getElementById('edu-modal')) closeEduModal() })
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEduModal() })
+
+function submitEduRequest() {
+  const name   = document.getElementById('edu-name').value.trim()
+  const school = document.getElementById('edu-school').value.trim()
+  const email  = document.getElementById('edu-email').value.trim()
+  if (!name || !school || !email) { alert('Please fill in your name, school, and email.'); return }
+  closeEduModal()
+  alert(`Thanks, ${name}! We'll be in touch at ${email} within 24 hours to set up your ${selectedPlan === 'trial' ? 'free trial' : 'classroom'}.`)
+}
+
 </script>
 </body>
-</html>
+</html> 
