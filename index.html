@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smith Cut — Beat-Sync Video Editing Automation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #000;
+  --white: #fff;
+  --red: #DC2626;
+  --red-dim: #7f1d1d;
+  --gray: #111;
+  --mgray: #222;
+  --lgray: #555;
+  --xlgray: #888;
+  --blue: #1E6EFF;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CURSOR ── */
+#cursor {
+  width: 12px; height: 12px;
+  background: var(--red);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+  mix-blend-mode: difference;
+}
+#cursor.hover { width: 40px; height: 40px; background: var(--white); }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 38px; left: 0; right: 0;
+  z-index: 1000;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 60px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s, background 0.3s, top 0.3s;
+}
+nav.scrolled { background: rgba(0,0,0,0.92); border-color: var(--mgray); backdrop-filter: blur(12px); top: 0; }
+.nav-logo { font-family: 'Bebas Neue'; font-size: 28px; letter-spacing: 0.15em; color: var(--white); text-decoration: none; }
+.nav-logo span { color: var(--red); }
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a { font-family: 'Space Mono'; font-size: 10px; letter-spacing: 0.2em; color: var(--xlgray); text-decoration: none; text-transform: uppercase; transition: color 0.2s; }
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  font-family: 'Space Mono'; font-size: 10px; letter-spacing: 0.15em;
+  background: var(--red); color: var(--white); border: none;
+  padding: 10px 24px; cursor: none; text-decoration: none;
+  text-transform: uppercase; transition: background 0.2s;
+}
+.nav-cta:hover { background: #b91c1c; }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 160px 60px 80px;
+  position: relative;
+}
+#hero-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.55;
+}
+.hero-eyebrow {
+  font-family: 'Space Mono'; font-size: 10px; letter-spacing: 0.3em;
+  color: var(--red); text-transform: uppercase; margin-bottom: 24px;
+  opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+}
+.hero-title {
+  font-family: 'Bebas Neue';
+  font-size: clamp(80px, 12vw, 180px);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  position: relative; z-index: 1;
+  opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+}
+.hero-title .line2 { color: var(--red); display: block; }
+.hero-sub {
+  font-family: 'DM Sans'; font-size: 18px; font-weight: 300;
+  color: var(--xlgray); max-width: 520px;
+  margin-top: 32px; line-height: 1.7;
+  opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+}
+.hero-actions {
+  display: flex; gap: 16px; margin-top: 48px;
+  opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+}
+.btn-primary {
+  font-family: 'Space Mono'; font-size: 11px; letter-spacing: 0.15em;
+  background: var(--red); color: var(--white);
+  border: none; padding: 16px 40px; cursor: none;
+  text-decoration: none; text-transform: uppercase;
+  transition: background 0.2s, transform 0.15s;
+  display: inline-block;
+}
+.btn-primary:hover { background: #b91c1c; transform: translateY(-2px); }
+.btn-secondary {
+  font-family: 'Space Mono'; font-size: 11px; letter-spacing: 0.15em;
+  background: none; color: var(--white);
+  border: 1px solid var(--mgray); padding: 16px 40px; cursor: none;
+  text-decoration: none; text-transform: uppercase;
+  transition: border-color 0.2s, transform 0.15s;
+  display: inline-block;
+}
+.btn-secondary:hover { border-color: var(--white); transform: translateY(-2px); }
+.hero-stat-row {
+  display: flex; gap: 60px; margin-top: 80px;
+  opacity: 0; animation: fadeUp 0.8s 1s forwards;
+  position: relative; z-index: 1;
+}
+.hero-stat { border-left: 2px solid var(--red); padding-left: 16px; }
+.hero-stat-num { font-family: 'Bebas Neue'; font-size: 48px; color: var(--white); line-height: 1; }
+.hero-stat-label { font-family: 'Space Mono'; font-size: 9px; letter-spacing: 0.2em; color: var(--xlgray); text-transform: uppercase; }
+.scroll-indicator {
+  position: absolute; bottom: 40px; left: 60px;
+  font-family: 'Space Mono'; font-size: 9px; letter-spacing: 0.25em;
+  color: var(--lgray); text-transform: uppercase;
+  display: flex; align-items: center; gap: 16px;
+  opacity: 0; animation: fadeUp 0.8s 1.2s forwards;
+}
+.scroll-line { width: 40px; height: 1px; background: var(--lgray); }
+
+/* ── MARQUEE ── */
+.marquee-wrap {
+  overflow: hidden;
+  border-top: 1px solid var(--mgray);
+  border-bottom: 1px solid var(--mgray);
+  padding: 18px 0;
+  background: rgba(0,0,0,0.88);
+  position: relative; z-index: 1;
+}
+.marquee-track {
+  display: flex; gap: 60px;
+  animation: marquee 20s linear infinite;
+  width: max-content;
+}
+.marquee-item {
+  font-family: 'Bebas Neue'; font-size: 20px; letter-spacing: 0.2em;
+  color: var(--lgray); white-space: nowrap;
+}
+.marquee-item span { color: var(--red); margin: 0 8px; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ── SECTIONS ── */
+section { padding: 120px 60px; position: relative; z-index: 1; }
+.section-label {
+  font-family: 'Space Mono'; font-size: 9px; letter-spacing: 0.3em;
+  color: var(--red); text-transform: uppercase; margin-bottom: 16px;
+}
+.section-title {
+  font-family: 'Bebas Neue'; font-size: clamp(48px, 6vw, 96px);
+  line-height: 0.95; letter-spacing: 0.02em;
+}
+
+
+/* ── USE CASES ── */
+.use-card {
+  background: rgba(17,17,17,0.85);
+  border: 1px solid var(--mgray);
+  border-top: 2px solid var(--mgray);
+  padding: 36px 32px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.use-card:hover { border-color: var(--red); transform: translateY(-3px); }
+.use-icon { font-size: 22px; color: var(--red); margin-bottom: 16px; }
+.use-title { font-family: 'Space Mono'; font-size: 11px; letter-spacing: 0.15em; color: var(--white); text-transform: uppercase; margin-bottom: 12px; }
+.use-desc { font-family: 'DM Sans'; font-size: 14px; color: var(--xlgray); line-height: 1.7; }
+
+/* ── HOW IT WORKS ── */
+#how { background: transparent; }
+.steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 80px; }
+.step {
+  background: var(--gray); padding: 40px 32px;
+  border-top: 2px solid var(--mgray);
+  transition: border-color 0.2s;
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.6s, transform 0.6s, border-color 0.2s;
+}
+.step.visible { opacity: 1; transform: translateY(0); }
+.step:hover { border-color: var(--red); }
+.step-num { font-family: 'Bebas Neue'; font-size: 64px; color: var(--mgray); line-height: 1; margin-bottom: 16px; }
+.step-title { font-family: 'Space Mono'; font-size: 11px; letter-spacing: 0.15em; color: var(--white); text-transform: uppercase; margin-bottom: 12px; }
+.step-desc { font-family: 'DM Sans'; font-size: 14px; color: var(--xlgray); line-height: 1.7; }
+
+/* ── PRICING ── */
+#pricing { background: transparent; }
+.pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 80px; max-width: 900px; }
+.pricing-card {
+  background: var(--black); padding: 48px 40px;
+  border: 1px solid var(--mgray);
+  position: relative;
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.6s, transform 0.6s;
+}
+.pricing-card.visible { opacity: 1; transform: translateY(0); }
+.pricing-card.featured { border-color: var(--red); }
+.pricing-badge {
+  position: absolute; top: -1px; right: 32px;
+  font-family: 'Space Mono'; font-size: 9px; letter-spacing: 0.2em;
+  background: var(--red); color: var(--white);
+  padding: 6px 14px; text-transform: uppercase;
+}
+.pricing-name { font-family: 'Space Mono'; font-size: 10px; letter-spacing: 0.3em; color: var(--red); text-transform: uppercase; margin-bottom: 24px; }
+.pricing-price { font-family: 'Bebas Neue'; font-size: 72px; line-height: 1; color: var(--white); }
+.pricing-price span { font-family: 'DM Sans'; font-size: 16px; color: var(--xlgray); font-weight: 300; }
+.pricing-desc { font-family: 'DM Sans'; font-size: 14px; color: var(--xlgray); line-height: 1.6; margin: 16px 0 32px; }
+.pricing-features { list-style: none; margin-bottom: 40px; }
+.pricing-features li {
+  font-family: 'Space Mono'; font-size: 10px; letter-spacing: 0.1em;
+  color: var(--xlgray); padding: 10px 0;
+  border-bottom: 1px solid var(--mgray);
+  display: flex; align-items: center; gap: 12px;
+}
+.pricing-features li::before { content: '—'; color: var(--red); flex-shrink: 0; }
+.pricing-features li.highlight { color: var(--white); }
+.pricing-ai-note {
+  background: var(--gray); border: 1px solid var(--mgray);
+  padding: 16px; margin-bottom: 32px;
+  font-family: 'Space Mono'; font-size: 9px; letter-spacing: 0.1em;
+  color: var(--xlgray); line-height: 1.6;
+}
+.pricing-ai-note strong { color: var(--white); }
+
+
+
+/* ── LICENSE ADMIN ── */
+#admin {
+  background: transparent;
+  border-top: 1px solid var(--mgray);
+}
+.admin-box {
+  background: var(--black); border: 1px solid var(--mgray);
+  max-width: 700px; padding: 48px;
+  margin-top: 60px;
+}
+.admin-tabs { display: flex; gap: 0; margin-bottom: 40px; border-bottom: 1px solid var(--mgray); }
+.admin-tab {
+  font-family: 'Space Mono'; font-size: 9px; letter-spacing: 0.2em;
+  color: var(--xlgray); background: none; border: none;
+  padding: 12px 24px; cursor: none; text-transform: uppercase;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.admin-tab.active { color: var(--white); border-color: var(--red); }
+.admin-tab:hover { color: var(--white); }
+.admin-pane { display: none; }
+.admin-pane.active { display: block; }
+.admin-field { margin-bottom: 20px; }
+.admin-label { font-family: 'Space Mono'; font-size: 9px; letter-spacing: 0.2em; color: var(--xlgray); text-transform: uppercase; margin-bottom: 8px; display: block; }
+.admin-input {
+  width: 100%; background: var(--gray); border: 1px solid var(--mgray);
+  color: var(--white); font-family: 'Space Mono'; font-size: 12px;
+  padding: 12px 16px; outline: none;
+  transition: border-color 0.2s;
+}
+.admin-input:focus { border-color: var(--blue); }
+.admin-select {
+  width: 100%; background: var(--gray); border: 1px solid var(--mgray);
+  color: var(--white); font-family: 'Space Mono'; font-size: 11px;
+  padding: 12px 16px; outline: none; appearance: none;
+  transition: border-color 0.2s; cursor: none;
+}
+.admin-select:focus { border-color: var(--blue); }
+.btn-admin {
+  font-family: 'Space Mono'; font-size: 10px; letter-spacing: 0.15em;
+  background: var(--red); color: var(--white);
+  border: none; padding: 12px 28px; cursor: none;
+  text-transform: uppercase; transition: background 0.2s;
+}
+.btn-admin:hover { background: #b91c1c; }
+.btn-admin-ghost {
+  font-family: 'Space Mono'; font-size: 10px; letter-spacing: 0.15em;
+  background: none; color: var(--xlgray);
+  border: 1px solid var(--mgray); padding: 12px 28px; cursor: none;
+  text-transform: uppercase; transition: all 0.2s; margin-left: 12px;
+}
+.btn-admin-ghost:hover { color: var(--white); border-color: var(--white); }
+.key-output {
+  background: var(--gray); border: 1px solid var(--mgray);
+  padding: 20px; margin-top: 20px;
+  font-family: 'Space Mono'; font-size: 13px;
+  color: var(--blue); letter-spacing: 0.08em;
+  display: none; word-break: break-all;
+}
+.key-output.show { display: block; }
+.keys-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+.keys-table th {
+  font-family: 'Space Mono'; font-size: 8px; letter-spacing: 0.2em;
+  color: var(--xlgray); text-transform: uppercase;
+  padding: 8px 12px; text-align: left;
+  border-bottom: 1px solid var(--mgray);
+}
+.keys-table td {
+  font-family: 'Space Mono'; font-size: 10px;
+  color: var(--xlgray); padding: 10px 12px;
+  border-bottom: 1px solid #161616;
+}
+.keys-table td.key-code { color: var(--white); }
+.status-badge {
+  font-family: 'Space Mono'; font-size: 8px; letter-spacing: 0.1em;
+  padding: 3px 8px; text-transform: uppercase;
+}
+.status-badge.active { background: #052e16; color: #4ade80; }
+.status-badge.revoked { background: #450a0a; color: #f87171; }
+.revoke-btn {
+  font-family: 'Space Mono'; font-size: 8px; letter-spacing: 0.1em;
+  background: none; color: var(--lgray); border: 1px solid var(--mgray);
+  padding: 4px 10px; cursor: none; text-transform: uppercase;
+  transition: all 0.2s;
+}
+.revoke-btn:hover { color: #f87171; border-color: #f87171; }
+.admin-note {
+  font-family: 'Space Mono'; font-size: 9px; letter-spacing: 0.1em;
+  color: var(--lgray); line-height: 1.6; margin-top: 16px;
+  padding: 12px; border-left: 2px solid var(--mgray);
+}
+
+/* ── FOOTER ── */
+footer {
+  background: rgba(0,0,0,0.9);
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--mgray);
+  padding: 60px;
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+}
+.footer-brand .footer-logo { font-family: 'Bebas Neue'; font-size: 32px; letter-spacing: 0.1em; }
+.footer-brand .footer-logo span { color: var(--red); }
+.footer-brand p { font-family: 'DM Sans'; font-size: 14px; color: var(--lgray); line-height: 1.7; margin-top: 12px; max-width: 280px; }
+.footer-col-title { font-family: 'Space Mono'; font-size: 9px; letter-spacing: 0.25em; color: var(--xlgray); text-transform: uppercase; margin-bottom: 20px; }
+.footer-col a { display: block; font-family: 'DM Sans'; font-size: 14px; color: var(--lgray); text-decoration: none; margin-bottom: 12px; transition: color 0.2s; }
+.footer-col a:hover { color: var(--white); }
+.footer-bottom {
+  background: rgba(0,0,0,0.9);
+  position: relative; z-index: 1; border-top: 1px solid var(--mgray);
+  padding: 20px 60px;
+  display: flex; justify-content: space-between;
+  font-family: 'Space Mono'; font-size: 9px; letter-spacing: 0.15em;
+  color: var(--lgray); text-transform: uppercase;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92); z-index: 2000;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { display: flex; }
+.modal { scrollbar-width: thin; scrollbar-color: #333 transparent; }
+.modal::-webkit-scrollbar { width: 3px; }
+.modal::-webkit-scrollbar-thumb { background: #333; }
+.modal-real {
+  background: var(--gray); border: 1px solid var(--mgray);
+  max-width: 500px; width: 90%; padding: 48px;
+  position: relative;
+}
+.modal-close {
+  position: absolute; top: 20px; right: 20px;
+  background: none; border: none; color: var(--xlgray);
+  font-size: 20px; cursor: none; font-family: monospace;
+  transition: color 0.2s;
+}
+.modal-close:hover { color: var(--white); }
+.modal-title { font-family: 'Bebas Neue'; font-size: 36px; margin-bottom: 8px; }
+.modal-sub { font-family: 'Space Mono'; font-size: 9px; letter-spacing: 0.2em; color: var(--xlgray); text-transform: uppercase; margin-bottom: 32px; }
+.modal-field { margin-bottom: 16px; }
+
+/* ── NOTICE BANNER ── */
+.notice {
+  background: var(--red); color: var(--white);
+  text-align: center; padding: 10px;
+  font-family: 'Space Mono'; font-size: 9px; letter-spacing: 0.2em;
+  text-transform: uppercase;
+  position: sticky; top: 0; z-index: 999;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  nav .nav-links { display: none; }
+  #hero { padding: 100px 24px 60px; }
+  section { padding: 80px 24px; }
+  .steps-grid { grid-template-columns: 1fr 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  footer { grid-template-columns: 1fr 1fr; gap: 40px; padding: 40px 24px; }
+  .footer-bottom { padding: 16px 24px; flex-direction: column; gap: 8px; }
+  .hero-stat-row { gap: 32px; flex-wrap: wrap; }
+}
+@media (max-width: 600px) {
+  .steps-grid { grid-template-columns: 1fr; }
+  footer { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">SMITH<span>CUT</span></a>
+  <ul class="nav-links">
+    <li><a href="#usecases">Use Cases</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#admin">License Admin</a></li>
+  </ul>
+  <a href="#pricing" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- NOTICE -->
+<div class="notice">Now available — Beat-sync automation for Adobe Premiere Pro &nbsp;·&nbsp; macOS only</div>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <p class="hero-eyebrow">Beat-sync automation &mdash; Adobe Premiere Pro</p>
+  <h1 class="hero-title">
+    EDIT TO<br>
+    <span class="line2">THE BEAT.</span>
+  </h1>
+  <p class="hero-sub">Drop your clips. Drop your music. Smith Cut finds every beat and builds the edit automatically — in under 60 seconds.</p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn-primary">Start for $20/mo</a>
+    <a href="#how" class="btn-secondary">See How It Works</a>
+  </div>
+  <div class="hero-stat-row">
+    <div class="hero-stat">
+      <div class="hero-stat-num">168</div>
+      <div class="hero-stat-label">Beats detected per song</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">&lt;60s</div>
+      <div class="hero-stat-label">From drop to Premiere</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">4hrs</div>
+      <div class="hero-stat-label">Saved per project</div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="mtrack"></div>
+</div>
+
+
+<!-- USE CASES -->
+<section id="usecases" style="padding:120px 60px;">
+  <p class="section-label">What Smith Cut is built for</p>
+  <h2 class="section-title">MADE FOR<br>SHORT-FORM.</h2>
+  <p style="font-family:'DM Sans'; font-size:17px; color:var(--xlgray); max-width:600px; line-height:1.75; margin-top:24px; margin-bottom:80px;">
+    Smith Cut is purpose-built for fast, high-energy short-form content. 
+    If your edit lives on Instagram, YouTube Shorts, TikTok, or a client 
+    highlight reel — this is your tool.
+  </p>
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:2px;">
+    <div class="use-card">
+      <div class="use-icon">◈</div>
+      <div class="use-title">Music Videos</div>
+      <div class="use-desc">Hard cuts on every beat. Rapid-fire edits that feel like they were built for the track — because they were.</div>
+    </div>
+    <div class="use-card">
+      <div class="use-icon">◈</div>
+      <div class="use-title">Social Media Reels</div>
+      <div class="use-desc">Instagram Reels, TikTok, YouTube Shorts. 60 seconds. 8 clips. Done in under a minute instead of two hours.</div>
+    </div>
+    <div class="use-card">
+      <div class="use-icon">◈</div>
+      <div class="use-title">Brand Highlight Reels</div>
+      <div class="use-desc">Client deliverables that need to land on the beat. Drop your footage, drop their track, hand them a rough cut.</div>
+    </div>
+    <div class="use-card">
+      <div class="use-icon">◈</div>
+      <div class="use-title">Sports Edits</div>
+      <div class="use-desc">Action, energy, impact. Beat-sync edits are the standard in sports content — Smith Cut makes them automatic.</div>
+    </div>
+    <div class="use-card">
+      <div class="use-icon">◈</div>
+      <div class="use-title">Event Recaps</div>
+      <div class="use-desc">Conference, concert, wedding. Rapid turnaround rough cuts your client can react to before you refine.</div>
+    </div>
+    <div class="use-card">
+      <div class="use-icon">◈</div>
+      <div class="use-title">AI Story Edits</div>
+      <div class="use-desc">Import your Premiere project. The AI analyzes your footage, writes the story, and rebuilds the edit for you.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section id="testimonial" style="padding:80px 60px;">
+  <div style="max-width:800px; border-left:3px solid var(--red); padding-left:40px;">
+    <p style="font-family:'DM Sans'; font-size:clamp(20px,2.5vw,28px); font-weight:300; color:var(--white); line-height:1.6; margin-bottom:32px;">
+      &ldquo;Smith Cut saved us hours on every single project. We used to spend half a day just getting clips on the beat — now we have a rough cut before the client even gets off the phone. It's become a core part of our production workflow.&rdquo;
+    </p>
+    <div style="display:flex; align-items:center; gap:20px;">
+      <div style="width:48px; height:48px; background:var(--red); display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue'; font-size:20px; color:var(--white); flex-shrink:0;">RB</div>
+      <div>
+        <div style="font-family:'Space Mono'; font-size:11px; letter-spacing:0.15em; color:var(--white); text-transform:uppercase;">RBTV</div>
+        <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.1em; color:var(--xlgray); margin-top:4px;">Video Production Client</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <p class="section-label">The pipeline</p>
+  <h2 class="section-title">FOUR STEPS.<br>ONE CLICK.</h2>
+  <div class="steps-grid">
+    <div class="step" data-delay="0">
+      <div class="step-num">01</div>
+      <div class="step-title">Beat Detection</div>
+      <div class="step-desc">Librosa analyzes your music and finds every beat, onset, and rhythmic hit. 103 BPM? 168 cut points mapped to the millisecond.</div>
+    </div>
+    <div class="step" data-delay="100">
+      <div class="step-num">02</div>
+      <div class="step-title">Clip Metadata</div>
+      <div class="step-desc">FFprobe reads every clip — duration, frame rate, codec, creation date. Sort by name, date, size, or let the AI decide.</div>
+    </div>
+    <div class="step" data-delay="200">
+      <div class="step-num">03</div>
+      <div class="step-title">Beat Matching</div>
+      <div class="step-desc">Each clip is assigned to a beat slot and trimmed to exactly that duration. Loop, shuffle, vary — full control over pacing.</div>
+    </div>
+    <div class="step" data-delay="300">
+      <div class="step-num">04</div>
+      <div class="step-title">Premiere Import</div>
+      <div class="step-desc">Every clip placed on the Premiere timeline at its exact beat position via pymiere. Music track placed. Project saved.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <p class="section-label">Pricing</p>
+  <h2 class="section-title">SIMPLE.<br>TRANSPARENT.</h2>
+  <div class="pricing-grid">
+    <div class="pricing-card" data-delay="0">
+      <div class="pricing-name">Core Plan</div>
+      <div class="pricing-price">$20<span>/month</span></div>
+      <div class="pricing-desc">Everything you need for fast, professional beat-sync editing. Unlimited simple generations and 10 AI generations per month.</div>
+      <ul class="pricing-features">
+        <li class="highlight">Unlimited Simple Generations</li>
+        <li class="highlight">10 AI Generations / month</li>
+        <li>Beat detection (librosa)</li>
+        <li>Clip metadata sorting</li>
+        <li>Loop, shuffle, chop controls</li>
+        <li>Beat subdivision (1, 2, 4, 8 beats)</li>
+        <li>Cut length variation</li>
+        <li>Premiere Pro automation</li>
+        <li>Sound effects &amp; UI polish</li>
+        <li>macOS — Apple Silicon + Intel</li>
+      </ul>
+      <a href="#" class="btn-primary" style="width:100%;text-align:center;display:block;" onclick="openSubscribeModal()">Subscribe — $20/mo</a>
+    </div>
+    <div class="pricing-card featured" data-delay="150">
+      <div class="pricing-badge">Most Popular</div>
+      <div class="pricing-name">AI Add-On</div>
+      <div class="pricing-price">$3<span>/generation</span></div>
+      <div class="pricing-desc">Need more than 10 AI generations in a month? Top up instantly. Each AI generation runs the full story analysis pipeline.</div>
+      <div class="pricing-ai-note">
+        <strong>What an AI generation includes:</strong><br><br>
+        Imports your Premiere Pro project → extracts frames from every clip → describes each clip visually using moondream → generates a 3-paragraph story narrative → suggests optimal clip order, chop positions, and beat sensitivity → fires the full pipeline with one click.
+      </div>
+      <ul class="pricing-features">
+        <li class="highlight">Full AI story analysis</li>
+        <li class="highlight">Clip visual descriptions</li>
+        <li class="highlight">Narrative + vibe report</li>
+        <li class="highlight">AI-suggested clip order</li>
+        <li>Requires active Core Plan</li>
+        <li>Runs locally — no cloud</li>
+        <li>Ollama / moondream powered</li>
+      </ul>
+      <a href="#" class="btn-primary" style="width:100%;text-align:center;display:block;background:#111;border:1px solid var(--red);" onclick="openSubscribeModal()">Get Core Plan First</a>
+    </div>
+  </div>
+  <div style="margin-top:24px; font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--lgray);">
+    CANCEL ANYTIME &nbsp;·&nbsp; MONTHLY BILLING &nbsp;·&nbsp; LICENSE KEY DELIVERED BY EMAIL
+  </div>
+</section>
+
+<!-- LICENSE ADMIN -->
+<section id="admin">
+  <p class="section-label">License Management</p>
+  <h2 class="section-title">ADMIN<br>PANEL.</h2>
+  <div class="admin-box">
+    <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--lgray); margin-bottom:32px; padding:12px; border-left:2px solid var(--red);">
+      PROTECTED — Enter admin password to access license tools
+    </div>
+    <div id="admin-locked">
+      <div class="admin-field">
+        <label class="admin-label">Admin Password</label>
+        <input type="password" id="admin-pwd" class="admin-input" placeholder="••••••••••" />
+      </div>
+      <button class="btn-admin" onclick="unlockAdmin()">UNLOCK</button>
+      <p id="admin-error" style="font-family:'Space Mono'; font-size:9px; color:#f87171; margin-top:8px;"></p>
+    </div>
+    <div id="admin-panel" style="display:none;">
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchAdminTab('generate',this)">Generate Key</button>
+        <button class="admin-tab" onclick="switchAdminTab('keys',this)">All Keys</button>
+        <button class="admin-tab" onclick="switchAdminTab('revoke',this)">Revoke</button>
+        <button class="admin-tab" onclick="switchAdminTab('stats',this)">Stats</button>
+      </div>
+
+      <!-- Generate -->
+      <div class="admin-pane active" id="pane-generate">
+        <div class="admin-field">
+          <label class="admin-label">Plan Type</label>
+          <select class="admin-select" id="gen-plan">
+            <option value="core">Core Plan — $20/mo</option>
+            <option value="ai">AI Add-On Pack (10 credits)</option>
+            <option value="lifetime">Lifetime — no expiry</option>
+          </select>
+        </div>
+        <div class="admin-field">
+          <label class="admin-label">Customer Email</label>
+          <input class="admin-input" id="gen-email" placeholder="customer@email.com" />
+        </div>
+        <div class="admin-field">
+          <label class="admin-label">Notes (optional)</label>
+          <input class="admin-input" id="gen-notes" placeholder="e.g. Boss — RBTV client" />
+        </div>
+        <button class="btn-admin" onclick="generateKey()">GENERATE KEY</button>
+        <button class="btn-admin-ghost" onclick="copyGeneratedKey()">COPY KEY</button>
+        <div class="key-output" id="key-output"></div>
+        <div class="admin-note">
+          Key format: SMITH-XXXX-XXXX-XXXX where X is alphanumeric.<br>
+          Keys are stored locally in your browser. Export to CSV or copy the GitHub Gist URL below to update your live validation endpoint.
+        </div>
+      </div>
+
+      <!-- Keys list -->
+      <div class="admin-pane" id="pane-keys">
+        <table class="keys-table">
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Plan</th>
+              <th>Email</th>
+              <th>Created</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="keys-tbody"></tbody>
+        </table>
+        <div style="margin-top:20px;">
+          <button class="btn-admin" onclick="exportCSV()">EXPORT CSV</button>
+          <button class="btn-admin-ghost" onclick="exportGistJSON()">COPY GIST JSON</button>
+        </div>
+      </div>
+
+      <!-- Revoke -->
+      <div class="admin-pane" id="pane-revoke">
+        <div class="admin-field">
+          <label class="admin-label">Key to Revoke</label>
+          <input class="admin-input" id="revoke-input" placeholder="SMITH-XXXX-XXXX-XXXX" />
+        </div>
+        <button class="btn-admin" onclick="revokeKey()" style="background:#7f1d1d;">REVOKE KEY</button>
+        <p id="revoke-msg" style="font-family:'Space Mono'; font-size:9px; margin-top:12px; color:var(--lgray);"></p>
+        <div class="admin-note">
+          Revoking a key removes it from the valid_keys list immediately.<br>
+          The user will be locked out after their 12-hour grace period expires.
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="admin-pane" id="pane-stats">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div style="background:var(--gray); padding:24px; border:1px solid var(--mgray);">
+            <div style="font-family:'Bebas Neue'; font-size:48px;" id="stat-total">0</div>
+            <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--xlgray); text-transform:uppercase;">Total Keys</div>
+          </div>
+          <div style="background:var(--gray); padding:24px; border:1px solid var(--mgray);">
+            <div style="font-family:'Bebas Neue'; font-size:48px;" id="stat-active">0</div>
+            <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--xlgray); text-transform:uppercase;">Active Keys</div>
+          </div>
+          <div style="background:var(--gray); padding:24px; border:1px solid var(--mgray);">
+            <div style="font-family:'Bebas Neue'; font-size:48px;" id="stat-revoked">0</div>
+            <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--xlgray); text-transform:uppercase;">Revoked Keys</div>
+          </div>
+          <div style="background:var(--gray); padding:24px; border:1px solid var(--mgray);">
+            <div style="font-family:'Bebas Neue'; font-size:48px;" id="stat-rev">$0</div>
+            <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--xlgray); text-transform:uppercase;">Est. Monthly Revenue</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo">SMITH<span>CUT</span></div>
+    <p>Beat-sync video editing automation for Adobe Premiere Pro. Built for editors who value their time.</p>
+  </div>
+  <div class="footer-col">
+    <div class="footer-col-title">Product</div>
+    <a href="#how">How It Works</a>
+    <a href="#pricing">Pricing</a>
+  </div>
+  <div class="footer-col">
+    <div class="footer-col-title">Support</div>
+    <a href="#how">How It Works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="mailto:support@smithcut.app">support@smithcut.app</a>
+  </div>
+  <div class="footer-col">
+    <div class="footer-col-title">Legal</div>
+    <a href="#" onclick="openModal('terms-modal');return false;">Terms of Service</a>
+    <a href="#" onclick="openModal('privacy-modal');return false;">Privacy Policy</a>
+    <a href="#" onclick="openModal('license-modal');return false;">License Agreement</a>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <span>© 2026 Smith Cut. All rights reserved.</span>
+  <span>macOS only &nbsp;·&nbsp; Premiere Pro 2022+</span>
+</div>
+
+<!-- SUBSCRIBE MODAL -->
+<div class="modal-overlay" id="subscribe-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('subscribe-modal')">×</button>
+    <div class="modal-title">SUBSCRIBE</div>
+    <div class="modal-sub">Core Plan — $20 / month</div>
+    <div class="modal-field">
+      <label class="admin-label">Full Name</label>
+      <input class="admin-input" id="sub-name" placeholder="Your name" />
+    </div>
+    <div class="modal-field">
+      <label class="admin-label">Email Address</label>
+      <input class="admin-input" id="sub-email" type="email" placeholder="your@email.com" />
+    </div>
+    <div class="modal-field">
+      <label class="admin-label">Payment</label>
+      <div style="background:var(--black); border:1px solid var(--mgray); padding:14px 16px; font-family:'Space Mono'; font-size:10px; color:var(--lgray);">
+        Payment processing via Stripe — coming soon.<br>For now, contact us directly to subscribe.
+      </div>
+    </div>
+    <button class="btn-admin" onclick="submitSubscribe()" style="width:100%;padding:14px;">CONTINUE TO PAYMENT</button>
+    <div style="font-family:'Space Mono'; font-size:8px; color:var(--lgray); margin-top:16px; text-align:center;">
+      CANCEL ANYTIME &nbsp;·&nbsp; LICENSE KEY EMAILED WITHIN 24 HOURS
+    </div>
+  </div>
+</div>
+
+<!-- LEGAL MODALS -->
+<div class="modal-overlay" id="terms-modal">
+  <div class="modal" style="max-width:600px; max-height:80vh; overflow-y:auto;">
+    <button class="modal-close" onclick="closeModal('terms-modal')">×</button>
+    <div class="modal-title">TERMS OF SERVICE</div>
+    <div class="modal-sub" style="margin-bottom:24px;">Last updated April 2026</div>
+    <div style="font-family:'DM Sans'; font-size:14px; color:var(--xlgray); line-height:1.8;">
+      <p style="margin-bottom:16px;"><strong style="color:var(--white);">1. License Grant.</strong> Upon purchase, Smith Cut grants you a personal, non-transferable license to install and use the software on one Mac computer. The license key is bound to your machine.</p>
+      <p style="margin-bottom:16px;"><strong style="color:var(--white);">2. Subscription.</strong> The Core Plan is billed monthly at $20 USD. Subscription renews automatically. Cancel any time — cancellation takes effect at the end of the current billing period.</p>
+      <p style="margin-bottom:16px;"><strong style="color:var(--white);">3. AI Credits.</strong> The Core Plan includes 10 AI generations per calendar month. Unused credits do not roll over. Additional credits are available at $3 per generation.</p>
+      <p style="margin-bottom:16px;"><strong style="color:var(--white);">4. Restrictions.</strong> You may not redistribute, resell, reverse-engineer, or share your license key. Violation results in immediate revocation without refund.</p>
+      <p style="margin-bottom:16px;"><strong style="color:var(--white);">5. Refunds.</strong> Refunds are available within 7 days of purchase if the software cannot be made to function on your system after following the setup guide.</p>
+      <p style="margin-bottom:16px;"><strong style="color:var(--white);">6. Disclaimer.</strong> Smith Cut is provided as-is. We are not liable for data loss, project corruption, or any issues arising from use with Adobe Premiere Pro.</p>
+      <p><strong style="color:var(--white);">7. Contact.</strong> support@smithcut.app</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="privacy-modal">
+  <div class="modal" style="max-width:600px; max-height:80vh; overflow-y:auto;">
+    <button class="modal-close" onclick="closeModal('privacy-modal')">×</button>
+    <div class="modal-title">PRIVACY POLICY</div>
+    <div class="modal-sub" style="margin-bottom:24px;">Last updated April 2026</div>
+    <div style="font-family:'DM Sans'; font-size:14px; color:var(--xlgray); line-height:1.8;">
+      <p style="margin-bottom:16px;"><strong style="color:var(--white);">Data we collect.</strong> Email address (for license delivery), payment information (processed by Stripe — we never see your card details), and license validation requests (key + machine ID hash).</p>
+      <p style="margin-bottom:16px;"><strong style="color:var(--white);">Data we do not collect.</strong> Your video files, audio files, project files, or any content processed by Smith Cut never leaves your computer. All AI processing runs locally via Ollama.</p>
+      <p style="margin-bottom:16px;"><strong style="color:var(--white);">License validation.</strong> Smith Cut periodically checks your license key against our validation endpoint (a GitHub Gist). This request contains only your key and a hashed machine identifier — no personal data.</p>
+      <p style="margin-bottom:16px;"><strong style="color:var(--white);">Third parties.</strong> We use Stripe for payment processing. Their privacy policy applies to payment data. We do not sell or share your email with any third party.</p>
+      <p><strong style="color:var(--white);">Contact.</strong> support@smithcut.app</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="license-modal">
+  <div class="modal" style="max-width:600px; max-height:80vh; overflow-y:auto;">
+    <button class="modal-close" onclick="closeModal('license-modal')">×</button>
+    <div class="modal-title">LICENSE AGREEMENT</div>
+    <div class="modal-sub" style="margin-bottom:24px;">End User License Agreement</div>
+    <div style="font-family:'DM Sans'; font-size:14px; color:var(--xlgray); line-height:1.8;">
+      <p style="margin-bottom:16px;">By activating Smith Cut with a license key, you agree to the following:</p>
+      <p style="margin-bottom:16px;"><strong style="color:var(--white);">Single machine use.</strong> Each license key activates on one Mac and is bound to that machine's hardware fingerprint. To transfer your license to a new machine, contact support.</p>
+      <p style="margin-bottom:16px;"><strong style="color:var(--white);">No redistribution.</strong> You may not share, sell, or distribute your license key or the Smith Cut installer to any third party.</p>
+      <p style="margin-bottom:16px;"><strong style="color:var(--white);">No reverse engineering.</strong> You may not decompile, disassemble, or attempt to extract the source code of Smith Cut.</p>
+      <p style="margin-bottom:16px;"><strong style="color:var(--white);">Revocation.</strong> Smith Cut reserves the right to revoke any license key at any time for violation of this agreement, with no refund obligation.</p>
+      <p><strong style="color:var(--white);">Updates.</strong> Active subscribers receive all updates released during their subscription period.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CURSOR ──────────────────────────────────────────────────────────────────
+const cursor = document.getElementById('cursor')
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px'
+  cursor.style.top  = e.clientY + 'px'
+})
+document.querySelectorAll('a, button, .step, .pricing-card').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hover'))
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hover'))
+})
+
+// ── NAV SCROLL ───────────────────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60)
+})
+
+// ── HERO CANVAS (particle grid) ──────────────────────────────────────────────
+const canvas = document.getElementById('hero-canvas')
+const ctx    = canvas.getContext('2d')
+let W, H, particles = []
+
+function resize() {
+  W = canvas.width  = window.innerWidth
+  H = canvas.height = window.innerHeight
+}
+resize()
+window.addEventListener('resize', resize)
+
+for (let i = 0; i < 200; i++) {
+  particles.push({
+    x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
+    vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+    size: Math.random() * 1.5 + 0.5,
+  })
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, W, H)
+  particles.forEach((p, i) => {
+    p.x += p.vx; p.y += p.vy
+    if (p.x < 0) p.x = W; if (p.x > W) p.x = 0
+    if (p.y < 0) p.y = H; if (p.y > H) p.y = 0
+    ctx.beginPath()
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+    ctx.fillStyle = 'rgba(220,38,38,0.9)'
+    ctx.fill()
+    // Connect nearby particles
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = p.x - particles[j].x
+      const dy = p.y - particles[j].y
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      if (dist < 150) {
+        ctx.beginPath()
+        ctx.moveTo(p.x, p.y)
+        ctx.lineTo(particles[j].x, particles[j].y)
+        ctx.strokeStyle = `rgba(220,38,38,${0.25 * (1 - dist / 150)})`
+        ctx.lineWidth = 0.5
+        ctx.stroke()
+      }
+    }
+  })
+  requestAnimationFrame(drawParticles)
+}
+drawParticles()
+
+// ── MARQUEE ───────────────────────────────────────────────────────────────────
+const items = ['Beat Detection','Clip Matching','Premiere Automation','Beat Subdivision','Loop Mode','AI Story','Waveform Preview','Sound Design','License System','Cross-Mac Deployment']
+const track  = document.getElementById('mtrack')
+const markup = items.map(t => `<span class="marquee-item">${t}<span>·</span></span>`).join('')
+track.innerHTML = markup + markup
+
+// ── SCROLL REVEAL ─────────────────────────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const delay = e.target.dataset.delay || 0
+      setTimeout(() => e.target.classList.add('visible'), +delay)
+    }
+  })
+}, { threshold: 0.1 })
+
+document.querySelectorAll('.step, .pricing-card, .download-card').forEach(el => observer.observe(el))
+
+// ── MODALS ────────────────────────────────────────────────────────────────────
+function openSubscribeModal() { document.getElementById('subscribe-modal').classList.add('open') }
+function openModal(id) { document.getElementById(id).classList.add('open') }
+function closeModal(id)       { document.getElementById(id).classList.remove('open') }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open') })
+})
+
+function submitSubscribe() {
+  const email = document.getElementById('sub-email').value
+  if (!email) { alert('Please enter your email address.'); return }
+  alert(`Thanks! We'll email your license key to ${email} within 24 hours.`)
+  closeModal('subscribe-modal')
+}
+
+
+
+function verifyGateKey() {
+  const key = document.getElementById('gate-key-input').value.trim().toUpperCase()
+  const msg = document.getElementById('gate-key-msg')
+  if (!/^SMITH-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(key)) {
+    msg.style.color = '#f87171'
+    msg.textContent = 'INVALID KEY FORMAT — Expected: SMITH-XXXX-XXXX-XXXX'
+    return
+  }
+  const keys = getKeys()
+  const found = keys.find(k => k.key === key && k.status === 'active')
+  if (found) {
+    msg.style.color = '#4ade80'
+    msg.textContent = 'KEY VERIFIED — Your download will begin shortly.'
+    setTimeout(() => alert('Download starting... (connect your actual .dmg file here)'), 800)
+  } else if (keys.find(k => k.key === key && k.status === 'revoked')) {
+    msg.style.color = '#f87171'
+    msg.textContent = 'THIS LICENSE HAS BEEN REVOKED.'
+  } else {
+    msg.style.color = '#f87171'
+    msg.textContent = 'KEY NOT FOUND — Check your email or contact support.'
+  }
+}
+
+// ── ADMIN SYSTEM ──────────────────────────────────────────────────────────────
+const ADMIN_PASSWORD = 'smithcut2026' // Change this before deploying
+
+function unlockAdmin() {
+  const pwd = document.getElementById('admin-pwd').value
+  if (pwd === ADMIN_PASSWORD) {
+    document.getElementById('admin-locked').style.display = 'none'
+    document.getElementById('admin-panel').style.display = 'block'
+    refreshKeysTable()
+    refreshStats()
+  } else {
+    document.getElementById('admin-error').textContent = 'INCORRECT PASSWORD'
+  }
+}
+
+function getKeys() {
+  try { return JSON.parse(localStorage.getItem('smithcut_keys') || '[]') } catch { return [] }
+}
+function saveKeys(keys) { localStorage.setItem('smithcut_keys', JSON.stringify(keys)) }
+
+function generateKey() {
+  const plan  = document.getElementById('gen-plan').value
+  const email = document.getElementById('gen-email').value.trim()
+  const notes = document.getElementById('gen-notes').value.trim()
+  const seg = () => Array.from({length:4}, () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'[Math.floor(Math.random()*36)]).join('')
+  const key = `SMITH-${seg()}-${seg()}-${seg()}`
+  const record = {
+    key, plan, email, notes, status: 'active',
+    created: new Date().toISOString().slice(0, 10)
+  }
+  const keys = getKeys()
+  keys.push(record)
+  saveKeys(keys)
+  document.getElementById('key-output').textContent = key
+  document.getElementById('key-output').classList.add('show')
+  refreshKeysTable()
+  refreshStats()
+}
+
+function copyGeneratedKey() {
+  const key = document.getElementById('key-output').textContent
+  if (!key) { alert('Generate a key first.'); return }
+  navigator.clipboard.writeText(key).then(() => alert('Key copied to clipboard: ' + key))
+}
+
+function refreshKeysTable() {
+  const keys = getKeys()
+  const tbody = document.getElementById('keys-tbody')
+  tbody.innerHTML = keys.length === 0
+    ? '<tr><td colspan="6" style="color:var(--lgray);text-align:center;padding:24px;">No keys generated yet</td></tr>'
+    : keys.map(k => `
+      <tr>
+        <td class="key-code">${k.key}</td>
+        <td>${k.plan}</td>
+        <td>${k.email || '—'}</td>
+        <td>${k.created}</td>
+        <td><span class="status-badge ${k.status}">${k.status.toUpperCase()}</span></td>
+        <td>${k.status === 'active' ? `<button class="revoke-btn" onclick="quickRevoke('${k.key}')">REVOKE</button>` : '—'}</td>
+      </tr>`).join('')
+}
+
+function quickRevoke(key) {
+  if (!confirm(`Revoke key ${key}?`)) return
+  const keys = getKeys().map(k => k.key === key ? {...k, status:'revoked'} : k)
+  saveKeys(keys)
+  refreshKeysTable()
+  refreshStats()
+}
+
+function switchAdminTab(name, btn) {
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'))
+  document.querySelectorAll('.admin-pane').forEach(p => p.classList.remove('active'))
+  btn.classList.add('active')
+  document.getElementById('pane-' + name).classList.add('active')
+  if (name === 'keys') refreshKeysTable()
+  if (name === 'stats') refreshStats()
+}
+
+function revokeKey() {
+  const key = document.getElementById('revoke-input').value.trim().toUpperCase()
+  const msg = document.getElementById('revoke-msg')
+  const keys = getKeys()
+  const idx  = keys.findIndex(k => k.key === key)
+  if (idx === -1) { msg.style.color='#f87171'; msg.textContent='KEY NOT FOUND'; return }
+  if (keys[idx].status === 'revoked') { msg.style.color='#f87171'; msg.textContent='ALREADY REVOKED'; return }
+  keys[idx].status = 'revoked'
+  saveKeys(keys)
+  msg.style.color = '#4ade80'
+  msg.textContent = `KEY ${key} REVOKED SUCCESSFULLY`
+  refreshStats()
+}
+
+function refreshStats() {
+  const keys = getKeys()
+  const active  = keys.filter(k => k.status === 'active').length
+  const revoked = keys.filter(k => k.status === 'revoked').length
+  const rev     = active * 20
+  document.getElementById('stat-total').textContent   = keys.length
+  document.getElementById('stat-active').textContent  = active
+  document.getElementById('stat-revoked').textContent = revoked
+  document.getElementById('stat-rev').textContent     = '$' + rev
+}
+
+function exportCSV() {
+  const keys = getKeys()
+  const header = 'Key,Plan,Email,Notes,Status,Created'
+  const rows = keys.map(k => [k.key,k.plan,k.email,k.notes,k.status,k.created].join(','))
+  const blob = new Blob([[header, ...rows].join('\n')], { type: 'text/csv' })
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = 'smithcut_keys.csv'
+  a.click()
+}
+
+function exportGistJSON() {
+  const keys = getKeys().filter(k => k.status === 'active').map(k => k.key)
+  const json = JSON.stringify({ valid_keys: keys }, null, 2)
+  navigator.clipboard.writeText(json).then(() =>
+    alert('Gist JSON copied!\n\nPaste this into your GitHub Gist at:\nhttps://gist.github.com/YOUR_GIST_ID\n\n' + json)
+  )
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'))
+})
+</script>
+</body>
+</html>
