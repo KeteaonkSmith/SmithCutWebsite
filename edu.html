@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smith Cut — The Fastest Beat-Sync Tool on Earth</title>
+<title>Smith Cut: Education Edition — Teach Media. Not Just Tools.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ctext x='2' y='24' font-family='Arial Black,sans-serif' font-weight='900' font-size='18' fill='%23DC2626'%3ESC%3C/text%3E%3C/svg%3E">
@@ -596,8 +596,20 @@ footer {
 
 </style>
 
+<style>
+:root {
+  --red: #1E6EFF;
+  --red-dim: #1e3a8a;
+  --blue-bright: #60a5fa;
+}
+.notice { background: #1E6EFF; }
+.nav-cta { background: #1E6EFF; }
+.section-label { color: #60a5fa; }
+.btn-primary { background: #1E6EFF; }
+.hero-eyebrow { color: #60a5fa; }
+</style>
 </head>
-<body data-page="pro">
+<body data-page="edu">
 <canvas id="curtain-canvas"></canvas>
 <canvas id="bg-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:-1;opacity:0.55;"></canvas>
 <div id="cursor"></div>
@@ -606,212 +618,188 @@ footer {
 
 
 <!-- NAV -->
-<nav id="pro-nav">
-  <a href="#" class="nav-logo">SMITH<span>CUT</span></a>
-  <ul class="nav-links">
-    <li><a href="#usecases">Use Cases</a></li>
-    <li><a href="#how">How It Works</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-        <li><a href="blog.html">Blog</a></li>
-    <li><a href="#" onclick="navigate('edu.html','#1E6EFF');return false;" style="color:#60a5fa;">For Educators</a></li>
-  </ul>
-  <a href="#" onclick="navigate('onboarding.html','#DC2626');return false;" class="nav-cta">Start Free Trial</a>
+<nav id="edu-nav">
+  <a href="#" class="nav-logo">SMITH<span class="cut">CUT</span><span class="edu">EDU</span></a>
+  <a href="#" onclick="navigate('index.html','#DC2626');return false;" class="nav-back">← Back to Smith Cut Pro</a>
+  <a href="#pricing" class="nav-cta">Request Access</a>
 </nav>
-
-<!-- NOTICE -->
-<div class="notice">60 seconds, not 60 minutes &nbsp;·&nbsp; Your footage never leaves your Mac &nbsp;·&nbsp; The fastest beat-sync tool on earth</div>
 
 <!-- HERO -->
 <section id="hero">
-  <p class="hero-eyebrow">The fastest beat-sync tool on earth &mdash; built for editors who own their footage</p>
+  <p class="hero-eyebrow">Smith Cut: Education Edition — Built for classrooms</p>
   <h1 class="hero-title">
-    60 SECONDS.<br>
-    <span class="line2">NOT 60 MINUTES.</span>
+    TEACH <span class="accent">MEDIA.</span><br>
+    NOT JUST<br>
+    TOOLS.
   </h1>
-  <p class="hero-sub">Drop your clips. Drop your music. Smith Cut finds every beat, matches every clip, and places a complete beat-sync edit in Premiere Pro — in under 60 seconds. On your Mac. Offline. Your footage never touches a server.</p>
+  <p class="hero-sub">A classroom version of Smith Cut that shows students how beat-sync editing works — without letting the software make the creative decisions for them.</p>
   <div class="hero-actions">
-    <a href="#" onclick="navigate('onboarding.html','#DC2626');return false;" class="btn-primary">Start Free Trial</a>
-    <a href="#how" class="btn-secondary">See How It Works</a>
-  </div>
-  <div class="hero-stat-row">
-    <div class="hero-stat">
-      <div class="hero-stat-num">&lt;60s</div>
-      <div class="hero-stat-label">From drop to Premiere timeline</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">100%</div>
-      <div class="hero-stat-label">Local — zero uploads, ever</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-num">4hrs</div>
-      <div class="hero-stat-label">Saved per project vs manual</div>
-    </div>
-  </div>
-  <div class="scroll-indicator">
-    <div class="scroll-line"></div>
-    Scroll to explore
+    <a href="#pricing" class="btn-primary">Request Classroom Access</a>
+    <a href="#modes" class="btn-secondary">See Guided Mode</a>
   </div>
 </section>
 
-<!-- MARQUEE -->
-<div class="marquee-wrap">
-  <div class="marquee-track" id="mtrack"></div>
-</div>
-
-
-<!-- USE CASES -->
-<section id="usecases" style="padding:120px 60px;">
-  <p class="section-label">Why editors choose Smith Cut</p>
-  <h2 class="section-title">OWN YOUR<br>FOOTAGE.</h2>
-  <p style="font-family:'DM Sans'; font-size:17px; color:var(--xlgray); max-width:600px; line-height:1.75; margin-top:24px; margin-bottom:80px;">
-    Other tools upload your footage to a cloud server and take an hour to process it. Smith Cut runs entirely on your Mac — no uploads, no waiting, no NDA violations. Your client's footage is yours alone.
-  </p>
-  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:2px;">
-    <div class="use-card">
-      <div class="use-icon">◈</div>
-      <div class="use-title">Music Videos</div>
-      <div class="use-desc">Hard cuts on every beat. Rapid-fire edits that feel like they were built for the track — because they were.</div>
-    </div>
-    <div class="use-card">
-      <div class="use-icon">◈</div>
-      <div class="use-title">Social Media Reels</div>
-      <div class="use-desc">Instagram Reels, TikTok, YouTube Shorts. 60 seconds. 8 clips. Done in under a minute instead of two hours.</div>
-    </div>
-    <div class="use-card">
-      <div class="use-icon">◈</div>
-      <div class="use-title">Brand Highlight Reels</div>
-      <div class="use-desc">Client deliverables that need to land on the beat. Drop your footage, drop their track, hand them a rough cut.</div>
-    </div>
-    <div class="use-card">
-      <div class="use-icon">◈</div>
-      <div class="use-title">Sports Edits</div>
-      <div class="use-desc">Action, energy, impact. Beat-sync edits are the standard in sports content — Smith Cut makes them automatic.</div>
-    </div>
-    <div class="use-card">
-      <div class="use-icon">◈</div>
-      <div class="use-title">Event Recaps</div>
-      <div class="use-desc">Conference, concert, wedding. Rapid turnaround rough cuts your client can react to before you refine.</div>
-    </div>
-    <div class="use-card">
-      <div class="use-icon">◈</div>
-      <div class="use-title">AI Story Edits</div>
-      <div class="use-desc">Import your Premiere project. The AI analyzes your footage, writes the story, and rebuilds the edit for you.</div>
-    </div>
-  </div>
-</section>
-
-<!-- PRIVACY / SPEED COMPARISON -->
-<section id="vs" style="padding:80px 60px; position:relative; z-index:1;">
-  <p class="section-label">Smith Cut vs the cloud</p>
-  <h2 class="section-title">WHY LOCAL<br>WINS.</h2>
-  <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:60px; max-width:900px;">
-    <div style="background:rgba(220,38,38,0.06); border:1px solid rgba(220,38,38,0.3); border-top:3px solid var(--red); padding:40px 36px;">
-      <div style="font-family:'Bebas Neue'; font-size:28px; color:var(--white); margin-bottom:24px; letter-spacing:0.05em;">SMITH CUT</div>
-      <div style="display:flex; flex-direction:column; gap:16px;">
-        <div style="display:flex; gap:14px; align-items:flex-start;">
-          <span style="color:#4ade80; font-size:16px; flex-shrink:0;">✓</span>
-          <span style="font-family:'Space Mono'; font-size:10px; letter-spacing:0.1em; color:var(--white); line-height:1.6;">Under 60 seconds from drop to Premiere timeline</span>
-        </div>
-        <div style="display:flex; gap:14px; align-items:flex-start;">
-          <span style="color:#4ade80; font-size:16px; flex-shrink:0;">✓</span>
-          <span style="font-family:'Space Mono'; font-size:10px; letter-spacing:0.1em; color:var(--white); line-height:1.6;">Runs 100% on your Mac — zero uploads</span>
-        </div>
-        <div style="display:flex; gap:14px; align-items:flex-start;">
-          <span style="color:#4ade80; font-size:16px; flex-shrink:0;">✓</span>
-          <span style="font-family:'Space Mono'; font-size:10px; letter-spacing:0.1em; color:var(--white); line-height:1.6;">Client footage stays under your NDA — always</span>
-        </div>
-        <div style="display:flex; gap:14px; align-items:flex-start;">
-          <span style="color:#4ade80; font-size:16px; flex-shrink:0;">✓</span>
-          <span style="font-family:'Space Mono'; font-size:10px; letter-spacing:0.1em; color:var(--white); line-height:1.6;">Works offline — no internet required after setup</span>
-        </div>
-        <div style="display:flex; gap:14px; align-items:flex-start;">
-          <span style="color:#4ade80; font-size:16px; flex-shrink:0;">✓</span>
-          <span style="font-family:'Space Mono'; font-size:10px; letter-spacing:0.1em; color:var(--white); line-height:1.6;">Beat-sync specialist — owns this workflow completely</span>
-        </div>
-        <div style="display:flex; gap:14px; align-items:flex-start;">
-          <span style="color:#4ade80; font-size:16px; flex-shrink:0;">✓</span>
-          <span style="font-family:'Space Mono'; font-size:10px; letter-spacing:0.1em; color:var(--white); line-height:1.6;">$20/month — transparent, no waitlist, no upload fees</span>
-        </div>
+<!-- PHILOSOPHY -->
+<section id="philosophy">
+  <p class="section-label">Design philosophy</p>
+  <h2 class="section-title">THE TOOL TEACHES.<br>THE STUDENT DECIDES.</h2>
+  <div class="two-col">
+    <div>
+      <div class="phil-block" style="margin-bottom:60px;">
+        <div class="phil-num">01</div>
+        <div class="phil-title">Show the Analysis</div>
+        <div class="phil-body">Before a single cut is made, Education Edition surfaces everything: the waveform, the detected BPM, every beat timestamp, the energy level of each beat. Students see <strong>what the algorithm found and why</strong> — not just the result. This is the part professional Smith Cut skips. Here, it's the entire first lesson.</div>
+      </div>
+      <div class="phil-block">
+        <div class="phil-num">02</div>
+        <div class="phil-title">Decision Checkpoints</div>
+        <div class="phil-body">In Guided Mode, the software pauses before each clip placement and asks the student a question: <strong>"This beat is loud and percussive. Which of your clips would feel most dynamic here?"</strong> The student makes the choice. The tool executes it. Decisions are logged for the teacher to review.</div>
       </div>
     </div>
-    <div style="background:rgba(17,17,17,0.6); border:1px solid var(--mgray); border-top:3px solid var(--mgray); padding:40px 36px;">
-      <div style="font-family:'Bebas Neue'; font-size:28px; color:var(--xlgray); margin-bottom:24px; letter-spacing:0.05em;">CLOUD-BASED TOOLS</div>
-      <div style="display:flex; flex-direction:column; gap:16px;">
-        <div style="display:flex; gap:14px; align-items:flex-start;">
-          <span style="color:#f87171; font-size:16px; flex-shrink:0;">✗</span>
-          <span style="font-family:'Space Mono'; font-size:10px; letter-spacing:0.1em; color:var(--xlgray); line-height:1.6;">1 hour of footage takes ~1 hour to process in the cloud</span>
-        </div>
-        <div style="display:flex; gap:14px; align-items:flex-start;">
-          <span style="color:#f87171; font-size:16px; flex-shrink:0;">✗</span>
-          <span style="font-family:'Space Mono'; font-size:10px; letter-spacing:0.1em; color:var(--xlgray); line-height:1.6;">Your footage is uploaded to third-party servers</span>
-        </div>
-        <div style="display:flex; gap:14px; align-items:flex-start;">
-          <span style="color:#f87171; font-size:16px; flex-shrink:0;">✗</span>
-          <span style="font-family:'Space Mono'; font-size:10px; letter-spacing:0.1em; color:var(--xlgray); line-height:1.6;">Client NDAs may prohibit cloud processing of raw footage</span>
-        </div>
-        <div style="display:flex; gap:14px; align-items:flex-start;">
-          <span style="color:#f87171; font-size:16px; flex-shrink:0;">✗</span>
-          <span style="font-family:'Space Mono'; font-size:10px; letter-spacing:0.1em; color:var(--xlgray); line-height:1.6;">Requires fast internet + active connection throughout</span>
-        </div>
-        <div style="display:flex; gap:14px; align-items:flex-start;">
-          <span style="color:#f87171; font-size:16px; flex-shrink:0;">✗</span>
-          <span style="font-family:'Space Mono'; font-size:10px; letter-spacing:0.1em; color:var(--xlgray); line-height:1.6;">General-purpose AI — beat-sync is an afterthought</span>
-        </div>
-        <div style="display:flex; gap:14px; align-items:flex-start;">
-          <span style="color:#f87171; font-size:16px; flex-shrink:0;">✗</span>
-          <span style="font-family:'Space Mono'; font-size:10px; letter-spacing:0.1em; color:var(--xlgray); line-height:1.6;">Pricing undisclosed — waitlist required</span>
-        </div>
+    <div>
+      <div class="phil-block" style="margin-bottom:60px;">
+        <div class="phil-num">03</div>
+        <div class="phil-title">No AI Story Mode</div>
+        <div class="phil-body">The AI Story Assistant — which analyzes footage and suggests a narrative — is intentionally absent from Education Edition. <strong>Narrative thinking is the skill being taught.</strong> Students must write their own story brief before they can run the pipeline. The brief becomes part of their lesson report.</div>
       </div>
-    </div>
-  </div>
-  <p style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--lgray); margin-top:20px; max-width:900px;">
-    Cloud processing times sourced from published reviewer benchmarks. Smith Cut timing based on a 98.6s audio track with 8 clips on Apple M-series hardware.
-  </p>
-</section>
-
-<section id="usecases-grid" style="padding:0 60px 120px; position:relative; z-index:1;">
-</section>
-
-<!-- TESTIMONIAL -->
-<section id="testimonial" style="padding:80px 60px;">
-  <div style="max-width:800px; border-left:3px solid var(--red); padding-left:40px;">
-    <p style="font-family:'DM Sans'; font-size:clamp(20px,2.5vw,28px); font-weight:300; color:var(--white); line-height:1.6; margin-bottom:32px;">
-      &ldquo;Smith Cut saved us hours on every project. Half a day of manual beat-cutting is now under a minute — and it all runs on our machine, so there's no question about client footage security. It's become a core part of our production workflow.&rdquo;
-    </p>
-    <div style="display:flex; align-items:center; gap:20px;">
-      <div style="width:48px; height:48px; background:var(--red); display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue'; font-size:20px; color:var(--white); flex-shrink:0;">RB</div>
-      <div>
-        <div style="font-family:'Space Mono'; font-size:11px; letter-spacing:0.15em; color:var(--white); text-transform:uppercase;">RBTV</div>
-        <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.1em; color:var(--xlgray); margin-top:4px;">Video Production Client</div>
+      <div class="phil-block">
+        <div class="phil-num">04</div>
+        <div class="phil-title">Lesson Reports</div>
+        <div class="phil-body">Every session generates a structured report: decisions made at each checkpoint, time spent, reasoning provided, and the final edit settings used. <strong>Teachers receive this as a PDF.</strong> It replaces the old "show me your timeline" review with something quantifiable and discussable.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section id="how">
-  <p class="section-label">The pipeline</p>
-  <h2 class="section-title">FOUR STEPS.<br>ONE CLICK.</h2>
-  <div class="steps-grid">
-    <div class="step" data-delay="0">
-      <div class="step-num">01</div>
-      <div class="step-title">Beat Detection</div>
-      <div class="step-desc">Librosa analyzes your music locally — no upload needed. Finds every beat, onset, and rhythmic hit. Energy levels mapped per beat for smart placement.</div>
+<!-- MODES -->
+<section id="modes">
+  <p class="section-label">Learning modes</p>
+  <h2 class="section-title">THREE MODES.<br>ONE TOOL.</h2>
+  <p style="font-family:'DM Sans'; font-size:17px; color:var(--xlgray); max-width:580px; line-height:1.75; margin-top:24px; margin-bottom:80px;">Teachers assign a mode based on where students are in the curriculum. Students progress through all three as they develop confidence.</p>
+  <div class="modes-grid">
+
+    <div class="mode-card featured" data-delay="0">
+      <div class="mode-tag">Year 1 · Beginner</div>
+      <div class="mode-title">GUIDED MODE</div>
+      <div class="mode-desc">Every step explained. Every decision prompted. The student is guided through beat analysis, clip selection rationale, and timeline review. The tool does nothing until the student answers a question.</div>
+      <ul class="mode-features">
+        <li>Beat waveform shown before any cut</li>
+        <li>BPM, timestamps, energy map displayed</li>
+        <li>Clip selection prompts at each beat</li>
+        <li>Student must type a reason for each choice</li>
+        <li>Post-run reflection prompt ("What would you change?")</li>
+        <li>Full session exported to teacher dashboard</li>
+        <li class="dim">Automation disabled — no one-click RUN</li>
+      </ul>
     </div>
-    <div class="step" data-delay="100">
-      <div class="step-num">02</div>
-      <div class="step-title">Clip Metadata</div>
-      <div class="step-desc">FFprobe reads every clip on your local drive — duration, frame rate, codec, creation date. Your footage path never leaves your machine.</div>
+
+    <div class="mode-card" data-delay="120">
+      <div class="mode-tag">Year 2 · Intermediate</div>
+      <div class="mode-title">ASSISTED MODE</div>
+      <div class="mode-desc">The tool suggests. The student approves or overrides. Beat detection and clip order are shown as recommendations, not instructions. Students learn to critique algorithmic decisions.</div>
+      <ul class="mode-features">
+        <li>Suggested clip order shown, editable</li>
+        <li>Beat sensitivity slider with visual feedback</li>
+        <li>Override any assignment before running</li>
+        <li>Comparison view: AI suggestion vs student edit</li>
+        <li>Written justification for overrides logged</li>
+        <li>Reduced checkpoint frequency</li>
+        <li class="dim">RUN button enabled — after review step</li>
+      </ul>
     </div>
-    <div class="step" data-delay="200">
-      <div class="step-num">03</div>
-      <div class="step-title">Beat Matching</div>
-      <div class="step-desc">Each clip is assigned to a beat slot and trimmed to exactly that duration. Loop, shuffle, vary — full control over pacing.</div>
+
+    <div class="mode-card" data-delay="240">
+      <div class="mode-tag">Year 3 · Advanced</div>
+      <div class="mode-title">PRO MODE</div>
+      <div class="mode-desc">Full Smith Cut functionality with classroom logging. Students work at professional pace — all settings available. Session data still sent to teacher dashboard for portfolio and assessment.</div>
+      <ul class="mode-features">
+        <li>All settings unlocked</li>
+        <li>Beat subdivision, variation, loop controls</li>
+        <li>Full Premiere Pro automation</li>
+        <li>Silent background session logging</li>
+        <li>Portfolio export of completed edits</li>
+        <li>Peer review sharing via teacher dashboard</li>
+        <li class="dim">No AI Story Mode (student must self-direct)</li>
+      </ul>
     </div>
-    <div class="step" data-delay="300">
-      <div class="step-num">04</div>
-      <div class="step-title">Premiere Import</div>
-      <div class="step-desc">Every clip placed on the Premiere timeline at its exact beat position. Music track placed. Project saved. Total time: under 60 seconds.</div>
+
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section id="compare">
+  <p class="section-label">Pro vs Education</p>
+  <h2 class="section-title">WHAT'S DIFFERENT.</h2>
+  <p style="font-family:'DM Sans'; font-size:17px; color:var(--xlgray); max-width:580px; line-height:1.75; margin-top:24px; margin-bottom:0;">Education Edition is not a stripped-down version. It's a pedagogically restructured version.</p>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th style="width:40%;">Feature</th>
+        <th class="col-pro">Smith Cut Pro</th>
+        <th class="col-edu">Education Edition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="feature-name">Beat detection (librosa)</td><td><span class="check">✓</span></td><td><span class="check">✓</span> <span class="partial">+ shown to student</span></td></tr>
+      <tr><td class="feature-name">Clip metadata sorting</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td class="feature-name">Premiere Pro automation</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td class="feature-name">One-click RUN</td><td><span class="check">✓</span></td><td><span class="partial">Guided/Assisted: gated · Pro: ✓</span></td></tr>
+      <tr><td class="feature-name">Beat waveform display</td><td><span class="check">✓</span> <span class="partial">audio preview</span></td><td><span class="check">✓</span> <span class="partial">+ annotated BPM map</span></td></tr>
+      <tr><td class="feature-name">Beat subdivision controls</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td class="feature-name">AI Story Assistant</td><td><span class="check">✓</span> <span class="partial">5 credits/mo</span></td><td><span class="cross">✗</span> <span class="partial">intentionally excluded</span></td></tr>
+      <tr><td class="feature-name">Decision checkpoints</td><td><span class="cross">✗</span></td><td><span class="check">✓</span> <span class="partial">Guided + Assisted modes</span></td></tr>
+      <tr><td class="feature-name">Student session logging</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td class="feature-name">Lesson report PDF</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td class="feature-name">Teacher dashboard</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td class="feature-name">Story brief requirement</td><td><span class="cross">✗</span></td><td><span class="check">✓</span> <span class="partial">before running</span></td></tr>
+      <tr><td class="feature-name">Peer review sharing</td><td><span class="cross">✗</span></td><td><span class="check">✓</span> <span class="partial">Pro mode</span></td></tr>
+      <tr><td class="feature-name">Classroom seat management</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+      <tr><td class="feature-name">License type</td><td><span class="partial">Per user</span></td><td><span class="partial">Per classroom / institution</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- CURRICULUM ALIGNMENT -->
+<section id="curriculum">
+  <p class="section-label">Curriculum alignment</p>
+  <h2 class="section-title">A SEMESTER<br>OF LESSONS.</h2>
+  <p style="font-family:'DM Sans'; font-size:17px; color:var(--xlgray); max-width:580px; line-height:1.75; margin-top:24px; margin-bottom:0;">Education Edition is structured around a 12-week media production curriculum. Each session builds on the last.</p>
+  <div class="curriculum-grid" style="margin-top:60px;">
+    <div class="lesson-card" data-delay="0">
+      <div class="lesson-week">Weeks 1–2</div>
+      <div class="lesson-title">What is a Beat?</div>
+      <div class="lesson-objective">Students load a track and observe the waveform. They manually identify beats by tapping, then compare to what Smith Cut detected. Objective: understand that rhythm is measurable.</div>
+      <div class="lesson-outcome">Outcome: Student can explain BPM and describe the relationship between musical beats and visual cuts.</div>
+    </div>
+    <div class="lesson-card" data-delay="100">
+      <div class="lesson-week">Weeks 3–4</div>
+      <div class="lesson-title">Clip Selection Logic</div>
+      <div class="lesson-objective">In Guided Mode, students make clip-per-beat decisions and write a justification for each. They compare their edit to the default algorithm output. Objective: understand that clip choice creates meaning.</div>
+      <div class="lesson-outcome">Outcome: Student can articulate why a specific clip feels right or wrong at a given beat position.</div>
+    </div>
+    <div class="lesson-card" data-delay="200">
+      <div class="lesson-week">Weeks 5–6</div>
+      <div class="lesson-title">Pacing and Energy</div>
+      <div class="lesson-objective">Students adjust beat sensitivity and subdivision to create two contrasting edits from the same material — one high-energy, one slow. Objective: understand that pacing is a creative choice, not a default.</div>
+      <div class="lesson-outcome">Outcome: Student can describe how beat density affects emotional tone in a video edit.</div>
+    </div>
+    <div class="lesson-card" data-delay="300">
+      <div class="lesson-week">Weeks 7–8</div>
+      <div class="lesson-title">Story Before the Edit</div>
+      <div class="lesson-objective">Students write a story brief before touching the tool: who is the audience, what is the feeling, what happens first and last. They then build the edit to match their brief in Assisted Mode.</div>
+      <div class="lesson-outcome">Outcome: Student produces an edit that matches a written creative brief, evaluated by teacher and peers.</div>
+    </div>
+    <div class="lesson-card" data-delay="400">
+      <div class="lesson-week">Weeks 9–10</div>
+      <div class="lesson-title">Critique and Override</div>
+      <div class="lesson-objective">In Assisted Mode, students receive the AI's suggested clip order and must override at least 30% of decisions with written justifications. Objective: learning to critique algorithmic suggestions critically.</div>
+      <div class="lesson-outcome">Outcome: Student demonstrates editorial judgment by improving on the default algorithmic output.</div>
+    </div>
+    <div class="lesson-card" data-delay="500">
+      <div class="lesson-week">Weeks 11–12</div>
+      <div class="lesson-title">Professional Workflow</div>
+      <div class="lesson-objective">Students work in Pro Mode with full settings, building a final project to a client brief. Session logged, edit exported to portfolio. Peer review session using teacher dashboard.</div>
+      <div class="lesson-outcome">Outcome: Student produces a portfolio-ready beat-sync edit and can walk through every decision made in the session log.</div>
     </div>
   </div>
 </section>
@@ -819,202 +807,107 @@ footer {
 <!-- PRICING -->
 <section id="pricing">
   <p class="section-label">Pricing</p>
-  <h2 class="section-title">SIMPLE.<br>TRANSPARENT.</h2>
-  <div class="pricing-grid">
-    <div class="pricing-card" data-delay="0">
-      <div class="pricing-name">Core Plan</div>
-      <div class="pricing-price">$20<span>/month</span></div>
-      <div class="pricing-desc">Everything you need for fast, professional beat-sync editing. Unlimited simple generations and 5 AI generations per month. Includes a 3-day free trial with 0 AI generations.</div>
-      <ul class="pricing-features">
-        <li class="highlight">Unlimited Simple Generations</li>
-        <li class="highlight">5 AI generations / month after trial</li>
-        <li class="highlight">100% local — zero cloud uploads</li>
-        <li>Beat detection (librosa)</li>
-        <li>Clip metadata sorting</li>
-        <li>Loop, shuffle, chop controls</li>
-        <li>Beat subdivision (1, 2, 4, 8 beats)</li>
-        <li>Cut length variation</li>
-        <li>Premiere Pro automation</li>
-        <li>Sound effects &amp; UI polish</li>
-        <li>macOS — Apple Silicon + Intel</li>
+  <h2 class="section-title">BUILT FOR<br>INSTITUTIONS.</h2>
+  <p style="font-family:'DM Sans'; font-size:17px; color:var(--xlgray); max-width:560px; line-height:1.75; margin-top:24px; margin-bottom:0;">
+    One teacher license covers the whole classroom. No per-student billing until you scale to multiple classes.
+  </p>
+  <div class="edu-pricing-grid">
+    <div class="edu-price-card" data-delay="0">
+      <div class="edu-price-name">Classroom</div>
+      <div class="edu-price-price">$49<span>/month</span></div>
+      <div class="edu-price-desc">One teacher. Up to 30 student seats. Everything you need for a single media production class.</div>
+      <ul class="edu-price-features">
+        <li class="highlight">1 teacher license</li>
+        <li class="highlight">Up to 30 student seats</li>
+        <li class="highlight">All three learning modes</li>
+        <li>Lesson report PDFs</li>
+        <li>Teacher dashboard</li>
+        <li>Decision checkpoint logs</li>
+        <li>Portfolio export per student</li>
+        <li>12-week curriculum guide included</li>
+        <li>Setup support included</li>
       </ul>
-      <a href="#" class="btn-primary" style="width:100%;text-align:center;display:block;" onclick="navigate('onboarding.html','#DC2626');return false;">Subscribe — $20/mo</a>
+      <button class="btn-primary" style="width:100%;" onclick="openEduModal('classroom')">Request Access</button>
     </div>
-    <div class="pricing-card featured" data-delay="150">
-      <div class="pricing-badge">Most Popular</div>
-      <div class="pricing-name">AI Add-On</div>
-      <div class="pricing-price">$3<span>/generation</span></div>
-      <div class="pricing-desc">Need more than 5 AI generations in a month? Top up instantly. Each AI generation runs the full story analysis pipeline.</div>
-      <div class="pricing-ai-note">
-        <strong>What an AI generation includes:</strong><br><br>
-        Imports your Premiere Pro project → extracts frames from every clip → describes each clip visually using moondream → generates a 3-paragraph story narrative → suggests optimal clip order, chop positions, and beat sensitivity → fires the full pipeline with one click.
+    <div class="edu-price-card featured" data-delay="150">
+      <div class="edu-price-badge">Best Value</div>
+      <div class="edu-price-name">Department</div>
+      <div class="edu-price-price">$149<span>/month</span></div>
+      <div class="edu-price-desc">Multiple teachers, multiple classes, one institution. Centralised dashboard, shared student portfolios.</div>
+      <div class="edu-note">
+        <strong style="color:var(--white);">Includes everything in Classroom, plus:</strong><br><br>
+        Unlimited teacher licenses · Unlimited student seats · Department-wide analytics · Cross-class peer review · Priority setup and onboarding call · Custom curriculum alignment on request
       </div>
-      <ul class="pricing-features">
-        <li class="highlight">Full AI story analysis</li>
-        <li class="highlight">Clip visual descriptions</li>
-        <li class="highlight">Narrative + vibe report</li>
-        <li class="highlight">AI-suggested clip order</li>
-        <li>Requires active Core Plan</li>
-        <li>Runs locally — no cloud</li>
-        <li>Ollama / moondream powered</li>
+      <ul class="edu-price-features">
+        <li class="highlight">Unlimited teacher licenses</li>
+        <li class="highlight">Unlimited student seats</li>
+        <li class="highlight">Department-wide analytics</li>
+        <li>Cross-class peer review</li>
+        <li>Priority onboarding call</li>
+        <li>Custom curriculum alignment</li>
       </ul>
-      <a href="#" class="btn-primary" style="width:100%;text-align:center;display:block;background:#111;border:1px solid var(--red);" onclick="navigate('onboarding.html','#DC2626');return false;">Get Core Plan First</a>
+      <button class="btn-primary" style="width:100%;" onclick="openEduModal('department')">Request Access</button>
     </div>
   </div>
   <div style="margin-top:24px; font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--lgray);">
-    CANCEL ANYTIME &nbsp;·&nbsp; MONTHLY BILLING &nbsp;·&nbsp; LICENSE KEY DELIVERED BY EMAIL
+    FREE 30-DAY TRIAL FOR EDUCATORS &nbsp;·&nbsp; ANNUAL BILLING AVAILABLE (2 MONTHS FREE) &nbsp;·&nbsp; PURCHASE ORDERS ACCEPTED
   </div>
 </section>
 
-
-<!-- EDUCATION TEASER -->
-<section id="education" style="padding:120px 60px; position:relative; z-index:1;">
-  <div style="display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; max-width:1100px;">
-    <div>
-      <p class="section-label" style="color:#60a5fa;">Also available</p>
-      <h2 class="section-title">SMITH CUT:<br><span style="color:#1E6EFF;">EDUCATION</span><br>EDITION.</h2>
-      <p style="font-family:'DM Sans'; font-size:17px; color:var(--xlgray); line-height:1.75; margin-top:24px; margin-bottom:40px;">
-        The only beat-sync tool with a classroom edition. No competitor has touched this market. Decision checkpoints, lesson reports, three learning modes, and a 12-week curriculum — built for teachers who want students to understand the edit, not just produce one.
-      </p>
-      <a href="#" onclick="navigate('edu.html','#1E6EFF');return false;" class="btn-primary" style="background:#1E6EFF; display:inline-block;">Learn About Education Edition →</a>
-    </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px;">
-      <div style="background:rgba(10,10,30,0.85); border:1px solid #1a1a2e; border-top:2px solid #1E6EFF; padding:28px 24px;">
-        <div style="font-family:'Bebas Neue'; font-size:40px; color:#60a5fa; line-height:1;">3</div>
-        <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--xlgray); text-transform:uppercase; margin-top:4px;">Learning Modes</div>
-        <div style="font-family:'DM Sans'; font-size:12px; color:var(--lgray); margin-top:8px; line-height:1.5;">Guided · Assisted · Pro</div>
-      </div>
-      <div style="background:rgba(10,10,30,0.85); border:1px solid #1a1a2e; padding:28px 24px;">
-        <div style="font-family:'Bebas Neue'; font-size:40px; color:#60a5fa; line-height:1;">12</div>
-        <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--xlgray); text-transform:uppercase; margin-top:4px;">Week Curriculum</div>
-        <div style="font-family:'DM Sans'; font-size:12px; color:var(--lgray); margin-top:8px; line-height:1.5;">Ready to teach from day one</div>
-      </div>
-      <div style="background:rgba(10,10,30,0.85); border:1px solid #1a1a2e; padding:28px 24px;">
-        <div style="font-family:'Bebas Neue'; font-size:40px; color:#60a5fa; line-height:1;">30</div>
-        <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--xlgray); text-transform:uppercase; margin-top:4px;">Student Seats</div>
-        <div style="font-family:'DM Sans'; font-size:12px; color:var(--lgray); margin-top:8px; line-height:1.5;">Classroom plan from $49/mo</div>
-      </div>
-      <div style="background:rgba(10,10,30,0.85); border:1px solid #1a1a2e; padding:28px 24px;">
-        <div style="font-family:'Bebas Neue'; font-size:40px; color:#60a5fa; line-height:1;">PDF</div>
-        <div style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.15em; color:var(--xlgray); text-transform:uppercase; margin-top:4px;">Lesson Reports</div>
-        <div style="font-family:'DM Sans'; font-size:12px; color:var(--lgray); margin-top:8px; line-height:1.5;">Per student, per session</div>
-      </div>
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-inner">
+    <p class="section-label" style="text-align:center;">Get started</p>
+    <h2 class="cta-title">READY TO<br>BRING <span class="accent">SMITH CUT</span><br>TO YOUR CLASS?</h2>
+    <p class="cta-sub">Request access and we'll set up your classroom within 48 hours. Free 30-day trial, no credit card required.</p>
+    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+      <button class="btn-primary" onclick="openEduModal('trial')">Start Free Trial</button>
+      <a href="mailto:edu@smithcut.app" class="btn-secondary">Email Us Directly</a>
     </div>
   </div>
 </section>
-
-<!-- LICENSE ADMIN REMOVED -->
-<!-- License management is handled via a private admin dashboard.
-     Never expose key generation or revocation in a public-facing page. -->
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-brand">
-    <div class="footer-logo">SMITH<span>CUT</span></div>
-    <p>Beat-sync video editing automation for Adobe Premiere Pro. Built for editors who value their time.</p>
+  <div class="footer-left">
+    <div class="logo">SMITH<span class="cut">CUT</span></div>
+    <p>Education Edition · For media classrooms</p>
   </div>
-  <div class="footer-col">
-    <div class="footer-col-title">Product</div>
-    <a href="#how">How It Works</a>
+  <div class="footer-right">
+    <a href="#" onclick="navigate('index.html','#DC2626');return false;">Smith Cut Pro</a>
+    <a href="#modes">Learning Modes</a>
     <a href="#pricing">Pricing</a>
-  </div>
-  <div class="footer-col">
-    <div class="footer-col-title">Support</div>
-    <a href="#how">How It Works</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#" onclick="navigate('edu.html','#1E6EFF');return false;" style="color:#60a5fa;">Education Edition</a>
-    <a href="mailto:support@smithcut.app">support@smithcut.app</a>
-  </div>
-  <div class="footer-col">
-    <div class="footer-col-title">Legal</div>
-    <a href="#" onclick="openModal('terms-modal');return false;">Terms of Service</a>
-    <a href="#" onclick="openModal('privacy-modal');return false;">Privacy Policy</a>
-    <a href="#" onclick="openModal('license-modal');return false;">License Agreement</a>
+    <a href="mailto:edu@smithcut.app">edu@smithcut.app</a>
   </div>
 </footer>
 <div class="footer-bottom">
   <span>© 2026 Smith Cut. All rights reserved.</span>
-  <span>macOS only &nbsp;·&nbsp; Premiere Pro 2022+</span>
+  <span>macOS only · Premiere Pro 2022+</span>
 </div>
 
-<!-- SUBSCRIBE MODAL -->
-<div class="modal-overlay" id="subscribe-modal">
+<!-- REQUEST MODAL -->
+<div class="modal-overlay" id="edu-modal">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('subscribe-modal')">×</button>
-    <div class="modal-title">SUBSCRIBE</div>
-    <div class="modal-sub">Core Plan — $20 / month</div>
-    <div class="modal-field">
-      <label class="admin-label">Full Name</label>
-      <input class="admin-input" id="sub-name" placeholder="Your name" />
-    </div>
-    <div class="modal-field">
-      <label class="admin-label">Email Address</label>
-      <input class="admin-input" id="sub-email" type="email" placeholder="your@email.com" />
-    </div>
-    <div class="modal-field">
-      <label class="admin-label">Payment</label>
-      <div style="background:var(--black); border:1px solid var(--mgray); padding:14px 16px; font-family:'Space Mono'; font-size:10px; color:var(--lgray);">
-        Payment processing via Stripe — coming soon.<br>For now, contact us directly to subscribe.
-      </div>
-    </div>
-    <button class="btn-admin" onclick="submitSubscribe()" style="width:100%;padding:14px;">CONTINUE TO PAYMENT</button>
+    <button class="modal-close" onclick="closeEduModal()">×</button>
+    <div class="modal-title">REQUEST ACCESS</div>
+    <div class="modal-sub" id="edu-modal-sub">Education Edition — Classroom Plan</div>
+    <label class="field-label">Your Name</label>
+    <input class="field-input" id="edu-name" placeholder="Ms. Johnson" />
+    <label class="field-label">School / Institution</label>
+    <input class="field-input" id="edu-school" placeholder="Riverside High School" />
+    <label class="field-label">Email Address</label>
+    <input class="field-input" id="edu-email" type="email" placeholder="teacher@school.edu" />
+    <label class="field-label">Number of Students</label>
+    <input class="field-input" id="edu-students" type="number" placeholder="25" />
+    <label class="field-label">How do you plan to use Smith Cut?</label>
+    <textarea class="field-input" id="edu-use" rows="3" placeholder="e.g. Year 10 media production class, beat-sync editing unit..."></textarea>
+    <button class="btn-submit" onclick="submitEduRequest()">SUBMIT REQUEST</button>
     <div style="font-family:'Space Mono'; font-size:8px; color:var(--lgray); margin-top:16px; text-align:center;">
-      CANCEL ANYTIME &nbsp;·&nbsp; LICENSE KEY EMAILED WITHIN 24 HOURS
+      FREE 30-DAY TRIAL · WE'LL RESPOND WITHIN 24 HOURS
     </div>
   </div>
 </div>
 
-<!-- LEGAL MODALS -->
-<div class="modal-overlay" id="terms-modal">
-  <div class="modal" style="max-width:600px; max-height:80vh; overflow-y:auto;">
-    <button class="modal-close" onclick="closeModal('terms-modal')">×</button>
-    <div class="modal-title">TERMS OF SERVICE</div>
-    <div class="modal-sub" style="margin-bottom:24px;">Last updated April 2026</div>
-    <div style="font-family:'DM Sans'; font-size:14px; color:var(--xlgray); line-height:1.8;">
-      <p style="margin-bottom:16px;"><strong style="color:var(--white);">1. License Grant.</strong> Upon purchase, Smith Cut grants you a personal, non-transferable license to install and use the software on one Mac computer. The license key is bound to your machine.</p>
-      <p style="margin-bottom:16px;"><strong style="color:var(--white);">2. Subscription.</strong> The Core Plan is billed monthly at $20 USD. Subscription renews automatically. Cancel any time — cancellation takes effect at the end of the current billing period.</p>
-      <p style="margin-bottom:16px;"><strong style="color:var(--white);">3. AI Credits.</strong> The Core Plan includes 10 AI generations per calendar month. Unused credits do not roll over. Additional credits are available at $3 per generation.</p>
-      <p style="margin-bottom:16px;"><strong style="color:var(--white);">4. Restrictions.</strong> You may not redistribute, resell, reverse-engineer, or share your license key. Violation results in immediate revocation without refund.</p>
-      <p style="margin-bottom:16px;"><strong style="color:var(--white);">5. Refunds.</strong> Refunds are available within 7 days of purchase if the software cannot be made to function on your system after following the setup guide.</p>
-      <p style="margin-bottom:16px;"><strong style="color:var(--white);">6. Disclaimer.</strong> Smith Cut is provided as-is. We are not liable for data loss, project corruption, or any issues arising from use with Adobe Premiere Pro.</p>
-      <p><strong style="color:var(--white);">7. Contact.</strong> support@smithcut.app</p>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="privacy-modal">
-  <div class="modal" style="max-width:600px; max-height:80vh; overflow-y:auto;">
-    <button class="modal-close" onclick="closeModal('privacy-modal')">×</button>
-    <div class="modal-title">PRIVACY POLICY</div>
-    <div class="modal-sub" style="margin-bottom:24px;">Last updated April 2026</div>
-    <div style="font-family:'DM Sans'; font-size:14px; color:var(--xlgray); line-height:1.8;">
-      <p style="margin-bottom:16px;"><strong style="color:var(--white);">Data we collect.</strong> Email address (for license delivery), payment information (processed by Stripe — we never see your card details), and license validation requests (key + machine ID hash).</p>
-      <p style="margin-bottom:16px;"><strong style="color:var(--white);">Data we do not collect.</strong> Your video files, audio files, project files, or any content processed by Smith Cut never leaves your computer. All AI processing runs locally via Ollama.</p>
-      <p style="margin-bottom:16px;"><strong style="color:var(--white);">License validation.</strong> Smith Cut periodically checks your license key against our validation endpoint (a GitHub Gist). This request contains only your key and a hashed machine identifier — no personal data.</p>
-      <p style="margin-bottom:16px;"><strong style="color:var(--white);">Third parties.</strong> We use Stripe for payment processing. Their privacy policy applies to payment data. We do not sell or share your email with any third party.</p>
-      <p><strong style="color:var(--white);">Contact.</strong> support@smithcut.app</p>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="license-modal">
-  <div class="modal" style="max-width:600px; max-height:80vh; overflow-y:auto;">
-    <button class="modal-close" onclick="closeModal('license-modal')">×</button>
-    <div class="modal-title">LICENSE AGREEMENT</div>
-    <div class="modal-sub" style="margin-bottom:24px;">End User License Agreement</div>
-    <div style="font-family:'DM Sans'; font-size:14px; color:var(--xlgray); line-height:1.8;">
-      <p style="margin-bottom:16px;">By activating Smith Cut with a license key, you agree to the following:</p>
-      <p style="margin-bottom:16px;"><strong style="color:var(--white);">Single machine use.</strong> Each license key activates on one Mac and is bound to that machine's hardware fingerprint. To transfer your license to a new machine, contact support.</p>
-      <p style="margin-bottom:16px;"><strong style="color:var(--white);">No redistribution.</strong> You may not share, sell, or distribute your license key or the Smith Cut installer to any third party.</p>
-      <p style="margin-bottom:16px;"><strong style="color:var(--white);">No reverse engineering.</strong> You may not decompile, disassemble, or attempt to extract the source code of Smith Cut.</p>
-      <p style="margin-bottom:16px;"><strong style="color:var(--white);">Revocation.</strong> Smith Cut reserves the right to revoke any license key at any time for violation of this agreement, with no refund obligation.</p>
-      <p><strong style="color:var(--white);">Updates.</strong> Active subscribers receive all updates released during their subscription period.</p>
-    </div>
-  </div>
-</div>
-
-
-</div>
 <script>
 
 // ── CURSOR ──────────────────────────────────────────────────────────────────
@@ -1155,131 +1048,240 @@ if (_bg) {
   })()
 }
 
-document.querySelectorAll('a, button, .step, .pricing-card').forEach(el => {
+document.querySelectorAll('a,button,.mode-card,.lesson-card,.edu-price-card').forEach(el => {
   el.addEventListener('mouseenter', () => cursor.classList.add('hover'))
   el.addEventListener('mouseleave', () => cursor.classList.remove('hover'))
 })
 
-// ── NAV SCROLL ───────────────────────────────────────────────────────────────
-window.addEventListener('scroll', () => {
-  document.getElementById('pro-nav').classList.toggle('scrolled', window.scrollY > 60)
-})
 
-// ── HERO CANVAS (particle grid) ──────────────────────────────────────────────
-const canvas = document.getElementById('bg-canvas')
-const ctx    = canvas.getContext('2d')
-let W, H, particles = []
-let particleColor = 'rgba(220,38,38,'
-let lineColor = 'rgba(220,38,38,'
 
-function resize() {
-  W = canvas.width  = window.innerWidth
-  H = canvas.height = window.innerHeight
+// Edu canvas removed — shared bg-canvas handles all pages
+
+
+
+// ── MODAL ─────────────────────────────────────────────────────────────────────
+let selectedPlan = 'classroom'
+function openEduModal(plan) {
+  selectedPlan = plan
+  const subs = { classroom:'Education Edition — Classroom Plan', department:'Education Edition — Department Plan', trial:'Education Edition — Free 30-Day Trial' }
+  document.getElementById('edu-modal-sub').textContent = subs[plan] || subs.classroom
+  document.getElementById('edu-modal').classList.add('open')
 }
-resize()
-window.addEventListener('resize', resize)
+function closeEduModal() { document.getElementById('edu-modal').classList.remove('open') }
+document.getElementById('edu-modal').addEventListener('click', e => { if (e.target === document.getElementById('edu-modal')) closeEduModal() })
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEduModal() })
 
-for (let i = 0; i < 200; i++) {
-  particles.push({
-    x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
-    vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
-    size: Math.random() * 1.5 + 0.5,
+function submitEduRequest() {
+  const name   = document.getElementById('edu-name').value.trim()
+  const school = document.getElementById('edu-school').value.trim()
+  const email  = document.getElementById('edu-email').value.trim()
+  if (!name || !school || !email) { alert('Please fill in your name, school, and email.'); return }
+  closeEduModal()
+  alert(`Thanks, ${name}! We'll be in touch at ${email} within 24 hours to set up your ${selectedPlan === 'trial' ? 'free trial' : 'classroom'}.`)
+}
+
+
+// ── BLOG DATA ────────────────────────────────────────────────────────────────
+const POSTS = [
+  {
+    id: 1, tag: 'how-to', category: 'how-to', date: 'Apr 14 2026',
+    title: 'How to Beat-Sync 8 Clips in Under 60 Seconds',
+    excerpt: 'A complete walkthrough of the Smith Cut pipeline: from dropping your first clip to seeing a finished rough cut in Premiere Pro.',
+    body: `
+      <p class="post-meta">HOW-TO · APR 14 2026 · 4 MIN READ</p>
+      <h1>How to Beat-Sync 8 Clips in Under 60 Seconds</h1>
+      <p>Beat-synced editing used to mean an afternoon of work: manually scrubbing through your audio, dropping markers, then carefully trimming every clip to land on the beat. Smith Cut collapses that entire process into under a minute.</p>
+      <h2>Step 1 — Drop your clips</h2>
+      <p>Drag your video clips directly onto the VIDEO zone, or click to browse. Smith Cut accepts <strong>.mp4, .mov, .avi, .mkv, .mxf, .m4v,</strong> and <strong>.webm</strong>. Drop an entire folder and it scans recursively — no manual file selection needed.</p>
+      <div class="callout"><p><strong>Pro tip:</strong> Sort by Date Filmed to put your clips in chronological order automatically. This often produces the most natural-feeling rough cut without any manual sorting.</p></div>
+      <h2>Step 2 — Drop your music</h2>
+      <p>Drag your audio track onto the AUDIO zone. One track only — this is intentional. Click the play button to preview it inline with the waveform visualizer before committing to a run.</p>
+      <h2>Step 3 — Hit RUN</h2>
+      <p>Smith Cut runs four steps automatically: beat detection via librosa, metadata reading via FFprobe, clip-to-beat matching, and Premiere Pro placement via pymiere. The entire pipeline runs on your Mac — nothing is uploaded anywhere.</p>
+      <h2>Step 4 — Review in Premiere</h2>
+      <p>Open your Premiere project. Your clips are already on the timeline, trimmed to beat length, with your music on the audio track below. Scrub through it, make creative adjustments, and export. The mechanical work is done.</p>
+      <div class="callout"><p><strong>On a 98.6 second song at 103 BPM:</strong> 168 beat points detected, 8 clips placed, project saved. Total time from clicking RUN: 47 seconds.</p></div>
+    `
+  },
+  {
+    id: 2, tag: 'comparison', category: 'comparison', date: 'Apr 12 2026',
+    title: 'Smith Cut vs Wideframe: Two Very Different Problems',
+    excerpt: 'Both tools integrate with Premiere Pro and use AI. But they solve completely different problems at completely different price points.',
+    body: `
+      <p class="post-meta">COMPARISON · APR 12 2026 · 5 MIN READ</p>
+      <h1>Smith Cut vs Wideframe: Two Very Different Problems</h1>
+      <p>When people see two AI tools that both work with Adobe Premiere Pro, they assume they're competing. Smith Cut and Wideframe are not competing. They're solving different problems at different stages of the editing workflow.</p>
+      <h2>What Wideframe does</h2>
+      <p>Wideframe is a footage organisation and assembly tool. You point it at a library of raw footage — interviews, B-roll, product shots — and it indexes everything by meaning. You describe what you want in natural language, and it assembles a rough cut from your library. The output is a .prproj file you open in Premiere. At $100/month, it's priced for production companies with large footage archives.</p>
+      <h2>What Smith Cut does</h2>
+      <p>Smith Cut is a beat-sync automation tool. You have your clips already selected. You have a music track. Smith Cut finds every beat in the music and places your clips on the Premiere timeline in beat-sync order — in under 60 seconds. At $20/month, it's priced for individual editors and agencies.</p>
+      <h2>The key difference: speed and privacy</h2>
+      <p>Wideframe uploads your footage to a cloud server for analysis. One hour of footage takes roughly one hour to process. Smith Cut runs entirely on your Mac — no uploads, no waiting, no NDA violations. For client work under confidentiality agreements, this isn't a minor detail.</p>
+      <div class="callout"><p><strong>Bottom line:</strong> Use Wideframe to find the best clips from hours of raw footage. Use Smith Cut to beat-sync those clips to music in under a minute. They're complementary, not competing.</p></div>
+    `
+  },
+  {
+    id: 3, tag: 'workflow', category: 'workflow', date: 'Apr 10 2026',
+    title: 'Why Your Client Footage Should Never Leave Your Mac',
+    excerpt: 'Cloud-based AI video tools upload your footage to third-party servers. Here\'s why that matters for agency work and what the alternatives are.',
+    body: `
+      <p class="post-meta">WORKFLOW · APR 10 2026 · 4 MIN READ</p>
+      <h1>Why Your Client Footage Should Never Leave Your Mac</h1>
+      <p>Most AI video editing tools work the same way: you upload your footage to their cloud server, their AI processes it, and the result comes back to you. This is fast to implement and works well technically. But for agencies and freelancers doing client work, it creates a problem that most tools don't mention in their marketing.</p>
+      <h2>The NDA problem</h2>
+      <p>When a client hires you to edit their product launch video, their corporate keynote, or their unreleased campaign footage, there's usually a non-disclosure agreement involved. That NDA typically prohibits sharing the footage with third parties — including AI processing services. Uploading that footage to a cloud AI tool, even briefly for analysis, is potentially a violation of that agreement.</p>
+      <div class="callout"><p><strong>The question to ask any AI editing tool:</strong> "Where is my footage processed, and who has access to the servers it's processed on?" If the answer isn't "on your own machine," think carefully before using it for client work.</p></div>
+      <h2>What local processing means</h2>
+      <p>Smith Cut runs entirely on your Mac. Beat detection uses librosa — a Python library running on your hardware. Video metadata is read by FFprobe, also local. The AI story analysis uses Ollama, which downloads the model to your machine and runs inference locally. Nothing is sent to an external server at any point in the pipeline.</p>
+      <h2>The practical upside</h2>
+      <p>Beyond NDA compliance, local processing means Smith Cut works offline. No internet connection required after initial setup. No latency waiting for cloud round-trips. No monthly bandwidth fees. And critically — if the Smith Cut servers went down tomorrow, your app would still work perfectly.</p>
+    `
+  },
+  {
+    id: 4, tag: 'tutorial', category: 'tutorial', date: 'Apr 8 2026',
+    title: 'Beat Subdivision: Making Your Edit Feel Slower or Faster',
+    excerpt: 'Cutting every beat produces rapid-fire energy. Cutting every 4th beat gives a cinematic feel. Here\'s how to use subdivision to control pacing.',
+    body: `
+      <p class="post-meta">TUTORIAL · APR 8 2026 · 3 MIN READ</p>
+      <h1>Beat Subdivision: Making Your Edit Feel Slower or Faster</h1>
+      <p>At 103 BPM, a song produces about 1.7 beats per second. If Smith Cut cuts a new clip on every single beat, you get 168 cuts in 98 seconds — a fast, urgent, high-energy edit. Sometimes that's exactly what you want. Sometimes it's too aggressive.</p>
+      <h2>The subdivision setting</h2>
+      <p>Smith Cut's "Cut every N beats" setting in the Settings panel lets you control how often a new clip starts:</p>
+      <h3>Every beat (default)</h3>
+      <p>168 cuts in 98 seconds. Maximum energy. Good for action sports, club visuals, hype reels. Each clip is roughly 0.58 seconds long.</p>
+      <h3>Every 2nd beat</h3>
+      <p>84 cuts. Half the pace. Clips are roughly 1.16 seconds each. Good for music videos where you want the cuts to breathe a little.</p>
+      <h3>Every 4th beat (one bar)</h3>
+      <p>42 cuts. One cut per bar of music. Clips are roughly 2.3 seconds each. This is where narrative edits start to feel like they have a story — each clip has time to establish something.</p>
+      <h3>Every 8th beat (two bars)</h3>
+      <p>21 cuts. Cinematic pacing. Long enough for the viewer to absorb each shot. Good for emotional content, documentary-style edits, wedding films.</p>
+      <div class="callout"><p><strong>Quick rule of thumb:</strong> Match your subdivision to your content energy. High-energy music with dynamic footage? Every beat. Emotional ballad with scenic shots? Every 4th or 8th beat.</p></div>
+    `
+  },
+  {
+    id: 5, tag: 'workflow', category: 'workflow', date: 'Apr 6 2026',
+    title: 'The 5-Minute Beat-Sync Workflow for Agencies',
+    excerpt: 'How production agencies use Smith Cut to deliver beat-sync rough cuts to clients before the first revision call is even over.',
+    body: `
+      <p class="post-meta">WORKFLOW · APR 6 2026 · 4 MIN READ</p>
+      <h1>The 5-Minute Beat-Sync Workflow for Agencies</h1>
+      <p>The feedback loop in agency video production is usually: shoot, edit rough cut, send to client, wait, revise. The rough cut stage used to take half a day of mechanical work. With Smith Cut, it takes under five minutes — which changes when in the workflow you can show clients something.</p>
+      <h2>The workflow</h2>
+      <p><strong>Minute 1:</strong> Client sends music reference or brief. You already have the footage from the shoot. Drop clips into Smith Cut sorted by Date Filmed.</p>
+      <p><strong>Minute 2:</strong> Drop the music track. Hit RUN. Smith Cut detects beats, reads metadata, builds the cut list, places everything in Premiere.</p>
+      <p><strong>Minutes 3-5:</strong> Quick review in Premiere. Adjust any clips that feel wrong, export a low-res proxy for client review.</p>
+      <div class="callout"><p><strong>The RBTV workflow:</strong> "We have a rough cut before the client even gets off the phone. That's changed what our first revision call is about — now we're talking about creative choices, not whether the cuts are on the beat."</p></div>
+      <h2>Why this matters for client relationships</h2>
+      <p>Delivering something tangible within minutes of a briefing sets a tone of responsiveness that's hard to achieve any other way. Clients who see a rough cut quickly feel heard. The conversation becomes forward-looking rather than waiting-and-wondering.</p>
+    `
+  },
+  {
+    id: 6, tag: 'how-to', category: 'how-to', date: 'Apr 4 2026',
+    title: 'Setting Up Smith Cut: Mac to Premiere in 10 Minutes',
+    excerpt: 'A complete setup guide from fresh Mac to your first beat-sync edit in Premiere Pro. One script installs everything.',
+    body: `
+      <p class="post-meta">HOW-TO · APR 4 2026 · 5 MIN READ</p>
+      <h1>Setting Up Smith Cut: Mac to Premiere in 10 Minutes</h1>
+      <p>Smith Cut requires a few dependencies that the setup script installs automatically. Here's what happens when you double-click setup.command and what you need to do before running Smith Cut for the first time.</p>
+      <h2>What the setup script installs</h2>
+      <p><strong>Homebrew</strong> — the standard Mac package manager. If you already have it, the script skips this step.</p>
+      <p><strong>Python 3.11</strong> — specifically 3.11, not newer. The pymiere library that talks to Premiere uses a module removed in Python 3.12.</p>
+      <p><strong>FFmpeg</strong> — which includes FFprobe. Used to read video metadata without decoding the footage.</p>
+      <p><strong>pymiere and librosa</strong> — the Python libraries for Premiere control and beat detection respectively.</p>
+      <p><strong>Ollama</strong> — the local AI runtime for the story analysis feature. Downloads moondream and llama3.2 models to your machine.</p>
+      <h2>The one manual step</h2>
+      <p>After setup, open Adobe Premiere Pro and go to <strong>Window → Extensions → Pymiere Link</strong>. This starts the local server that Smith Cut uses to control Premiere. You need to do this once per Premiere session — just leave the panel open somewhere in your workspace.</p>
+      <div class="callout"><p><strong>Before clicking RUN:</strong> Premiere must be open, a project must be loaded, and a sequence must be open in the timeline panel. Smith Cut places clips on the active sequence.</p></div>
+    `
+  },
+]
+
+function renderBlogGrid(filter) {
+  const grid = document.getElementById('blog-grid')
+  if (!grid) return
+  grid.innerHTML = ''
+  const filtered = filter === 'all' ? POSTS : POSTS.filter(p => p.category === filter)
+  filtered.forEach(post => {
+    const card = document.createElement('div')
+    card.className = 'blog-card'
+    card.innerHTML = `
+      <div class="blog-tag">${post.tag.toUpperCase()}</div>
+      <div class="blog-title">${post.title}</div>
+      <div class="blog-excerpt">${post.excerpt}</div>
+      <div class="blog-meta">${post.date} · 4 MIN READ</div>
+    `
+    card.onclick = () => openPost(post)
+    grid.appendChild(card)
   })
 }
 
-function drawParticles() {
-  ctx.clearRect(0, 0, W, H)
-  particles.forEach((p, i) => {
-    p.x += p.vx; p.y += p.vy
-    if (p.x < 0) p.x = W; if (p.x > W) p.x = 0
-    if (p.y < 0) p.y = H; if (p.y > H) p.y = 0
-    ctx.beginPath()
-    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-    ctx.fillStyle = particleColor + "0.9)"
-    ctx.fill()
-    // Connect nearby particles
-    for (let j = i + 1; j < particles.length; j++) {
-      const dx = p.x - particles[j].x
-      const dy = p.y - particles[j].y
-      const dist = Math.sqrt(dx * dx + dy * dy)
-      if (dist < 150) {
-        ctx.beginPath()
-        ctx.moveTo(p.x, p.y)
-        ctx.lineTo(particles[j].x, particles[j].y)
-        ctx.strokeStyle = lineColor + (0.25 * (1 - dist / 150)) + ")"
-        ctx.lineWidth = 0.5
-        ctx.stroke()
-      }
-    }
-  })
-  requestAnimationFrame(drawParticles)
-}
-drawParticles()
-
-// ── MARQUEE ───────────────────────────────────────────────────────────────────
-const items = ['60 Seconds Not 60 Minutes','Your Footage Stays On Your Mac','Beat Detection','Clip Matching','Premiere Automation','Zero Cloud Uploads','Beat Subdivision','Energy-Aware Placement','Education Edition','Local AI — No API Key']
-const track  = document.getElementById('mtrack')
-const markup = items.map(t => `<span class="marquee-item">${t}<span>·</span></span>`).join('')
-track.innerHTML = markup + markup
-
-// ── SCROLL REVEAL ─────────────────────────────────────────────────────────────
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      const delay = e.target.dataset.delay || 0
-      setTimeout(() => e.target.classList.add('visible'), +delay)
-    }
-  })
-}, { threshold: 0.1 })
-
-
-
-// ── MODALS ────────────────────────────────────────────────────────────────────
-function openSubscribeModal() { document.getElementById('subscribe-modal').classList.add('open') }
-function openModal(id) { document.getElementById(id).classList.add('open') }
-function closeModal(id)       { document.getElementById(id).classList.remove('open') }
-document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open') })
-})
-
-function submitSubscribe() {
-  const email = document.getElementById('sub-email').value
-  if (!email) { alert('Please enter your email address.'); return }
-  alert(`Thanks! We'll email your license key to ${email} within 24 hours.`)
-  closeModal('subscribe-modal')
+function filterBlog(cat, btn) {
+  document.querySelectorAll('.blog-filter').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+  renderBlogGrid(cat)
 }
 
+function openPost(post) {
+  document.getElementById('post-content').innerHTML = post.body
+  document.getElementById('post-modal').style.display = 'block'
+  window.scrollTo(0,0)
+}
+function closePost() {
+  document.getElementById('post-modal').style.display = 'none'
+}
 
+// ── ONBOARDING ────────────────────────────────────────────────────────────────
+let obCurrentStep = 0
+const obAnswers = {}
 
-function verifyGateKey() {
-  const key = document.getElementById('gate-key-input').value.trim().toUpperCase()
-  const msg = document.getElementById('gate-key-msg')
-  if (!/^SMITH-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(key)) {
-    msg.style.color = '#f87171'
-    msg.textContent = 'INVALID KEY FORMAT — Expected: SMITH-XXXX-XXXX-XXXX'
+function obNext() {
+  const steps = document.querySelectorAll('#page-onboarding .ob-step')
+  if (obCurrentStep < steps.length - 1) {
+    steps[obCurrentStep].classList.remove('active')
+    obCurrentStep++
+    steps[obCurrentStep].classList.add('active')
+    const total = steps.length - 1
+    const ind = document.getElementById('ob-step-indicator')
+    if (ind && obCurrentStep > 0) ind.textContent = `0${obCurrentStep} / 0${total}`
+    if (ind && obCurrentStep === 0) ind.textContent = ''
+  }
+}
+
+function selectChoice(btn, groupId) {
+  document.querySelectorAll(`#${groupId} .ob-choice`).forEach(b => b.classList.remove('selected'))
+  btn.classList.add('selected')
+  obAnswers[groupId] = btn.dataset.val
+  // Enable next buttons
+  const stepMap = { 'role-choices': 'ob-1-next', 'usecase-choices': 'ob-3-next' }
+  const nextBtn = stepMap[groupId] ? document.getElementById(stepMap[groupId]) : null
+  if (nextBtn) nextBtn.classList.remove('ob-disabled')
+}
+
+function showMacHelp() {
+  document.getElementById('mac-help').style.display = 'block'
+}
+function showIntelBlock() {
+  document.getElementById('intel-block').style.display = 'block'
+  document.getElementById('mac-help').style.display = 'none'
+}
+function submitIntelNotify() {
+  const email = document.getElementById('intel-email').value
+  if (!email) { alert('Please enter your email.'); return }
+  document.getElementById('intel-block').innerHTML = `<p style="font-family:'Space Mono'; font-size:10px; color:#4ade80; letter-spacing:0.15em;">✓ WE'LL EMAIL YOU AT ${email.toUpperCase()} WHEN INTEL SUPPORT LAUNCHES</p>`
+}
+
+function obCheckout() {
+  const emailEl = document.getElementById('ob-email')
+  const email = emailEl.value.trim()
+  if (!email || !email.includes('@')) {
+    emailEl.style.borderColor = 'var(--red)'
+    emailEl.placeholder = 'Please enter a valid email'
+    emailEl.focus()
     return
   }
-  const keys = getKeys()
-  const found = keys.find(k => k.key === key && k.status === 'active')
-  if (found) {
-    msg.style.color = '#4ade80'
-    msg.textContent = 'KEY VERIFIED — Your download will begin shortly.'
-    setTimeout(() => alert('Download starting... (connect your actual .dmg file here)'), 800)
-  } else if (keys.find(k => k.key === key && k.status === 'revoked')) {
-    msg.style.color = '#f87171'
-    msg.textContent = 'THIS LICENSE HAS BEEN REVOKED.'
-  } else {
-    msg.style.color = '#f87171'
-    msg.textContent = 'KEY NOT FOUND — Check your email or contact support.'
-  }
+  // Redirect to Stripe with pre-filled email — 3-day free trial, then $20/mo
+  window.location.href = `https://buy.stripe.com/00w7sLc034yv1IRg3ifnO00?prefilled_email=${encodeURIComponent(email)}`
 }
-
-// Admin functions removed — use private dashboard for license management
-
-// Keyboard shortcuts
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'))
-})
 </script>
 </body>
 </html>

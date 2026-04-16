@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smith Cut Blog — Beat-Sync. Faster.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ctext x='2' y='24' font-family='Arial Black,sans-serif' font-weight='900' font-size='18' fill='%23DC2626'%3ESC%3C/text%3E%3C/svg%3E">
+<style>
+:root {
+  --black:#000; --white:#fff; --red:#DC2626; --red-dim:#7f1d1d;
+  --gray:#111; --mgray:#222; --lgray:#555; --xlgray:#888; --blue:#1E6EFF;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none;}
+
+/* CURSOR */
+#cursor{width:12px;height:12px;background:var(--red);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;mix-blend-mode:difference;}
+#cursor.hover{width:40px;height:40px;background:var(--white);}
+
+/* NAV */
+nav{position:fixed;top:38px;left:0;right:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:20px 60px;border-bottom:1px solid transparent;transition:border-color .3s,background .3s,top .3s;}
+nav.scrolled{background:rgba(0,0,0,.92);border-color:var(--mgray);backdrop-filter:blur(12px);top:0;}
+.nav-logo{font-family:'Bebas Neue';font-size:28px;letter-spacing:.15em;color:var(--white);text-decoration:none;}
+.nav-logo span{color:var(--red);}
+.nav-links{display:flex;gap:40px;list-style:none;}
+.nav-links a{font-family:'Space Mono';font-size:10px;letter-spacing:.2em;color:var(--xlgray);text-decoration:none;text-transform:uppercase;transition:color .2s;}
+.nav-links a:hover{color:var(--white);}
+.nav-cta{font-family:'Space Mono';font-size:10px;letter-spacing:.15em;background:var(--red);color:var(--white);border:none;padding:10px 24px;cursor:none;text-decoration:none;text-transform:uppercase;transition:background .2s;}
+.nav-cta:hover{background:#b91c1c;}
+
+/* NOTICE */
+.notice{background:var(--red);color:var(--white);text-align:center;padding:10px;font-family:'Space Mono';font-size:9px;letter-spacing:.2em;text-transform:uppercase;position:sticky;top:0;z-index:999;}
+
+/* CURTAIN */
+#curtain-canvas{position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:0;}
+
+/* BG */
+#bg-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:-1;opacity:.45;}
+
+/* ── BLOG LAYOUT ── */
+/* Two-panel: grid on left, post reader slides in from right */
+.blog-shell{position:relative;min-height:100vh;overflow:hidden;}
+
+/* GRID VIEW */
+.blog-grid-view{
+  position:relative;z-index:1;
+  padding:160px 60px 120px;
+  transition:transform .5s cubic-bezier(.77,0,.18,1), opacity .4s ease;
+  will-change:transform,opacity;
+}
+.blog-grid-view.slide-out{
+  transform:translateX(-60px);
+  opacity:0;
+  pointer-events:none;
+}
+
+.blog-hero-label{font-family:'Space Mono';font-size:9px;letter-spacing:.3em;color:var(--red);text-transform:uppercase;margin-bottom:12px;}
+.blog-hero-title{font-family:'Bebas Neue';font-size:clamp(56px,8vw,120px);line-height:.92;margin-bottom:20px;}
+.blog-hero-title span{color:var(--red);}
+.blog-hero-sub{font-family:'DM Sans';font-size:17px;color:var(--xlgray);max-width:520px;line-height:1.75;margin-bottom:48px;}
+
+/* Filter tabs */
+.blog-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:56px;}
+.blog-filter{font-family:'Space Mono';font-size:9px;letter-spacing:.2em;background:none;border:1px solid var(--mgray);color:var(--xlgray);padding:8px 16px;cursor:none;text-transform:uppercase;transition:all .2s;}
+.blog-filter:hover,.blog-filter.active{border-color:var(--red);color:var(--white);}
+
+/* Blog grid */
+#blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.blog-card{background:rgba(17,17,17,.85);border:1px solid var(--mgray);padding:36px;cursor:none;transition:border-color .2s,transform .2s;display:flex;flex-direction:column;}
+.blog-card:hover{border-color:var(--red);transform:translateY(-2px);}
+.blog-tag{font-family:'Space Mono';font-size:8px;letter-spacing:.25em;color:var(--red);text-transform:uppercase;margin-bottom:16px;}
+.blog-title{font-family:'Bebas Neue';font-size:28px;color:var(--white);line-height:1.1;margin-bottom:12px;}
+.blog-excerpt{font-family:'DM Sans';font-size:14px;color:var(--xlgray);line-height:1.7;flex:1;}
+.blog-meta{font-family:'Space Mono';font-size:8px;letter-spacing:.15em;color:var(--lgray);margin-top:20px;text-transform:uppercase;}
+.blog-read-more{font-family:'Space Mono';font-size:9px;letter-spacing:.15em;color:var(--red);margin-top:12px;text-transform:uppercase;}
+
+/* POST READER — slides in from right */
+.blog-post-view{
+  position:fixed;inset:0;z-index:100;
+  background:var(--black);
+  overflow-y:auto;
+  transform:translateX(100%);
+  transition:transform .5s cubic-bezier(.77,0,.18,1);
+  will-change:transform;
+}
+.blog-post-view.open{transform:translateX(0);}
+
+.post-inner{max-width:780px;margin:0 auto;padding:120px 40px 120px;}
+
+/* Back button */
+.post-back{
+  font-family:'Space Mono';font-size:9px;letter-spacing:.2em;
+  background:none;border:1px solid var(--mgray);color:var(--xlgray);
+  padding:10px 20px;cursor:none;text-transform:uppercase;
+  transition:all .2s;margin-bottom:64px;display:inline-flex;align-items:center;gap:10px;
+}
+.post-back:hover{color:var(--white);border-color:var(--white);}
+.post-back::before{content:'←';}
+
+/* Post typography */
+.post-tag{font-family:'Space Mono';font-size:9px;letter-spacing:.3em;color:var(--red);text-transform:uppercase;margin-bottom:16px;}
+#post-title{font-family:'Bebas Neue';font-size:clamp(48px,6vw,80px);line-height:.95;margin-bottom:24px;}
+.post-meta-row{font-family:'Space Mono';font-size:9px;letter-spacing:.15em;color:var(--lgray);text-transform:uppercase;margin-bottom:64px;padding-bottom:32px;border-bottom:1px solid var(--mgray);}
+#post-body h2{font-family:'Bebas Neue';font-size:40px;color:var(--red);margin:56px 0 20px;line-height:1;}
+#post-body h3{font-family:'Space Mono';font-size:10px;letter-spacing:.2em;color:var(--xlgray);text-transform:uppercase;margin:36px 0 12px;}
+#post-body p{font-family:'DM Sans';font-size:17px;color:var(--xlgray);line-height:1.85;margin-bottom:20px;}
+#post-body strong{color:var(--white);}
+#post-body em{color:var(--white);font-style:italic;}
+#post-body ul,#post-body ol{color:var(--xlgray);padding-left:24px;margin:16px 0 24px;line-height:2.1;font-size:16px;}
+#post-body li{margin-bottom:4px;}
+#post-body .callout{background:var(--gray);border-left:3px solid var(--red);padding:20px 24px;margin:32px 0;border-radius:0 2px 2px 0;}
+#post-body .callout p{font-size:15px;color:var(--xlgray);margin:0;line-height:1.7;}
+#post-body .callout strong{color:var(--white);}
+#post-body .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:32px 0;}
+#post-body .stat-box{background:var(--gray);border:1px solid var(--mgray);border-top:2px solid var(--red);padding:20px 16px;}
+#post-body .stat-num{font-family:'Bebas Neue';font-size:40px;color:var(--white);line-height:1;}
+#post-body .stat-label{font-family:'Space Mono';font-size:8px;letter-spacing:.15em;color:var(--xlgray);text-transform:uppercase;margin-top:4px;}
+#post-body .code-block{background:#050505;border:1px solid var(--mgray);border-left:2px solid var(--red);padding:16px 20px;font-family:'Space Mono';font-size:11px;color:#ccc;line-height:1.7;margin:20px 0;overflow-x:auto;}
+#post-body .section-divider{border:none;border-top:1px solid var(--mgray);margin:48px 0;}
+#post-body blockquote{border-left:3px solid var(--red);padding-left:24px;margin:32px 0;font-style:italic;color:var(--xlgray);}
+#post-body blockquote p{font-size:18px;line-height:1.7;}
+
+/* Post nav */
+.post-footer{margin-top:80px;padding-top:40px;border-top:1px solid var(--mgray);display:flex;justify-content:space-between;align-items:center;}
+.post-footer-cta{font-family:'Space Mono';font-size:9px;letter-spacing:.15em;background:var(--red);color:var(--white);padding:12px 28px;text-decoration:none;text-transform:uppercase;transition:background .2s;}
+.post-footer-cta:hover{background:#b91c1c;}
+
+@media(max-width:900px){
+  nav{padding:16px 24px;}
+  .nav-links{display:none;}
+  .blog-grid-view{padding:120px 24px 80px;}
+  #blog-grid{grid-template-columns:1fr;}
+  .post-inner{padding:100px 24px 80px;}
+  #post-body .stat-row{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body data-page="blog">
+<canvas id="curtain-canvas"></canvas>
+<canvas id="bg-canvas"></canvas>
+<div id="cursor"></div>
+
+<div class="notice">60 seconds, not 60 minutes &nbsp;·&nbsp; Your footage never leaves your Mac</div>
+
+<nav id="blog-nav">
+  <a href="index.html" class="nav-logo">SMITH<span>CUT</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+    <li><a href="edu.html">For Educators</a></li>
+  </ul>
+  <a href="onboarding.html" class="nav-cta">Start Free Trial</a>
+</nav>
+
+<div class="blog-shell">
+  <!-- GRID VIEW -->
+  <div class="blog-grid-view" id="blog-grid-view">
+    <p class="blog-hero-label">Smith Cut Blog</p>
+    <h1 class="blog-hero-title">BEAT-SYNC.<br><span>FASTER.</span></h1>
+    <p class="blog-hero-sub">Practical guides on beat-sync editing, Premiere Pro workflows, and how editors ship better work in less time.</p>
+    <div class="blog-filters" id="blog-filters">
+      <button class="blog-filter active" onclick="filterBlog('all',this)">All</button>
+      <button class="blog-filter" onclick="filterBlog('how-to',this)">How-To</button>
+      <button class="blog-filter" onclick="filterBlog('comparison',this)">Comparisons</button>
+      <button class="blog-filter" onclick="filterBlog('workflow',this)">Workflows</button>
+      <button class="blog-filter" onclick="filterBlog('tutorial',this)">Tutorials</button>
+    </div>
+    <div id="blog-grid"></div>
+  </div>
+
+  <!-- POST READER -->
+  <div class="blog-post-view" id="blog-post-view">
+    <div class="post-inner">
+      <button class="post-back" id="post-back-btn" onclick="closePost()">Back to Blog</button>
+      <div id="post-tag" class="post-tag"></div>
+      <h1 id="post-title"></h1>
+      <div id="post-meta-row" class="post-meta-row"></div>
+      <div id="post-body"></div>
+      <div class="post-footer">
+        <a href="onboarding.html" class="post-footer-cta">Start Free Trial — $20/mo</a>
+        <span style="font-family:'Space Mono';font-size:9px;color:var(--lgray);">SMITH CUT · 2026</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CURSOR ───────────────────────────────────────────────────────────────────
+const cursor = document.getElementById('cursor')
+document.addEventListener('mousemove', e => { cursor.style.left=e.clientX+'px'; cursor.style.top=e.clientY+'px' })
+function bindCursor() {
+  document.querySelectorAll('a,button,.blog-card').forEach(el => {
+    if(el._cb) return; el._cb=true
+    el.addEventListener('mouseenter',()=>cursor.classList.add('hover'))
+    el.addEventListener('mouseleave',()=>cursor.classList.remove('hover'))
+  })
+}
+bindCursor()
+
+// ── NAV SCROLL ───────────────────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('blog-nav').classList.toggle('scrolled', window.scrollY > 60)
+})
+
+// ── CURTAIN TRANSITION ───────────────────────────────────────────────────────
+const _cc=document.getElementById('curtain-canvas'),_cx=_cc.getContext('2d')
+let _cW,_cH,_transitioning=false
+function _ccR(){_cW=_cc.width=innerWidth;_cH=_cc.height=innerHeight}
+_ccR();window.addEventListener('resize',_ccR)
+function _ease(t){return t<.5?2*t*t:-1+(4-2*t)*t}
+function _easeOut(t){return t===1?1:1-Math.pow(2,-10*t)}
+function _drawC(p,accent){
+  _cx.clearRect(0,0,_cW,_cH);if(p<=0)return
+  const ex=_cW*p,b=Math.sin(p*Math.PI)*80
+  _cx.beginPath();_cx.moveTo(0,0);_cx.lineTo(ex,0)
+  _cx.bezierCurveTo(ex+b,_cH*.25,ex+b,_cH*.75,ex,_cH)
+  _cx.lineTo(0,_cH);_cx.closePath();_cx.fillStyle='#000';_cx.fill()
+  _cx.beginPath();_cx.moveTo(ex,0)
+  _cx.bezierCurveTo(ex+b,_cH*.25,ex+b,_cH*.75,ex,_cH)
+  _cx.strokeStyle=accent;_cx.lineWidth=3;_cx.stroke()
+}
+function navigate(href,accent){
+  if(_transitioning)return;_transitioning=true;accent=accent||'#DC2626'
+  if(!_cc){window.location.href=href;return}
+  _cc.style.opacity='1'
+  const t0=performance.now(),DUR=280
+  ;(function tick(now){
+    const p=_ease(Math.min((now-t0)/DUR,1));_drawC(p,accent)
+    if(p<1)requestAnimationFrame(tick)
+    else{sessionStorage.setItem('sc-accent',accent);window.location.href=href}
+  })(performance.now())
+}
+;(function(){
+  const accent=sessionStorage.getItem('sc-accent')||'#DC2626'
+  sessionStorage.removeItem('sc-accent')
+  _cc.style.opacity='1';_drawC(1,accent)
+  const t0=performance.now(),DUR=340
+  ;(function tick(now){
+    const p=_easeOut(Math.min((now-t0)/DUR,1));_drawC(1-p,accent)
+    if(p<1)requestAnimationFrame(tick)
+    else{_cx.clearRect(0,0,_cW,_cH);_cc.style.opacity='0';_transitioning=false}
+  })(performance.now())
+})()
+
+// ── BACKGROUND PARTICLES ─────────────────────────────────────────────────────
+const _bg=document.getElementById('bg-canvas'),_bgx=_bg.getContext('2d')
+let _bW,_bH
+function _bgR(){_bW=_bg.width=innerWidth;_bH=_bg.height=innerHeight}
+_bgR();window.addEventListener('resize',_bgR)
+const _pts=Array.from({length:200},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5}))
+;(function _draw(){
+  _bgx.clearRect(0,0,_bW,_bH)
+  _pts.forEach((p,i)=>{
+    p.x+=p.vx;p.y+=p.vy
+    if(p.x<0)p.x=_bW;if(p.x>_bW)p.x=0;if(p.y<0)p.y=_bH;if(p.y>_bH)p.y=0
+    _bgx.beginPath();_bgx.arc(p.x,p.y,p.r,0,Math.PI*2)
+    _bgx.fillStyle='rgba(220,38,38,0.9)';_bgx.fill()
+    for(let j=i+1;j<_pts.length;j++){
+      const dx=p.x-_pts[j].x,dy=p.y-_pts[j].y,dd=Math.sqrt(dx*dx+dy*dy)
+      if(dd<150){_bgx.beginPath();_bgx.moveTo(p.x,p.y);_bgx.lineTo(_pts[j].x,_pts[j].y)
+        _bgx.strokeStyle=`rgba(220,38,38,${0.25*(1-dd/150)})`;_bgx.lineWidth=.5;_bgx.stroke()}
+    }
+  })
+  requestAnimationFrame(_draw)
+})()
+
+// ── POST OPEN/CLOSE WITH SLIDE TRANSITION ────────────────────────────────────
+let currentPost = null
+
+function openPost(post) {
+  currentPost = post
+  // Populate content
+  document.getElementById('post-tag').textContent = post.tag.toUpperCase()
+  document.getElementById('post-title').textContent = post.title
+  document.getElementById('post-meta-row').textContent = post.date + '  ·  ' + post.readTime + ' READ'
+  document.getElementById('post-body').innerHTML = post.body
+  // Rebind cursor on new content
+  bindCursor()
+  // Slide grid out, post in
+  const gridView = document.getElementById('blog-grid-view')
+  const postView = document.getElementById('blog-post-view')
+  gridView.classList.add('slide-out')
+  postView.classList.add('open')
+  postView.scrollTop = 0
+  window.scrollTo(0, 0)
+  // Update page title
+  document.title = post.title + ' — Smith Cut Blog'
+  // Push state for back button
+  history.pushState({ postId: post.id }, post.title, '#post-' + post.id)
+}
+
+function closePost() {
+  const gridView = document.getElementById('blog-grid-view')
+  const postView = document.getElementById('blog-post-view')
+  postView.classList.remove('open')
+  gridView.classList.remove('slide-out')
+  document.title = 'Smith Cut Blog — Beat-Sync. Faster.'
+  history.pushState({}, 'Blog', window.location.pathname)
+}
+
+// Handle browser back button
+window.addEventListener('popstate', e => {
+  if (!e.state || !e.state.postId) closePost()
+})
+
+// ── BLOG DATA ────────────────────────────────────────────────────────────────
+const POSTS = [
+  {
+    id: 1, tag: 'how-to', category: 'how-to',
+    date: 'Apr 14 2026', readTime: '8 MIN',
+    title: 'How to Beat-Sync 8 Clips in Under 60 Seconds',
+    excerpt: 'A complete walkthrough of the Smith Cut pipeline — from dropping your first clip to a finished rough cut sitting in Premiere Pro. Every setting explained.',
+    body: `
+<h2>The Problem With Manual Beat-Sync</h2>
+<p>Open YouTube and search "beat sync tutorial Premiere Pro." You'll find dozens of videos teaching the same workflow: set markers on every beat, then manually cut each clip to land on one. It works. It also takes anywhere from 45 minutes to two hours depending on the length of your track and how many clips you're working with.</p>
+<p>That's time you're spending on mechanical work — not creative work. You're not making decisions about <em>which</em> clip goes where or <em>why</em>. You're just executing math. Smith Cut does the math so you can focus on the edit.</p>
+<p>Here's exactly how to use it, step by step, with every setting explained.</p>
+
+<div class="stat-row">
+  <div class="stat-box"><div class="stat-num">47s</div><div class="stat-label">Typical pipeline time</div></div>
+  <div class="stat-box"><div class="stat-num">168</div><div class="stat-label">Beat points at 103 BPM</div></div>
+  <div class="stat-box"><div class="stat-num">0</div><div class="stat-label">Files uploaded anywhere</div></div>
+</div>
+
+<h2>Step 1 — Prepare Your Clips</h2>
+<p>Before opening Smith Cut, do one thing: organise your clips in Finder. The order you drop them into Smith Cut determines their starting sequence in Premiere. You don't have to get this perfect — the sort options inside the app give you plenty of control — but starting from an organised folder saves time.</p>
+<p>Smith Cut accepts <strong>.mp4, .mov, .avi, .mkv, .mxf, .m4v,</strong> and <strong>.webm</strong>. It reads files recursively, so you can drop an entire project folder and it will find every video file inside without you having to flatten the directory structure.</p>
+<div class="callout"><p><strong>File naming matters.</strong> If you name your clips descriptively — <code>HERO_SHOT_01.mov</code>, <code>BROLL_CROWD.mp4</code> — you'll be able to identify them at a glance when reviewing your Premiere timeline. Generic names like <code>IMG_4521.mov</code> make the review step slower.</p></div>
+
+<h2>Step 2 — Drop Your Clips into the Video Zone</h2>
+<p>The main window has two drop zones: VIDEO on the left, AUDIO on the right. Drag your clips onto the VIDEO zone, or click it to browse. You'll see each clip appear as a row with its filename and duration. Smith Cut reads metadata — duration, frame rate, creation date — without decoding the video. This is why it's fast: FFprobe reads the container headers, not the actual pixels.</p>
+<p>Once clips are loaded, use the sort dropdown to set your clip order:</p>
+<ul>
+  <li><strong>Name (A→Z)</strong> — alphabetical. Great if you've numbered your clips.</li>
+  <li><strong>Date Filmed</strong> — chronological by creation date. Produces the most natural-feeling rough cut for documentary or event footage.</li>
+  <li><strong>Duration (short→long)</strong> — starts with quick cuts, builds to longer ones. Creates a sense of escalating pacing.</li>
+  <li><strong>Duration (long→short)</strong> — the inverse. Starts strong, winds down.</li>
+  <li><strong>Manual</strong> — drag to reorder after loading. Use this when you have a specific narrative arc in mind.</li>
+</ul>
+
+<h2>Step 3 — Drop Your Audio Track</h2>
+<p>The AUDIO zone accepts one track. This is intentional — Smith Cut is built around a single music track driving the edit. Drop your file onto the zone and you'll see a waveform appear. Click the play button to preview it inline before running the pipeline.</p>
+<p>The waveform visualizer shows you the shape of the track at a glance. Tall peaks are loud sections. Flat sections are quiet. You can use this to predict where the drop will land and mentally plan which of your clips should go there.</p>
+<div class="callout"><p><strong>Audio format support:</strong> .mp3, .wav, .aiff, .m4a, .flac, .ogg. If your track is part of a video file (like a reference edit), export the audio separately first. Smith Cut's beat detection runs on audio data only.</p></div>
+
+<h2>Step 4 — Configure Your Settings</h2>
+<p>Before hitting RUN, spend 30 seconds in the Settings panel. These three settings have the biggest impact on your output:</p>
+<h3>Beat Subdivision</h3>
+<p>Controls how often a new clip starts. "Every beat" gives you maximum density — at 103 BPM, a new clip every 0.58 seconds. "Every 2nd beat" doubles the cut length to 1.16 seconds. "Every 4th beat" gives you one cut per musical bar, which starts to feel cinematic. Start with "Every beat" for high-energy content and "Every 4th beat" for emotional or narrative edits.</p>
+<h3>Beat Sensitivity</h3>
+<p>Controls how aggressively librosa identifies beat onsets. At 1.0, it finds every rhythmic hit including softer ones. At 0.5, it only picks up strong, clear beats. If your generated edit has cuts in places that don't feel musical, lower this setting. If it's missing obvious beats, raise it.</p>
+<h3>Chop Position</h3>
+<p>For each beat slot, Smith Cut trims a portion of your clip to fit. "Beginning" takes the first N seconds of each clip. "Middle" takes from the midpoint. "End" takes the last N seconds. For clips with strong opening moments, "Beginning" is usually best. For clips where the action builds, try "Middle."</p>
+
+<h2>Step 5 — Run the Pipeline</h2>
+<p>Click RUN (or BUILD GUIDED EDIT in Education Mode). The pipeline runs four steps in sequence. Watch the log panel on the right — each step updates in real time:</p>
+<ol>
+  <li><strong>Beat Detection</strong> — librosa analyzes your audio file, identifies every beat onset, calculates BPM, and maps timestamps to millisecond precision. A 98.6-second track at 103 BPM produces 168 beat points.</li>
+  <li><strong>Clip Metadata</strong> — FFprobe reads the duration, frame rate, and codec of every clip. This takes under a second even for large clips because FFprobe reads container headers, not the video data.</li>
+  <li><strong>Clip Matching</strong> — the clip matcher assigns each beat slot a clip and calculates the exact trim points. If you have fewer clips than beat slots, clips loop. If you have more clips than beat slots, the excess are unused.</li>
+  <li><strong>Premiere Placement</strong> — pymiere communicates with Premiere Pro via the Pymiere Link CEP extension. Each clip is imported to your project bin, trimmed to beat length, and placed on the active sequence at its beat position. Your audio track is placed on Audio 1.</li>
+</ol>
+
+<h2>Step 6 — Review and Refine in Premiere</h2>
+<p>Your timeline now has clips on every beat. Scrub through the sequence. Most of what Smith Cut builds is usable — but a few things are worth adjusting manually:</p>
+<ul>
+  <li><strong>The opening and closing clips</strong> — the first and last cuts are the most important emotionally. Manually review them and swap if needed.</li>
+  <li><strong>Energy mismatches</strong> — if a high-energy beat has a slow, static clip, move a more dynamic clip to that slot.</li>
+  <li><strong>Chop review</strong> — occasionally FFprobe misreads a clip's usable duration. If a clip looks like a freeze frame, extend it manually in Premiere.</li>
+</ul>
+<div class="callout"><p><strong>Typical time breakdown:</strong> Pipeline runs in 47 seconds. Manual review and adjustment takes 5–15 minutes depending on the project. Compare this to a fully manual beat-sync which takes 45–120 minutes for the same result. Smith Cut doesn't replace your eye — it removes the mechanical steps so your eye can focus on quality.</p></div>
+<p>Export your sequence, deliver to the client. The mechanical work is done.</p>
+`
+  },
+  {
+    id: 2, tag: 'comparison', category: 'comparison',
+    date: 'Apr 12 2026', readTime: '7 MIN',
+    title: 'Smith Cut vs Wideframe: Two Different Problems',
+    excerpt: 'Both tools work with Premiere Pro and both use AI. But they solve completely different problems at completely different price points — and understanding the difference helps you use both better.',
+    body: `
+<h2>Why People Confuse These Tools</h2>
+<p>When Wideframe launched, a lot of video editors asked the same question: "Is this the same as Smith Cut?" Both tools integrate with Adobe Premiere Pro. Both use AI in some form. Both produce .prproj files. On the surface, they look like competitors.</p>
+<p>They're not. And understanding why they're different helps you use both of them far more effectively.</p>
+
+<div class="stat-row">
+  <div class="stat-box"><div class="stat-num">$20</div><div class="stat-label">Smith Cut / month</div></div>
+  <div class="stat-box"><div class="stat-num">$100</div><div class="stat-label">Wideframe / month</div></div>
+  <div class="stat-box"><div class="stat-num">60s</div><div class="stat-label">Smith Cut pipeline</div></div>
+</div>
+
+<h2>What Wideframe Actually Does</h2>
+<p>Wideframe is a footage organisation and assembly tool. It's designed to solve a specific problem that plagues documentary filmmakers, corporate video producers, and anyone who shoots more footage than they can possibly review in a reasonable amount of time.</p>
+<p>The problem: you have 6 hours of raw footage from a two-day shoot. You need a 3-minute highlight video. Finding the good clips — the moments where someone says something quotable, where the lighting is right, where the action actually happens — requires watching all 6 hours first. Or it used to.</p>
+<p>Wideframe indexes your footage library by meaning. It uses computer vision and audio analysis to understand what's in each clip: who's speaking, what they're saying, what's visible, what the quality is like. Then you describe what you want in natural language and it assembles a rough cut from your library.</p>
+<p>The output is a real .prproj file — not a rendered video, but an actual Premiere project with your clips on the timeline. You open it, refine it, export it.</p>
+<div class="callout"><p><strong>The trade-off:</strong> Wideframe uploads your footage to a cloud server for analysis. Reviewers have documented that one hour of footage takes roughly one hour to process. For large libraries, you're talking about leaving it running overnight. This also means your footage leaves your machine — which matters for NDA-sensitive client work.</p></div>
+
+<h2>What Smith Cut Actually Does</h2>
+<p>Smith Cut solves a completely different problem. You already know which clips you want to use. You've already done the creative curation. What you need now is to place those clips on the Premiere timeline synchronized to a music track — and you need it done before your client gets off the phone.</p>
+<p>The workflow is: drop clips, drop music, hit RUN. Smith Cut detects every beat in your audio using librosa, reads your clip metadata using FFprobe, matches clips to beat slots, and places everything on your Premiere timeline in under 60 seconds. Everything runs locally on your Mac. Nothing is uploaded anywhere.</p>
+<p>The output is the same as Wideframe: a Premiere project with your clips on the timeline. But the path to get there, and what you're starting with, is completely different.</p>
+
+<h2>The Real Difference: Where You Are in the Workflow</h2>
+<p>Think of video production as a funnel:</p>
+<ol>
+  <li><strong>Capture</strong> — shooting raw footage</li>
+  <li><strong>Curation</strong> — finding the best clips from what you shot</li>
+  <li><strong>Assembly</strong> — placing clips on the timeline</li>
+  <li><strong>Refinement</strong> — fine-cutting, colour, sound</li>
+  <li><strong>Delivery</strong> — export and client handoff</li>
+</ol>
+<p><strong>Wideframe lives at step 2 and partially at step 3.</strong> It helps you find the best clips from large libraries and assemble them into a rough sequence based on content meaning.</p>
+<p><strong>Smith Cut lives at step 3.</strong> It assembles clips you've already curated into a beat-synced timeline. It doesn't decide which clips are good — you've already made that decision. It decides <em>when</em> each clip appears, synchronized to music.</p>
+
+<h2>When to Use Each Tool</h2>
+<h3>Use Wideframe when:</h3>
+<ul>
+  <li>You have hours of raw footage and need help finding the usable moments</li>
+  <li>You're working with interview footage and need the best soundbites identified automatically</li>
+  <li>Your clients have large footage libraries that change between projects</li>
+  <li>You're making content-driven videos (documentaries, testimonials, corporate brand films)</li>
+  <li>You have fast internet and the footage is not under NDA</li>
+</ul>
+<h3>Use Smith Cut when:</h3>
+<ul>
+  <li>You have a curated set of clips and a music track</li>
+  <li>You're making beat-sync content: music videos, social reels, hype edits, sports highlights</li>
+  <li>Your client footage is under NDA or cannot be uploaded to third-party servers</li>
+  <li>You need a rough cut in under 5 minutes</li>
+  <li>You're working offline or without a fast internet connection</li>
+</ul>
+
+<h2>The Case for Using Both</h2>
+<p>For agencies handling mixed content, both tools can slot into the same workflow without overlapping:</p>
+<p>Use Wideframe to comb through 4 hours of event footage and identify the best 20 clips from a conference. Then use Smith Cut to beat-sync those 20 clips to the event's official music track for the highlight reel. Wideframe does the curation — Smith Cut does the sync.</p>
+<p>The $120/month combined cost is still significantly less than an hour of an editor's time spent on manual beat-sync work.</p>
+<div class="callout"><p><strong>Bottom line:</strong> These tools don't compete. They address adjacent problems in the same workflow. If you're asking "which one should I use?" the answer depends entirely on whether your bottleneck is <em>finding</em> the right clips or <em>assembling</em> them to music.</p></div>
+`
+  },
+  {
+    id: 3, tag: 'workflow', category: 'workflow',
+    date: 'Apr 10 2026', readTime: '6 MIN',
+    title: 'Why Your Client Footage Should Never Leave Your Mac',
+    excerpt: 'Cloud-based AI video tools upload your footage to third-party servers. For agency work, that\'s a legal and ethical problem most tools don\'t mention. Here\'s what you need to know.',
+    body: `
+<h2>The Upload You Didn't Think About</h2>
+<p>When you drag footage into most cloud-based AI editing tools, something happens that's easy to miss: your video files travel from your hard drive to a server somewhere in the world, get processed, and live there for some period of time before being deleted. The tools don't hide this — it's in their privacy policies. But most editors don't read privacy policies before they start a new project.</p>
+<p>For personal projects, this probably doesn't matter. For client work, it might matter a great deal.</p>
+
+<h2>What NDAs Actually Say About AI Tools</h2>
+<p>A typical client NDA prohibits sharing confidential information with third parties. "Third parties" usually means people and companies outside of the contracting relationship. Most NDAs predate the era of cloud AI processing — they were written assuming that your tools ran on your machine and your footage stayed on your hard drive.</p>
+<p>That assumption is no longer valid. When you upload client footage to a cloud AI service for processing, you are — technically — sharing that footage with a third party. The AI service is not party to your client NDA. Their servers are not covered by your confidentiality agreement.</p>
+<div class="callout"><p><strong>Ask your clients this question:</strong> "Our AI editing tool needs to upload your footage to a cloud server to process it. Is that acceptable under our NDA?" If the answer is no — or if you don't know the answer — you need a local-first tool.</p></div>
+
+<h2>The Categories of Client Footage That Cannot Go to the Cloud</h2>
+<p>Not all client footage carries the same sensitivity. But here are categories where cloud processing creates real risk:</p>
+<h3>Unreleased product footage</h3>
+<p>A tech company's product demo filmed before the launch announcement. A fashion brand's lookbook shoot before the season drops. A car manufacturer's reveal event before the press conference. This footage has significant commercial value tied to its secrecy. Uploading it to a cloud processing service before launch is a meaningful disclosure risk.</p>
+<h3>Legal proceedings footage</h3>
+<p>Documentary footage, depositions, or any video created in connection with litigation. Uploading this to a third-party server may have evidentiary implications.</p>
+<h3>Healthcare and HIPAA footage</h3>
+<p>Medical procedure videos, patient testimonials, hospital environments where individuals may be identifiable. HIPAA imposes strict rules on where protected health information can be processed and stored.</p>
+<h3>Government and defence contracts</h3>
+<p>Some agencies handle footage for government clients where uploading to commercial cloud services is prohibited by contract or regulation, regardless of AI processing intent.</p>
+<h3>Financial institution footage</h3>
+<p>Internal communications, executive presentations, or training videos for banks, investment firms, or insurance companies often carry confidentiality obligations that extend to video content.</p>
+
+<h2>What "Local Processing" Actually Means in Smith Cut</h2>
+<p>When we say Smith Cut runs locally, this is what that means technically:</p>
+<ul>
+  <li><strong>Beat detection</strong> uses librosa, a Python library that runs as a subprocess on your Mac. Your audio file is read from your local drive into memory. No audio data leaves your machine.</li>
+  <li><strong>Clip metadata reading</strong> uses FFprobe, which reads container header data from your local video files. It doesn't decode video frames. No video data leaves your machine.</li>
+  <li><strong>Clip matching</strong> is pure Python arithmetic — duration calculations, beat interval math. No network calls.</li>
+  <li><strong>Premiere placement</strong> uses pymiere, which communicates with Premiere Pro running on your machine via a local WebSocket connection on port 3000. No data leaves your machine.</li>
+  <li><strong>AI story analysis</strong> uses Ollama, which downloads language models to your local machine and runs inference locally. No footage frames are sent to OpenAI, Anthropic, or any external API.</li>
+</ul>
+<p>The only network calls Smith Cut makes are license validation requests (sending only your license key hash, not any footage data) on launch and every 4 hours while running.</p>
+
+<h2>The Practical Advantages of Local Processing Beyond Privacy</h2>
+<p>Privacy compliance is the most important reason to use local tools for client work. But there are practical advantages that matter for every project:</p>
+<h3>Works offline</h3>
+<p>On a plane, in a hotel with terrible WiFi, in a client's facility without internet access — Smith Cut works regardless. Cloud tools need a connection. Some require a fast one.</p>
+<h3>Consistent speed</h3>
+<p>Cloud processing speed depends on server load, your upload bandwidth, and queue position. A Smith Cut pipeline that takes 47 seconds on Tuesday takes 47 seconds on Friday. There's no variability based on how many other users are processing simultaneously.</p>
+<h3>No ongoing bandwidth cost</h3>
+<p>Some tools charge for bandwidth or processing time on top of the subscription. With Smith Cut, your subscription covers everything — there's no metered upload cost that grows with your footage volume.</p>
+<h3>No data retention uncertainty</h3>
+<p>Cloud tools have data retention policies. Most say they delete your footage after processing. "After processing" might mean immediately. It might mean 30 days. It might mean "when you explicitly delete your account." With local processing, the question doesn't arise.</p>
+<div class="callout"><p><strong>For agencies billing by the hour:</strong> The time your team spends waiting for cloud processing is non-billable time. A tool that takes an hour to process an hour of footage means an hour of your team sitting idle. Smith Cut's 60-second pipeline means that time becomes billable creative work.</p></div>
+`
+  },
+  {
+    id: 4, tag: 'tutorial', category: 'tutorial',
+    date: 'Apr 8 2026', readTime: '7 MIN',
+    title: 'Beat Subdivision: The Setting That Changes Everything',
+    excerpt: 'Most Smith Cut users never touch the beat subdivision setting. The ones who do produce edits that feel completely different from the default. Here\'s exactly how it works and when to use each option.',
+    body: `
+<h2>What Beat Subdivision Actually Is</h2>
+<p>When a song plays at 103 BPM, there are 1.72 beats per second. Smith Cut's default behaviour is to place a new clip on every single one of those beats. At 168 beats in a 98.6-second track, that means 168 cuts — a new clip every 0.58 seconds.</p>
+<p>For some content, that's exactly right. For a lot of content, it's too aggressive. Beat subdivision lets you control this ratio: instead of cutting on every beat, you cut on every 2nd, 4th, or 8th beat. This single setting changes the emotional character of your edit more than any other.</p>
+
+<div class="stat-row">
+  <div class="stat-box"><div class="stat-num">0.58s</div><div class="stat-label">Every beat (168 cuts)</div></div>
+  <div class="stat-box"><div class="stat-num">2.32s</div><div class="stat-label">Every 4th beat (42 cuts)</div></div>
+  <div class="stat-box"><div class="stat-num">4.65s</div><div class="stat-label">Every 8th beat (21 cuts)</div></div>
+</div>
+
+<h2>The Musical Theory Behind the Setting</h2>
+<p>In most Western popular music, beats are grouped into bars. A standard bar has 4 beats. Two bars have 8 beats. Sixteen bars make a section (verse or chorus).</p>
+<p>This matters for editing because musical phrases resolve at bar boundaries. When a chorus hits, it usually lands on beat 1 of a new bar. When a drop hits, it's almost always bar-aligned. Cutting on every beat ignores this phrase structure — you're cutting at the level of individual beats, not musical ideas.</p>
+<p>Cutting on every 4th beat (every bar) means your cuts align with musical phrases. The result feels more musical, even if it's technically less synchronized to individual beats. This is why cinema often feels more relaxed than social media content even when both are set to music — filmmakers historically cut on phrases, not on every beat.</p>
+
+<h2>Every Setting Explained</h2>
+<h3>Every Beat (Default)</h3>
+<p><strong>Cut length at 103 BPM:</strong> 0.58 seconds. <strong>Cuts in a 98-second edit:</strong> 168.</p>
+<p>This is maximum energy. Each clip appears and disappears before the viewer fully registers it. The effect is a blur of activity — exciting, urgent, slightly overwhelming. This works extremely well for action sports, concert highlights, DJ sets, club visuals, and any content where the goal is stimulation rather than storytelling.</p>
+<p>The limitation: at this density, individual clips don't read. The viewer sees motion and colour, not specific moments. If you have footage with strong individual images — a great expression, a defining action — they'll disappear too quickly to land.</p>
+
+<h3>Every 2nd Beat</h3>
+<p><strong>Cut length at 103 BPM:</strong> 1.16 seconds. <strong>Cuts in a 98-second edit:</strong> 84.</p>
+<p>This is the sweet spot for most social media content. Fast enough to feel energetic, slow enough that individual clips register. At 1.16 seconds, a viewer can identify what they're looking at before the cut happens. This subdivision works for Instagram reels, sports highlight edits, product launches, and brand content targeting younger audiences.</p>
+<p>The 2nd-beat subdivision also tends to feel more musical because it aligns with the half-bar — in 4/4 time, every 2 beats is a natural subdivision point that musicians feel even when they're not consciously counting.</p>
+
+<h3>Every 4th Beat (One Bar)</h3>
+<p><strong>Cut length at 103 BPM:</strong> 2.32 seconds. <strong>Cuts in a 98-second edit:</strong> 42.</p>
+<p>One cut per musical bar. This is where narrative editing begins. At 2+ seconds per clip, each shot has time to establish something — a location, a face, an action. The viewer can start to build a mental model of what they're watching. This subdivision is ideal for event highlight reels, wedding films, travel content, and any edit where the footage itself tells a story that the music supports.</p>
+<p>This also aligns perfectly with music that has clear verse/chorus structure, because the bar boundary marks the shift between musical phrases.</p>
+
+<h3>Every 8th Beat (Two Bars)</h3>
+<p><strong>Cut length at 103 BPM:</strong> 4.65 seconds. <strong>Cuts in a 98-second edit:</strong> 21.</p>
+<p>This is cinematic pacing. 21 cuts in 98 seconds is close to the average shot length in a theatrical feature film. Each clip has nearly 5 seconds to breathe — long enough for a character to make an expression, long enough for a landscape to reveal itself, long enough for a product to be shown from multiple angles within a single shot.</p>
+<p>This subdivision works for emotional content: memorial videos, brand films with a documentary feel, educational content, anything targeting audiences over 35 who prefer slower pacing. It also works well with slower BPM tracks — applying 8th-beat subdivision to a 60 BPM ambient track gives you 8-second clips, which starts to feel like a slideshow.</p>
+
+<h2>The BPM × Subdivision Matrix</h2>
+<p>The right subdivision isn't just about content type — it interacts with your BPM. A fast track at 140 BPM with every-4th-beat subdivision gives you 1.7-second clips, which feels energetic. A slow track at 70 BPM with every-beat subdivision gives you 0.86-second clips, which still feels relatively relaxed despite being "every beat."</p>
+<p>The key number to watch is your resulting clip length. Under 0.75 seconds feels hyperactive regardless of content. Over 5 seconds starts to feel like a slideshow regardless of music. The sweet spot for most content is between 1 and 3 seconds per clip.</p>
+<div class="callout"><p><strong>Quick formula:</strong> Clip length (seconds) = 60 ÷ BPM × subdivision. At 120 BPM with every 2nd beat: 60 ÷ 120 × 2 = 1.0 second per clip. At 80 BPM with every 4th beat: 60 ÷ 80 × 4 = 3.0 seconds per clip.</p></div>
+
+<h2>Combining Subdivision with Variation</h2>
+<p>Smith Cut's "Cut length variation" setting adds randomness to your clip lengths. With variation set to "±25%", a 1.16-second target clip might actually be anywhere from 0.87 to 1.45 seconds. This breaks the mechanical regularity that makes fully automated edits feel artificial.</p>
+<p>Variation works best at 2nd and 4th beat subdivisions. At every-beat, there isn't enough range to vary meaningfully. At 8th beat, the variation creates inconsistency that can feel sloppy rather than organic. 2nd and 4th beat subdivisions with ±25% variation produce the most "edited by a human" feel from an automated pipeline.</p>
+`
+  },
+  {
+    id: 5, tag: 'workflow', category: 'workflow',
+    date: 'Apr 6 2026', readTime: '6 MIN',
+    title: 'The Agency Workflow: Rough Cuts Before the Call Ends',
+    excerpt: 'How production agencies use Smith Cut to change what their first client revision call is actually about. Not "are the cuts on the beat" — but "which clips feel right."',
+    body: `
+<h2>The Problem With the Old Rough Cut Process</h2>
+<p>In a typical agency video production workflow, the rough cut comes after the shoot. The editor goes home with the footage, spends a day or two building a first assembly, and sends it to the client. The client watches it on their schedule and responds with feedback — sometimes within 24 hours, sometimes within a week.</p>
+<p>The first revision call is usually spent establishing basic facts: are the cuts on the beat? Is the music the right track? Are these the right clips? This is necessary but unrewarding work. You're validating mechanical choices, not making creative decisions together.</p>
+<p>Smith Cut changes the timeline of this process in a way that changes what the conversation is about.</p>
+
+<div class="stat-row">
+  <div class="stat-box"><div class="stat-num">45min</div><div class="stat-label">Old rough cut time</div></div>
+  <div class="stat-box"><div class="stat-num">5min</div><div class="stat-label">Smith Cut rough cut time</div></div>
+  <div class="stat-box"><div class="stat-num">+40min</div><div class="stat-label">Recovered per project</div></div>
+</div>
+
+<h2>The New Workflow, Step by Step</h2>
+<h3>Before the shoot</h3>
+<p>This is where most agencies skip a step that would save them hours later: get the music selection confirmed before the shoot day. If you're doing a brand video for a product launch, the client almost certainly has a vibe in mind — get a track reference or three from them during pre-production. This means on shoot day you know roughly what energy level you're editing to.</p>
+
+<h3>During the shoot</h3>
+<p>Use your phone or a note-taking app to flag your best clips in real time. When something goes perfectly — a great take, a golden moment, the shot that captures exactly what the brief asked for — note the filename and timecode. This takes 10 seconds per clip and saves 30 minutes of footage review back at the edit bay.</p>
+
+<h3>Same day as the shoot</h3>
+<p>You don't have to wait until the next day to deliver something. While the footage is ingesting (or while your team is wrapping gear), you can have Smith Cut running on a laptop with the best 8–12 clips flagged from your real-time notes. Drop them in, drop the pre-approved track, hit RUN. 60 seconds later you have a rough cut.</p>
+<p>Send it to the client as "a quick first look while we're still on-site — this is the automated first pass before any refinement." The client's reaction to this rough cut tells you more than a brief: they'll tell you exactly which clips they love and which feel wrong, which means your actual edit is already half-planned.</p>
+
+<h3>The revision call</h3>
+<p>Instead of validating basics, this call becomes creative: "The third shot where the product is hero-framed — can we make that the opening instead of the wide establishing shot? And I loved the energy in the second half, can we bring that forward?" You're having an artistic conversation, not a technical one.</p>
+<div class="callout"><p><strong>From RBTV:</strong> "We have a rough cut before the client even gets off the phone after the brief call. That's changed what our first revision call is about — now we're talking about creative choices, not whether the cuts are on the beat. The client feels heard immediately, and our billable time goes toward the creative work instead of the mechanical assembly."</p></div>
+
+<h2>Setting Up for a Fast Turnaround</h2>
+<p>Getting a 5-minute rough cut requires some setup. Here's what needs to be in place:</p>
+<h3>Premiere Pro must be open and ready</h3>
+<p>Smith Cut places clips onto the active Premiere sequence via the Pymiere Link extension. Before running the pipeline, Premiere needs to be open with a project loaded and a sequence active. Build a "rough cut" project template — same settings, same sequence format — that you can open in 10 seconds at the start of any job.</p>
+<h3>Footage must be ingested first</h3>
+<p>Smith Cut reads from your local filesystem. Before running, your footage needs to have finished copying from your card or drive. On a fast Mac with a USB-C SSD, a 50GB card ingest takes about 3 minutes. Add this to your shoot-wrap process rather than treating it as something that happens back at the office.</p>
+<h3>Have your track library organised</h3>
+<p>For fast client turnarounds, having 20–30 pre-licensed tracks organised by BPM and energy level lets you grab the right track in 30 seconds instead of 10 minutes. Build a "quick picks" folder with your most reliable tracks — the ones that work for almost any brief at their respective energy levels.</p>
+
+<h2>Using the AI Story Mode for More Complex Jobs</h2>
+<p>The basic pipeline is ideal for straightforward beat-sync content. For more complex jobs — brand films, event recaps with a narrative arc, documentary-style content — Smith Cut's AI Story Mode adds a layer of editorial intelligence to the process.</p>
+<p>AI Story Mode imports your existing Premiere project, extracts representative frames from every clip, uses Ollama running locally to generate a visual description of each clip, and then produces a 3-paragraph narrative summary of your footage. It suggests a clip order, identifies which clips carry the highest emotional weight, and flags which beat position would benefit from each clip.</p>
+<p>This isn't replacing your editorial judgement — it's giving you a second perspective before you've committed to a direction. Some editors use it as a sanity check on an edit they're already building. Others use it as a starting point when they're staring at a timeline with no idea where to begin.</p>
+<div class="callout"><p><strong>AI Story Mode uses 5 credits per month</strong> on the Core Plan. Additional credits are available at $3 each. The basic pipeline (no AI analysis) runs unlimited times on all plans.</p></div>
+`
+  },
+  {
+    id: 6, tag: 'how-to', category: 'how-to',
+    date: 'Apr 4 2026', readTime: '9 MIN',
+    title: 'Setting Up Smith Cut: Everything That Needs to Happen Before Your First Run',
+    excerpt: 'A complete setup walkthrough — from a fresh Mac to your first beat-sync edit in Premiere Pro. What the setup script installs, what you need to do manually, and what to check if something doesn\'t work.',
+    body: `
+<h2>What You Need Before You Start</h2>
+<p>Smith Cut runs on macOS with Apple Silicon (M1, M2, M3, or M4). Intel Macs are not supported — Smith Cut's local AI processing depends on Apple Neural Engine acceleration that Intel chips don't provide. If you're on Intel, sign up for the waitlist via the onboarding page.</p>
+<p>You also need Adobe Premiere Pro 2022 or later. Smith Cut communicates with Premiere via the Pymiere Link extension — a small CEP (Common Extensibility Platform) panel that Premiere loads. Versions before 2022 may not support all the pymiere API calls Smith Cut uses.</p>
+<p>The setup script handles everything else automatically. Here's what it does and why.</p>
+
+<h2>What setup.command Installs</h2>
+<h3>Homebrew</h3>
+<p>Homebrew is the standard package manager for macOS. Most developers already have it. If you do, the setup script detects it and skips the install step. If you don't, it installs it — this requires your system password and takes about 2 minutes. Homebrew is used to install FFmpeg in the next step.</p>
+
+<h3>Python 3.11</h3>
+<p>Smith Cut requires Python 3.11 specifically — not 3.12, not 3.13. The reason is pymiere, the Python library that controls Adobe Premiere Pro. Pymiere uses the <code>distutils</code> module, which was removed from Python's standard library in version 3.12. Installing a newer Python breaks pymiere.</p>
+<p>If you already have Python 3.11, the script checks the version and skips the install. If you have a newer Python, both can coexist — the setup script installs Python 3.11 alongside whatever you already have via Homebrew, and Smith Cut calls Python 3.11 explicitly.</p>
+
+<h3>FFmpeg and FFprobe</h3>
+<p>FFmpeg is installed at <code>/opt/homebrew/bin/ffmpeg</code>. Smith Cut uses FFprobe (which ships with FFmpeg) to read video clip metadata: duration, frame rate, codec, and creation date. FFprobe reads container headers without decoding the video — this is why metadata reading takes under a second even for large 4K files.</p>
+
+<h3>Python libraries: pymiere, librosa, numpy, soundfile</h3>
+<p>These install via pip into your Python 3.11 environment:</p>
+<ul>
+  <li><strong>pymiere</strong> — controls Premiere Pro via the Pymiere Link extension. Handles everything: importing clips to the project bin, setting in/out points, inserting clips at specific timecodes on the sequence.</li>
+  <li><strong>librosa</strong> — audio analysis. Loads your audio file, detects beat onsets using onset strength envelopes, and calculates BPM via autocorrelation. Also computes per-beat RMS energy for the Education Edition's beat analysis panel.</li>
+  <li><strong>numpy</strong> — numerical computing library that librosa depends on for its array operations.</li>
+  <li><strong>soundfile</strong> — reads audio files in a format librosa can process. Handles .wav, .aiff, and .flac natively; .mp3 and .m4a require an additional codec.</li>
+</ul>
+
+<h3>Ollama</h3>
+<p>Ollama is a local AI runtime that downloads and runs large language models on your machine. Smith Cut uses it for the AI Story Mode feature — specifically the moondream model (visual description of video frames) and llama3.2 (narrative generation).</p>
+<p>The initial Ollama setup downloads approximately 4GB of model data to your machine. This happens once during setup. After that, inference runs locally with no further downloads and no network calls.</p>
+<p>If you don't want AI Story Mode, you can skip the Ollama install — the setup script asks whether to include it. The basic pipeline (beat detection, clip matching, Premiere placement) works without Ollama.</p>
+
+<h3>Pymiere Link CEP Extension</h3>
+<p>This is a small panel that Premiere Pro loads as a plugin. It starts a local WebSocket server on port 3000 that pymiere connects to. Smith Cut communicates with Premiere by sending JavaScript commands through this channel.</p>
+<p>The setup script copies the extension to <code>~/Library/Application Support/Adobe/CEP/extensions/Pymiere_Link/</code>. Premiere Pro loads CEP extensions from this folder automatically on launch.</p>
+
+<h2>The One Manual Step</h2>
+<p>Everything above is automated. There is one thing you have to do yourself every time you start an editing session: enable the Pymiere Link panel in Premiere.</p>
+<ol>
+  <li>Open Adobe Premiere Pro</li>
+  <li>Open any project (or create a new one)</li>
+  <li>Go to <strong>Window → Extensions → Pymiere Link</strong></li>
+  <li>A small panel appears. Leave it open — you can dock it anywhere or leave it floating.</li>
+</ol>
+<p>The panel must remain open for Smith Cut to communicate with Premiere. If you close it, the pipeline will fail at Step 4 (Premiere Placement) with a connection error.</p>
+<div class="callout"><p><strong>Pro tip:</strong> Add the Pymiere Link panel to a saved Premiere workspace. Go to <strong>Window → Workspaces → Save as New Workspace</strong> after opening the panel. Next time you launch Premiere, your workspace loads with the panel already open.</p></div>
+
+<h2>Before Every Run: The Pre-Flight Checklist</h2>
+<p>Smith Cut needs three things to be true when you click RUN:</p>
+<ul>
+  <li><strong>Premiere Pro is open</strong> with the Pymiere Link panel active</li>
+  <li><strong>A project is loaded</strong> in Premiere (File → Open Project or File → New Project)</li>
+  <li><strong>A sequence is active</strong> — open in the Timeline panel. Smith Cut places clips on the active sequence. If no sequence is open, it creates one called "Smith Cut [timestamp]."</li>
+</ul>
+<p>If any of these aren't true, you'll see an error in the Smith Cut log panel. The error messages are specific: "Premiere connection failed" means the Pymiere Link panel isn't open. "No active sequence" means Premiere is open but no sequence is in the Timeline.</p>
+
+<h2>Common Setup Problems and Their Fixes</h2>
+<h3>"Python not found" error on first run</h3>
+<p>The setup script installed Python 3.11, but Smith Cut is looking for it at <code>/opt/homebrew/bin/python3.11</code> and not finding it. Run <code>which python3.11</code> in Terminal to find where it actually installed. If it's at a different path, open Smith Cut's settings, go to Advanced, and update the Python path.</p>
+<h3>"Pymiere connection timeout"</h3>
+<p>Port 3000 on your machine is being used by something else (another development server, a Docker container, etc.). Either close the conflicting service or change the Pymiere Link port: open the Pymiere Link panel in Premiere, change the port number, and update the same port in Smith Cut's Advanced settings.</p>
+<h3>"FFprobe not found"</h3>
+<p>FFmpeg didn't install via Homebrew, or it installed to a non-standard path. Run <code>brew install ffmpeg</code> in Terminal. If FFmpeg is already installed but at a different path, run <code>which ffprobe</code> to find the actual location and update Smith Cut's Advanced settings.</p>
+<h3>"librosa import error" or "soundfile not found"</h3>
+<p>The Python libraries didn't install correctly. Run <code>/opt/homebrew/bin/pip3.11 install librosa soundfile --break-system-packages</code> in Terminal. If you see dependency conflicts, run the same command with the <code>--force-reinstall</code> flag.</p>
+<div class="callout"><p><strong>Still stuck?</strong> The Smith Cut log panel shows the exact Python error that caused a pipeline failure. Screenshot it and send it to support@smithcut.app — we can usually diagnose setup issues from the log output in under 5 minutes.</p></div>
+`
+  },
+]
+
+// ── BLOG GRID RENDER ──────────────────────────────────────────────────────────
+function renderBlogGrid(filter) {
+  const grid = document.getElementById('blog-grid')
+  if (!grid) return
+  grid.innerHTML = ''
+  const filtered = filter === 'all' ? POSTS : POSTS.filter(p => p.category === filter)
+  filtered.forEach(post => {
+    const card = document.createElement('div')
+    card.className = 'blog-card'
+    card.innerHTML = `
+      <div class="blog-tag">${post.tag.toUpperCase()}</div>
+      <div class="blog-title">${post.title}</div>
+      <div class="blog-excerpt">${post.excerpt}</div>
+      <div class="blog-meta">${post.date} &nbsp;·&nbsp; ${post.readTime} READ</div>
+      <div class="blog-read-more">Read article →</div>
+    `
+    card.addEventListener('click', () => openPost(post))
+    grid.appendChild(card)
+    bindCursor()
+  })
+}
+
+function filterBlog(cat, btn) {
+  document.querySelectorAll('.blog-filter').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+  renderBlogGrid(cat)
+}
+
+// ── POST OPEN / CLOSE WITH SLIDE TRANSITION ───────────────────────────────────
+function openPost(post) {
+  document.getElementById('post-tag').textContent = post.tag.toUpperCase()
+  document.getElementById('post-title').textContent = post.title
+  document.getElementById('post-meta-row').textContent = `${post.date}  ·  ${post.readTime} READ  ·  SMITH CUT BLOG`
+  document.getElementById('post-body').innerHTML = post.body
+  bindCursor()
+
+  const gridView = document.getElementById('blog-grid-view')
+  const postView = document.getElementById('blog-post-view')
+
+  // Slide grid left out, post in from right
+  gridView.classList.add('slide-out')
+  // Small delay so grid starts sliding before post arrives
+  setTimeout(() => {
+    postView.classList.add('open')
+    postView.scrollTop = 0
+  }, 60)
+
+  document.title = post.title + ' — Smith Cut Blog'
+  history.pushState({ postId: post.id }, post.title, '#post-' + post.id)
+}
+
+function closePost() {
+  const gridView = document.getElementById('blog-grid-view')
+  const postView = document.getElementById('blog-post-view')
+
+  // Slide post back right, grid comes back
+  postView.classList.remove('open')
+  setTimeout(() => {
+    gridView.classList.remove('slide-out')
+  }, 60)
+
+  document.title = 'Smith Cut Blog — Beat-Sync. Faster.'
+  history.pushState({}, 'Blog', window.location.pathname)
+}
+
+// Handle browser back/forward
+window.addEventListener('popstate', e => {
+  if (!e.state || !e.state.postId) {
+    // Close post if open
+    const postView = document.getElementById('blog-post-view')
+    if (postView.classList.contains('open')) closePost()
+  }
+})
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderBlogGrid('all')
+  // If URL has #post-N, open that post
+  const hash = window.location.hash
+  if (hash.startsWith('#post-')) {
+    const id = parseInt(hash.replace('#post-', ''))
+    const post = POSTS.find(p => p.id === id)
+    if (post) setTimeout(() => openPost(post), 100)
+  }
+})
+</script>
+</body>
+</html>
