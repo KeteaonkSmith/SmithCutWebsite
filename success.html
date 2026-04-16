@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You're In — Smith Cut</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ctext x='2' y='24' font-family='Arial Black,sans-serif' font-weight='900' font-size='18' fill='%23DC2626'%3ESC%3C/text%3E%3C/svg%3E">
+<style>
+:root { --black:#000; --white:#fff; --red:#DC2626; --gray:#111; --mgray:#222; --xlgray:#888; --lgray:#555; }
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--black); color:var(--white); font-family:'DM Sans',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:60px 24px; cursor:none; overflow:hidden; }
+
+/* cursor */
+#cursor { width:12px; height:12px; background:var(--red); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .2s,height .2s; mix-blend-mode:difference; }
+
+/* bg canvas */
+#bg-canvas { position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:-1; opacity:.4; }
+
+/* curtain */
+#curtain-canvas { position:fixed; inset:0; z-index:9000; pointer-events:none; opacity:0; }
+
+.success-wrap { position:relative; z-index:1; max-width:600px; }
+
+/* Animated checkmark */
+.check-ring {
+  width:80px; height:80px; border-radius:50%;
+  border:2px solid var(--red);
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 40px;
+  animation:ring-appear .6s .1s both;
+}
+@keyframes ring-appear { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+.check-mark {
+  font-size:32px; color:var(--red);
+  animation:check-appear .3s .7s both;
+}
+@keyframes check-appear { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+
+.success-eyebrow {
+  font-family:'Space Mono'; font-size:9px; letter-spacing:.3em;
+  color:var(--red); text-transform:uppercase; margin-bottom:16px;
+  animation:fadeUp .6s .3s both;
+}
+.success-title {
+  font-family:'Bebas Neue'; font-size:clamp(56px,8vw,96px);
+  line-height:.92; margin-bottom:24px;
+  animation:fadeUp .6s .4s both;
+}
+.success-title span { color:var(--red); }
+.success-sub {
+  font-family:'DM Sans'; font-size:17px; color:var(--xlgray);
+  line-height:1.75; max-width:480px; margin:0 auto 48px;
+  animation:fadeUp .6s .5s both;
+}
+
+/* Steps */
+.next-steps {
+  background:var(--gray); border:1px solid var(--mgray);
+  border-top:2px solid var(--red); padding:32px;
+  text-align:left; margin-bottom:40px;
+  animation:fadeUp .6s .6s both;
+}
+.next-steps-title {
+  font-family:'Space Mono'; font-size:9px; letter-spacing:.2em;
+  color:var(--xlgray); text-transform:uppercase; margin-bottom:20px;
+}
+.step-item {
+  display:flex; gap:16px; align-items:flex-start;
+  padding:12px 0; border-bottom:1px solid var(--mgray);
+  font-family:'DM Sans'; font-size:15px; color:var(--xlgray); line-height:1.6;
+}
+.step-item:last-child { border-bottom:none; }
+.step-num {
+  font-family:'Bebas Neue'; font-size:28px; color:var(--red);
+  line-height:1; flex-shrink:0; width:28px;
+}
+.step-item strong { color:var(--white); display:block; margin-bottom:2px; font-size:14px; }
+
+/* Email notice */
+.email-notice {
+  background:rgba(30,110,255,.08); border:1px solid rgba(30,110,255,.2);
+  padding:16px 20px; margin-bottom:40px; font-family:'Space Mono';
+  font-size:10px; color:#60a5fa; letter-spacing:.1em; line-height:1.7;
+  animation:fadeUp .6s .7s both;
+}
+.email-notice strong { color:var(--white); display:block; margin-bottom:4px; font-size:9px; letter-spacing:.2em; }
+
+/* CTA */
+.success-ctas {
+  display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
+  animation:fadeUp .6s .8s both;
+}
+.btn-home {
+  font-family:'Space Mono'; font-size:11px; letter-spacing:.15em;
+  background:var(--red); color:var(--white); border:none;
+  padding:16px 40px; text-decoration:none; text-transform:uppercase;
+  transition:background .2s; cursor:none;
+}
+.btn-home:hover { background:#b91c1c; }
+.btn-secondary {
+  font-family:'Space Mono'; font-size:11px; letter-spacing:.15em;
+  background:none; color:var(--white); border:1px solid var(--mgray);
+  padding:16px 40px; text-decoration:none; text-transform:uppercase;
+  transition:border-color .2s; cursor:none;
+}
+.btn-secondary:hover { border-color:var(--white); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+/* Logo top left */
+.success-logo {
+  position:fixed; top:32px; left:60px;
+  font-family:'Bebas Neue'; font-size:24px; letter-spacing:.15em;
+  color:var(--white); text-decoration:none;
+}
+.success-logo span { color:var(--red); }
+</style>
+</head>
+<body>
+<canvas id="curtain-canvas"></canvas>
+<canvas id="bg-canvas"></canvas>
+<div id="cursor"></div>
+
+<a href="index.html" class="success-logo">SMITH<span>CUT</span></a>
+
+<div class="success-wrap">
+  <div class="check-ring"><div class="check-mark">✓</div></div>
+
+  <p class="success-eyebrow">Payment confirmed</p>
+  <h1 class="success-title">YOU'RE<br><span>IN.</span></h1>
+  <p class="success-sub">Your subscription is active. Check your email for your license key — it arrives within a few minutes of payment.</p>
+
+  <div class="email-notice">
+    <strong>CHECK YOUR INBOX</strong>
+    Your license key will arrive at the email you used at checkout. The key format is SMITH-XXXX-XXXX-XXXX. Add it in Smith Cut's Settings panel to activate your account.
+  </div>
+
+  <div class="next-steps">
+    <div class="next-steps-title">What happens next</div>
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div>
+        <strong>Download Smith Cut</strong>
+        Get the installer from the download page. The .dmg installs like any Mac app.
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">2</div>
+      <div>
+        <strong>Run setup.command</strong>
+        Double-click the setup script. It installs Python 3.11, FFmpeg, and the Premiere Link extension automatically — takes about 3 minutes.
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">3</div>
+      <div>
+        <strong>Activate your license</strong>
+        Open Smith Cut, go to Settings, paste your SMITH-XXXX-XXXX-XXXX key. You're active immediately.
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">4</div>
+      <div>
+        <strong>Open Premiere → Window → Extensions → Pymiere Link</strong>
+        This one manual step connects Smith Cut to Premiere. Do it once per session.
+      </div>
+    </div>
+  </div>
+
+  <div class="success-ctas">
+    <a href="index.html" class="btn-home" onclick="navigate('index.html');return false;">Back to Home</a>
+    <a href="blog.html" class="btn-secondary" onclick="navigate('blog.html');return false;">Read the Setup Guide</a>
+  </div>
+</div>
+
+<script>
+// Cursor
+const cursor = document.getElementById('cursor')
+document.addEventListener('mousemove', e => { cursor.style.left=e.clientX+'px'; cursor.style.top=e.clientY+'px' })
+document.querySelectorAll('a,button').forEach(el => {
+  el.addEventListener('mouseenter',()=>cursor.classList.add('hover'))
+  el.addEventListener('mouseleave',()=>cursor.classList.remove('hover'))
+})
+
+// BG particles
+const bg=document.getElementById('bg-canvas'),bgx=bg.getContext('2d')
+let bW,bH
+function bgR(){bW=bg.width=innerWidth;bH=bg.height=innerHeight}
+bgR();window.addEventListener('resize',bgR)
+const pts=Array.from({length:200},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5}))
+;(function draw(){
+  bgx.clearRect(0,0,bW,bH)
+  pts.forEach((p,i)=>{
+    p.x+=p.vx;p.y+=p.vy
+    if(p.x<0)p.x=bW;if(p.x>bW)p.x=0;if(p.y<0)p.y=bH;if(p.y>bH)p.y=0
+    bgx.beginPath();bgx.arc(p.x,p.y,p.r,0,Math.PI*2)
+    bgx.fillStyle='rgba(220,38,38,0.9)';bgx.fill()
+    for(let j=i+1;j<pts.length;j++){
+      const dx=p.x-pts[j].x,dy=p.y-pts[j].y,dd=Math.sqrt(dx*dx+dy*dy)
+      if(dd<150){bgx.beginPath();bgx.moveTo(p.x,p.y);bgx.lineTo(pts[j].x,pts[j].y)
+        bgx.strokeStyle=`rgba(220,38,38,${0.25*(1-dd/150)})`;bgx.lineWidth=.5;bgx.stroke()}
+    }
+  })
+  requestAnimationFrame(draw)
+})()
+
+// Curtain
+const cc=document.getElementById('curtain-canvas'),cx=cc.getContext('2d')
+let cW,cH,transitioning=false
+function ccR(){cW=cc.width=innerWidth;cH=cc.height=innerHeight}
+ccR();window.addEventListener('resize',ccR)
+function ease(t){return t<.5?2*t*t:-1+(4-2*t)*t}
+function easeOut(t){return t===1?1:1-Math.pow(2,-10*t)}
+function drawC(p,a){
+  cx.clearRect(0,0,cW,cH);if(p<=0)return
+  const ex=cW*p,b=Math.sin(p*Math.PI)*80
+  cx.beginPath();cx.moveTo(0,0);cx.lineTo(ex,0)
+  cx.bezierCurveTo(ex+b,cH*.25,ex+b,cH*.75,ex,cH)
+  cx.lineTo(0,cH);cx.closePath();cx.fillStyle='#000';cx.fill()
+  cx.beginPath();cx.moveTo(ex,0)
+  cx.bezierCurveTo(ex+b,cH*.25,ex+b,cH*.75,ex,cH)
+  cx.strokeStyle=a;cx.lineWidth=3;cx.stroke()
+}
+function navigate(href,accent){
+  if(transitioning)return;transitioning=true
+  accent=accent||'#DC2626';cc.style.opacity='1'
+  const t0=performance.now(),DUR=280
+  ;(function tick(now){
+    const p=ease(Math.min((now-t0)/DUR,1));drawC(p,accent)
+    if(p<1)requestAnimationFrame(tick)
+    else{sessionStorage.setItem('sc-accent',accent);window.location.href=href}
+  })(performance.now())
+}
+// Open animation
+;(function(){
+  const accent=sessionStorage.getItem('sc-accent')||'#DC2626'
+  sessionStorage.removeItem('sc-accent')
+  cc.style.opacity='1';drawC(1,accent)
+  const t0=performance.now(),DUR=340
+  ;(function tick(now){
+    const p=easeOut(Math.min((now-t0)/DUR,1));drawC(1-p,accent)
+    if(p<1)requestAnimationFrame(tick)
+    else{cx.clearRect(0,0,cW,cH);cc.style.opacity='0';transitioning=false}
+  })(performance.now())
+})()
+</script>
+</body>
+</html>
