@@ -143,7 +143,7 @@ nav.scrolled{background:rgba(0,0,0,.92);border-color:var(--mgray);backdrop-filte
 <canvas id="bg-canvas"></canvas>
 <div id="cursor"></div>
 
-<div class="notice">60 seconds, not 60 minutes &nbsp;·&nbsp; Your footage never leaves your Mac</div>
+<div class="notice">60 seconds, not 60 minutes &nbsp;·&nbsp; Full media stays local for rough cuts</div>
 
 <nav id="blog-nav">
   <a href="index.html" class="nav-logo">SMITH<span>CUT</span></a>
@@ -331,7 +331,7 @@ const POSTS = [
 <div class="callout"><p><strong>File naming matters.</strong> If you name your clips descriptively — <code>HERO_SHOT_01.mov</code>, <code>BROLL_CROWD.mp4</code> — you'll be able to identify them at a glance when reviewing your Premiere timeline. Generic names like <code>IMG_4521.mov</code> make the review step slower.</p></div>
 
 <h2>Step 2 — Drop Your Clips into the Video Zone</h2>
-<p>The main window has two drop zones: VIDEO on the left, AUDIO on the right. Drag your clips onto the VIDEO zone, or click it to browse. You'll see each clip appear as a row with its filename and duration. Smith Cut reads metadata — duration, frame rate, creation date — without decoding the video. This is why it's fast: FFprobe reads the container headers, not the actual pixels.</p>
+<p>The main window has two drop zones: VIDEO on the left, AUDIO on the right. Drag your clips onto the VIDEO zone, or click it to browse. You'll see each clip appear as a row with its filename and duration. Smith Cut reads metadata — duration, frame rate, creation date — without decoding the video. This is why it's fast: only the container headers are read, not the actual pixels.</p>
 <p>Once clips are loaded, use the sort dropdown to set your clip order:</p>
 <ul>
   <li><strong>Name (A→Z)</strong> — alphabetical. Great if you've numbered your clips.</li>
@@ -351,15 +351,15 @@ const POSTS = [
 <h3>Beat Subdivision</h3>
 <p>Controls how often a new clip starts. "Every beat" gives you maximum density — at 103 BPM, a new clip every 0.58 seconds. "Every 2nd beat" doubles the cut length to 1.16 seconds. "Every 4th beat" gives you one cut per musical bar, which starts to feel cinematic. Start with "Every beat" for high-energy content and "Every 4th beat" for emotional or narrative edits.</p>
 <h3>Beat Sensitivity</h3>
-<p>Controls how aggressively librosa identifies beat onsets. At 1.0, it finds every rhythmic hit including softer ones. At 0.5, it only picks up strong, clear beats. If your generated edit has cuts in places that don't feel musical, lower this setting. If it's missing obvious beats, raise it.</p>
+<p>Controls how aggressively Smith Cut identifies beat onsets. At 1.0, it finds every rhythmic hit including softer ones. At 0.5, it only picks up strong, clear beats. If your generated edit has cuts in places that don't feel musical, lower this setting. If it's missing obvious beats, raise it.</p>
 <h3>Chop Position</h3>
 <p>For each beat slot, Smith Cut trims a portion of your clip to fit. "Beginning" takes the first N seconds of each clip. "Middle" takes from the midpoint. "End" takes the last N seconds. For clips with strong opening moments, "Beginning" is usually best. For clips where the action builds, try "Middle."</p>
 
 <h2>Step 5 — Run the Pipeline</h2>
 <p>Click RUN (or BUILD GUIDED EDIT in Education Mode). The pipeline runs four steps in sequence. Watch the log panel on the right — each step updates in real time:</p>
 <ol>
-  <li><strong>Beat Detection</strong> — librosa analyzes your audio file, identifies every beat onset, calculates BPM, and maps timestamps to millisecond precision. A 98.6-second track at 103 BPM produces 168 beat points.</li>
-  <li><strong>Clip Metadata</strong> — FFprobe reads the duration, frame rate, and codec of every clip. This takes under a second even for large clips because FFprobe reads container headers, not the video data.</li>
+  <li><strong>Beat Detection</strong> — Smith Cut analyzes your audio file locally, identifies every beat onset, calculates BPM, and maps timestamps to millisecond precision. A 98.6-second track at 103 BPM produces 168 beat points.</li>
+  <li><strong>Clip Metadata</strong> — Smith Cut reads the duration, frame rate, and codec of every clip locally. This takes under a second even for large clips because only container headers are read, not the actual video data.</li>
   <li><strong>Clip Matching</strong> — the clip matcher assigns each beat slot a clip and calculates the exact trim points. If you have fewer clips than beat slots, clips loop. If you have more clips than beat slots, the excess are unused.</li>
   <li><strong>Premiere Placement</strong> — pymiere communicates with Premiere Pro via the Pymiere Link CEP extension. Each clip is imported to your project bin, trimmed to beat length, and placed on the active sequence at its beat position. Your audio track is placed on Audio 1.</li>
 </ol>
@@ -369,7 +369,7 @@ const POSTS = [
 <ul>
   <li><strong>The opening and closing clips</strong> — the first and last cuts are the most important emotionally. Manually review them and swap if needed.</li>
   <li><strong>Energy mismatches</strong> — if a high-energy beat has a slow, static clip, move a more dynamic clip to that slot.</li>
-  <li><strong>Chop review</strong> — occasionally FFprobe misreads a clip's usable duration. If a clip looks like a freeze frame, extend it manually in Premiere.</li>
+  <li><strong>Chop review</strong> — occasionally Smith Cut misreads a clip's usable duration. If a clip looks like a freeze frame, extend it manually in Premiere.</li>
 </ul>
 <div class="callout"><p><strong>Typical time breakdown:</strong> Pipeline runs in 47 seconds. Manual review and adjustment takes 5–15 minutes depending on the project. Compare this to a fully manual beat-sync which takes 45–120 minutes for the same result. Smith Cut doesn't replace your eye — it removes the mechanical steps so your eye can focus on quality.</p></div>
 <p>Export your sequence, deliver to the client. The mechanical work is done.</p>
@@ -396,11 +396,11 @@ const POSTS = [
 <p>The problem: you have 6 hours of raw footage from a two-day shoot. You need a 3-minute highlight video. Finding the good clips — the moments where someone says something quotable, where the lighting is right, where the action actually happens — requires watching all 6 hours first. Or it used to.</p>
 <p>Wideframe indexes your footage library by meaning. It uses computer vision and audio analysis to understand what's in each clip: who's speaking, what they're saying, what's visible, what the quality is like. Then you describe what you want in natural language and it assembles a rough cut from your library.</p>
 <p>The output is a real .prproj file — not a rendered video, but an actual Premiere project with your clips on the timeline. You open it, refine it, export it.</p>
-<div class="callout"><p><strong>The trade-off:</strong> Wideframe uploads your footage to a cloud server for analysis. Reviewers have documented that one hour of footage takes roughly one hour to process. For large libraries, you're talking about leaving it running overnight. This also means your footage leaves your machine — which matters for NDA-sensitive client work.</p></div>
+<div class="callout"><p><strong>The trade-off:</strong> Wideframe uploads your complete footage to a cloud server for analysis. One hour of footage can take roughly one hour to process. This also means your full raw footage leaves your machine — which matters for NDA-sensitive client work.</p></div>
 
 <h2>What Smith Cut Actually Does</h2>
 <p>Smith Cut solves a completely different problem. You already know which clips you want to use. You've already done the creative curation. What you need now is to place those clips on the Premiere timeline synchronized to a music track — and you need it done before your client gets off the phone.</p>
-<p>The workflow is: drop clips, drop music, hit RUN. Smith Cut detects every beat in your audio using librosa, reads your clip metadata using FFprobe, matches clips to beat slots, and places everything on your Premiere timeline in under 60 seconds. Everything runs locally on your Mac. Nothing is uploaded anywhere.</p>
+<p>The workflow is: drop clips, drop music, hit RUN. Smith Cut detects every beat in your audio, reads your clip metadata locally, matches clips to beat slots, and places everything on your Premiere timeline in under 60 seconds. The rough-cut pipeline runs on your Mac. Full raw media is not uploaded.</p>
 <p>The output is the same as Wideframe: a Premiere project with your clips on the timeline. But the path to get there, and what you're starting with, is completely different.</p>
 
 <h2>The Real Difference: Where You Are in the Workflow</h2>
@@ -430,7 +430,7 @@ const POSTS = [
   <li>You're making beat-sync content: music videos, social reels, hype edits, sports highlights</li>
   <li>Your client footage is under NDA or cannot be uploaded to third-party servers</li>
   <li>You need a rough cut in under 5 minutes</li>
-  <li>You're working offline or without a fast internet connection</li>
+  <li>Full raw media privacy matters for your shoot (NDA, client, unreleased content)</li>
 </ul>
 
 <h2>The Case for Using Both</h2>
@@ -447,13 +447,13 @@ const POSTS = [
     excerpt: 'Cloud-based AI video tools upload your footage to third-party servers. For agency work, that\'s a legal and ethical problem most tools don\'t mention. Here\'s what you need to know.',
     body: `
 <h2>The Upload You Didn't Think About</h2>
-<p>When you drag footage into most cloud-based AI editing tools, something happens that's easy to miss: your video files travel from your hard drive to a server somewhere in the world, get processed, and live there for some period of time before being deleted. The tools don't hide this — it's in their privacy policies. But most editors don't read privacy policies before they start a new project.</p>
-<p>For personal projects, this probably doesn't matter. For client work, it might matter a great deal.</p>
+<p>When you drag footage into most cloud-based AI editing tools, your video files travel from your hard drive to a server, get processed, and live there for some period of time before being deleted. The tools don't hide this — it's in their privacy policies. But most editors don't read privacy policies before they start a new project.</p>
+<p>For personal projects, this probably doesn't matter. For client work, it might matter a great deal. Smith Cut's rough-cut pipeline keeps full media on your machine. When you use AI Story, only low-resolution still-frame samples and clip metadata — filenames, durations, quality metrics — are sent to Smith Cut Cloud Vision. Complete raw video files are never uploaded.</p>
 
 <h2>What NDAs Actually Say About AI Tools</h2>
 <p>A typical client NDA prohibits sharing confidential information with third parties. "Third parties" usually means people and companies outside of the contracting relationship. Most NDAs predate the era of cloud AI processing — they were written assuming that your tools ran on your machine and your footage stayed on your hard drive.</p>
 <p>That assumption is no longer valid. When you upload client footage to a cloud AI service for processing, you are — technically — sharing that footage with a third party. The AI service is not party to your client NDA. Their servers are not covered by your confidentiality agreement.</p>
-<div class="callout"><p><strong>Ask your clients this question:</strong> "Our AI editing tool needs to upload your footage to a cloud server to process it. Is that acceptable under our NDA?" If the answer is no — or if you don't know the answer — you need a local-first tool.</p></div>
+<div class="callout"><p><strong>The right question to ask:</strong> "Does this tool upload complete raw footage for AI processing?" Smith Cut's answer for rough cuts: no. For AI Story: only compact still-frame samples and metadata — not full video files. Know the difference before you start a client project.</p></div>
 
 <h2>The Categories of Client Footage That Cannot Go to the Cloud</h2>
 <p>Not all client footage carries the same sensitivity. But here are categories where cloud processing creates real risk:</p>
@@ -468,27 +468,25 @@ const POSTS = [
 <h3>Financial institution footage</h3>
 <p>Internal communications, executive presentations, or training videos for banks, investment firms, or insurance companies often carry confidentiality obligations that extend to video content.</p>
 
-<h2>What "Local Processing" Actually Means in Smith Cut</h2>
-<p>When we say Smith Cut runs locally, this is what that means technically:</p>
+<h2>What "Local Processing" Means in Smith Cut</h2>
+<p>The rough-cut pipeline stays on your Mac. Here's what that means in practice:</p>
 <ul>
-  <li><strong>Beat detection</strong> uses librosa, a Python library that runs as a subprocess on your Mac. Your audio file is read from your local drive into memory. No audio data leaves your machine.</li>
-  <li><strong>Clip metadata reading</strong> uses FFprobe, which reads container header data from your local video files. It doesn't decode video frames. No video data leaves your machine.</li>
-  <li><strong>Clip matching</strong> is pure Python arithmetic — duration calculations, beat interval math. No network calls.</li>
-  <li><strong>Premiere placement</strong> uses pymiere, which communicates with Premiere Pro running on your machine via a local WebSocket connection on port 3000. No data leaves your machine.</li>
-  <li><strong>AI story analysis</strong> uses Ollama, which downloads language models to your local machine and runs inference locally. No footage frames are sent to OpenAI, Anthropic, or any external API.</li>
+  <li><strong>Beat detection</strong> — audio is analyzed locally. No audio data leaves your machine for the core build.</li>
+  <li><strong>Clip metadata reading</strong> — Smith Cut reads container header data from your local video files. No video frames are decoded or sent anywhere for the rough-cut step.</li>
+  <li><strong>Clip matching and placement</strong> — purely local calculations. Smith Cut places clips on your active Premiere Pro sequence via the Pymiere Link extension running on your machine.</li>
+  <li><strong>AI Story (optional)</strong> — when you choose to run AI Story, Smith Cut sends low-resolution still-frame samples, clip filenames, durations, and quality metrics to Smith Cut Cloud Vision. Full video files are not uploaded. This step requires internet and uses AI credits.</li>
 </ul>
-<p>The only network calls Smith Cut makes are license validation requests (sending only your license key hash, not any footage data) on launch and every 4 hours while running.</p>
+<p>Network calls Smith Cut makes: license and credit validation on launch and periodically, and AI Story requests when you initiate them. These contain no full media data.</p>
 
 <h2>The Practical Advantages of Local Processing Beyond Privacy</h2>
 <p>Privacy compliance is the most important reason to use local tools for client work. But there are practical advantages that matter for every project:</p>
-<h3>Works offline</h3>
-<p>On a plane, in a hotel with terrible WiFi, in a client's facility without internet access — Smith Cut works regardless. Cloud tools need a connection. Some require a fast one.</p>
+<h3>Consistent speed</h3>
 <h3>Consistent speed</h3>
 <p>Cloud processing speed depends on server load, your upload bandwidth, and queue position. A Smith Cut pipeline that takes 47 seconds on Tuesday takes 47 seconds on Friday. There's no variability based on how many other users are processing simultaneously.</p>
 <h3>No ongoing bandwidth cost</h3>
 <p>Some tools charge for bandwidth or processing time on top of the subscription. With Smith Cut, your subscription covers everything — there's no metered upload cost that grows with your footage volume.</p>
-<h3>No data retention uncertainty</h3>
-<p>Cloud tools have data retention policies. Most say they delete your footage after processing. "After processing" might mean immediately. It might mean 30 days. It might mean "when you explicitly delete your account." With local processing, the question doesn't arise.</p>
+<h3>No full-media retention risk</h3>
+<p>General cloud editors upload complete footage files. Their data retention policies vary. Smith Cut's AI Story sends only still-frame samples — compact, low-resolution — not complete media files. Your full raw footage never touches our servers.</p>
 <div class="callout"><p><strong>For agencies billing by the hour:</strong> The time your team spends waiting for cloud processing is non-billable time. A tool that takes an hour to process an hour of footage means an hour of your team sitting idle. Smith Cut's 60-second pipeline means that time becomes billable creative work.</p></div>
 `
   },
@@ -587,9 +585,9 @@ const POSTS = [
 
 <h2>Using the AI Story Mode for More Complex Jobs</h2>
 <p>The basic pipeline is ideal for straightforward beat-sync content. For more complex jobs — brand films, event recaps with a narrative arc, documentary-style content — Smith Cut's AI Story Mode adds a layer of editorial intelligence to the process.</p>
-<p>AI Story Mode imports your existing Premiere project, extracts representative frames from every clip, uses Ollama running locally to generate a visual description of each clip, and then produces a 3-paragraph narrative summary of your footage. It suggests a clip order, identifies which clips carry the highest emotional weight, and flags which beat position would benefit from each clip.</p>
+<p>AI Story analyzes your footage through Smith Cut Cloud Vision — extracting still-frame samples and clip metadata from your project, then returning a 3-paragraph narrative summary with suggested clip order, smart clip names, and pacing recommendations. Fast AI Story (1 credit) runs a compact pass. Deep AI Story (3 credits) uses more visual context for stronger story planning. Full raw video files are not uploaded.</p>
 <p>This isn't replacing your editorial judgement — it's giving you a second perspective before you've committed to a direction. Some editors use it as a sanity check on an edit they're already building. Others use it as a starting point when they're staring at a timeline with no idea where to begin.</p>
-<div class="callout"><p><strong>AI Story Mode uses 5 credits per month</strong> on the Core Plan. Additional credits are available at $3 each. The basic pipeline (no AI analysis) runs unlimited times on all plans.</p></div>
+<div class="callout"><p><strong>AI Story credits:</strong> Fast AI Story uses 1 credit, Deep AI Story uses 3 credits. Core Membership includes 5 credits/month. Advanced Membership includes 25 credits/month. Top up anytime with Credit Packs. The core rough-cut pipeline runs unlimited times on all plans.</p></div>
 `
   },
   {
@@ -599,7 +597,7 @@ const POSTS = [
     excerpt: 'A complete setup walkthrough — from a fresh Mac to your first beat-sync edit in Premiere Pro. What the setup script installs, what you need to do manually, and what to check if something doesn\'t work.',
     body: `
 <h2>What You Need Before You Start</h2>
-<p>Smith Cut runs on macOS with Apple Silicon (M1, M2, M3, or M4). Intel Macs are not supported — Smith Cut's local AI processing depends on Apple Neural Engine acceleration that Intel chips don't provide. If you're on Intel, sign up for the waitlist via the onboarding page.</p>
+<p>Smith Cut runs on macOS with Apple Silicon (M1, M2, M3, or M4). Intel Mac support is not currently available. If you're on Intel, contact support or sign up via the onboarding page to be notified when Intel support launches.</p>
 <p>You also need Adobe Premiere Pro 2022 or later. Smith Cut communicates with Premiere via the Pymiere Link extension — a small CEP (Common Extensibility Platform) panel that Premiere loads. Versions before 2022 may not support all the pymiere API calls Smith Cut uses.</p>
 <p>The setup script handles everything else automatically. Here's what it does and why.</p>
 
@@ -611,22 +609,20 @@ const POSTS = [
 <p>Smith Cut requires Python 3.11 specifically — not 3.12, not 3.13. The reason is pymiere, the Python library that controls Adobe Premiere Pro. Pymiere uses the <code>distutils</code> module, which was removed from Python's standard library in version 3.12. Installing a newer Python breaks pymiere.</p>
 <p>If you already have Python 3.11, the script checks the version and skips the install. If you have a newer Python, both can coexist — the setup script installs Python 3.11 alongside whatever you already have via Homebrew, and Smith Cut calls Python 3.11 explicitly.</p>
 
-<h3>FFmpeg and FFprobe</h3>
-<p>FFmpeg is installed at <code>/opt/homebrew/bin/ffmpeg</code>. Smith Cut uses FFprobe (which ships with FFmpeg) to read video clip metadata: duration, frame rate, codec, and creation date. FFprobe reads container headers without decoding the video — this is why metadata reading takes under a second even for large 4K files.</p>
+<h3>FFmpeg</h3>
+<p>FFmpeg is installed at <code>/opt/homebrew/bin/ffmpeg</code>. Smith Cut uses FFmpeg's tools to read video clip metadata: duration, frame rate, codec, and creation date — by reading container headers without decoding the video. This is why metadata reading takes under a second even for large 4K files.</p>
 
-<h3>Python libraries: pymiere, librosa, numpy, soundfile</h3>
+<h3>Python libraries</h3>
 <p>These install via pip into your Python 3.11 environment:</p>
 <ul>
   <li><strong>pymiere</strong> — controls Premiere Pro via the Pymiere Link extension. Handles everything: importing clips to the project bin, setting in/out points, inserting clips at specific timecodes on the sequence.</li>
-  <li><strong>librosa</strong> — audio analysis. Loads your audio file, detects beat onsets using onset strength envelopes, and calculates BPM via autocorrelation. Also computes per-beat RMS energy for the Education Edition's beat analysis panel.</li>
-  <li><strong>numpy</strong> — numerical computing library that librosa depends on for its array operations.</li>
-  <li><strong>soundfile</strong> — reads audio files in a format librosa can process. Handles .wav, .aiff, and .flac natively; .mp3 and .m4a require an additional codec.</li>
+  <li><strong>Audio analysis library</strong> — loads your audio file, detects beat onsets, calculates BPM, and maps per-beat energy levels.</li>
+  <li><strong>Clip metadata library</strong> — reads container headers from your video files (duration, frame rate, codec) without decoding video data.</li>
+  <li><strong>Premiere bridge</strong> — communicates with Premiere Pro via the Pymiere Link extension to place clips on your active sequence.</li>
 </ul>
 
-<h3>Ollama</h3>
-<p>Ollama is a local AI runtime that downloads and runs large language models on your machine. Smith Cut uses it for the AI Story Mode feature — specifically the moondream model (visual description of video frames) and llama3.2 (narrative generation).</p>
-<p>The initial Ollama setup downloads approximately 4GB of model data to your machine. This happens once during setup. After that, inference runs locally with no further downloads and no network calls.</p>
-<p>If you don't want AI Story Mode, you can skip the Ollama install — the setup script asks whether to include it. The basic pipeline (beat detection, clip matching, Premiere placement) works without Ollama.</p>
+<h3>Smith Cut account and AI credits</h3>
+<p>AI Story uses Smith Cut Cloud Vision, which requires an active account and AI credits. Credits are managed in your Smith Cut account and can be topped up at any time from the app or the website. An internet connection is required for license validation and AI Story runs.</p>
 
 <h3>Pymiere Link CEP Extension</h3>
 <p>This is a small panel that Premiere Pro loads as a plugin. It starts a local WebSocket server on port 3000 that pymiere connects to. Smith Cut communicates with Premiere by sending JavaScript commands through this channel.</p>
@@ -657,10 +653,10 @@ const POSTS = [
 <p>The setup script installed Python 3.11, but Smith Cut is looking for it at <code>/opt/homebrew/bin/python3.11</code> and not finding it. Run <code>which python3.11</code> in Terminal to find where it actually installed. If it's at a different path, open Smith Cut's settings, go to Advanced, and update the Python path.</p>
 <h3>"Pymiere connection timeout"</h3>
 <p>Port 3000 on your machine is being used by something else (another development server, a Docker container, etc.). Either close the conflicting service or change the Pymiere Link port: open the Pymiere Link panel in Premiere, change the port number, and update the same port in Smith Cut's Advanced settings.</p>
-<h3>"FFprobe not found"</h3>
-<p>FFmpeg didn't install via Homebrew, or it installed to a non-standard path. Run <code>brew install ffmpeg</code> in Terminal. If FFmpeg is already installed but at a different path, run <code>which ffprobe</code> to find the actual location and update Smith Cut's Advanced settings.</p>
-<h3>"librosa import error" or "soundfile not found"</h3>
-<p>The Python libraries didn't install correctly. Run <code>/opt/homebrew/bin/pip3.11 install librosa soundfile --break-system-packages</code> in Terminal. If you see dependency conflicts, run the same command with the <code>--force-reinstall</code> flag.</p>
+<h3>"Audio processing library not found"</h3>
+<p>The setup script did not complete successfully. Re-run <code>setup.command</code>. If the error persists, contact support@smithcut.app with a screenshot of the error — we can usually resolve setup issues within a few hours.</p>
+<h3>"Clip metadata reader not found"</h3>
+<p>FFmpeg/FFprobe did not install correctly. Run <code>brew install ffmpeg</code> in Terminal. If the error persists, contact support with your macOS version and Apple chip model.</p>
 <div class="callout"><p><strong>Still stuck?</strong> The Smith Cut log panel shows the exact Python error that caused a pipeline failure. Screenshot it and send it to support@smithcut.app — we can usually diagnose setup issues from the log output in under 5 minutes.</p></div>
 `
   },
