@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smith Cut — Start Your Free Trial</title>
+<title>Smith Cut — Get Started</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ctext x='2' y='24' font-family='Arial Black,sans-serif' font-weight='900' font-size='18' fill='%23DC2626'%3ESC%3C/text%3E%3C/svg%3E">
@@ -608,7 +608,7 @@ footer {
         <div class="ob-step active" id="ob-0" style="text-align:center;">
           <p style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.3em; color:var(--red); text-transform:uppercase; margin-bottom:16px;">GET STARTED</p>
           <h1 style="font-family:'Bebas Neue'; font-size:clamp(48px,7vw,80px); line-height:0.92; margin-bottom:16px;">LET'S GET<br>YOU SET UP.</h1>
-          <p style="font-family:'DM Sans'; font-size:16px; color:var(--xlgray); margin-bottom:48px;">Takes about 60 seconds.</p>
+          <p style="font-family:'DM Sans'; font-size:16px; color:var(--xlgray); margin-bottom:48px;">A quick setup check before checkout.</p>
           <button class="ob-btn-primary" onclick="obNext()">Continue &#8594;</button>
         </div>
         <div class="ob-step" id="ob-1">
@@ -627,7 +627,7 @@ footer {
         <div class="ob-step" id="ob-2">
           <p class="ob-label">YOUR SETUP</p>
           <h2 class="ob-question">Do you have an Apple Silicon Mac?</h2>
-          <p style="font-family:'DM Sans'; font-size:14px; color:var(--xlgray); margin-bottom:32px; line-height:1.7;">Smith Cut requires M1 or newer. The rough-cut pipeline runs on your Mac. AI Story requires internet and uses AI credits.</p>
+          <p style="font-family:'DM Sans'; font-size:14px; color:var(--xlgray); margin-bottom:32px; line-height:1.7;">Smith Cut currently targets Apple Silicon Macs. Local beat-sync runs on your Mac; AI subtitles, Creator Mode, and AI Story require internet and AI credits.</p>
           <div class="ob-choices" id="mac-choices">
             <button class="ob-choice" onclick="selectChoice(this,'mac-choices');setTimeout(obNext,400)">Yes &#8212; M1, M2, M3 or M4</button>
             <button class="ob-choice" onclick="selectChoice(this,'mac-choices');showMacHelp()">I'm not sure</button>
@@ -652,11 +652,11 @@ footer {
           <p class="ob-label">YOUR WORKFLOW</p>
           <h2 class="ob-question">What will you use Smith Cut for most?</h2>
           <div class="ob-choices" id="usecase-choices">
-            <button class="ob-choice" onclick="selectChoice(this,'usecase-choices')">Social media reels &amp; TikTok</button>
-            <button class="ob-choice" onclick="selectChoice(this,'usecase-choices')">Brand &amp; client highlight reels</button>
-            <button class="ob-choice" onclick="selectChoice(this,'usecase-choices')">Music videos</button>
-            <button class="ob-choice" onclick="selectChoice(this,'usecase-choices')">Sports &amp; action edits</button>
-            <button class="ob-choice" onclick="selectChoice(this,'usecase-choices')">Event recaps &amp; wedding films</button>
+            <button class="ob-choice" onclick="selectChoice(this,'usecase-choices')">Beat-sync rough cuts</button>
+            <button class="ob-choice" onclick="selectChoice(this,'usecase-choices')">AI social captions</button>
+            <button class="ob-choice" onclick="selectChoice(this,'usecase-choices')">Interview cleanup</button>
+            <button class="ob-choice" onclick="selectChoice(this,'usecase-choices')">Event recaps &amp; client highlights</button>
+            <button class="ob-choice" onclick="selectChoice(this,'usecase-choices')">Premiere workflow automation</button>
             <button class="ob-choice" onclick="selectChoice(this,'usecase-choices')">Teaching &amp; education</button>
           </div>
           <button class="ob-btn-primary ob-disabled" id="ob-3-next" onclick="obNext()">Continue &#8594;</button>
@@ -673,19 +673,19 @@ footer {
         </div>
         <div class="ob-step" id="ob-5">
           <p class="ob-label">YOU'RE IN</p>
-          <h2 style="font-family:'Bebas Neue'; font-size:clamp(40px,6vw,64px); line-height:0.95; margin-bottom:24px;">START YOUR<br><span style="color:var(--red);">FREE TRIAL.</span></h2>
+          <h2 style="font-family:'Bebas Neue'; font-size:clamp(40px,6vw,64px); line-height:0.95; margin-bottom:24px;">START WITH<br><span style="color:var(--red);">SMITH CUT.</span></h2>
           <div style="background:var(--gray); border:1px solid var(--mgray); border-top:2px solid var(--red); padding:24px; margin-bottom:20px;">
             <p style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.2em; color:var(--xlgray); text-transform:uppercase; margin-bottom:14px;">WHAT'S INCLUDED</p>
             <div style="display:flex; flex-direction:column; gap:10px;">
-              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>Unlimited simple generations</div>
-              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>0 AI generations during trial</div>
-              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>Full media stays local &#8212; no raw uploads</div>
-              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>Full Premiere Pro automation</div>
+              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>Premiere CEP panel</div>
+              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>Beat-sync rough cuts on duplicate sequences</div>
+              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>AI subtitles, social captions, and interview cleanup</div>
+              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>License-based AI credits and top-ups</div>
             </div>
           </div>
           <input id="ob-email" class="ob-input" placeholder="your@email.com" type="email" style="margin-bottom:10px;" />
           <button class="ob-btn-primary" style="width:100%;" onclick="obCheckout()">SUBSCRIBE &#8212; $20/MONTH &#8594;</button>
-          <p style="font-family:'Space Mono'; font-size:8px; letter-spacing:0.12em; color:var(--lgray); text-align:center; margin-top:10px;">3-DAY FREE TRIAL &#183; 0 AI GENERATIONS DURING TRIAL &#183; CANCEL ANYTIME</p>
+          <p style="font-family:'Space Mono'; font-size:8px; letter-spacing:0.12em; color:var(--lgray); text-align:center; margin-top:10px;">MONTHLY BILLING &#183; LICENSE KEY BY EMAIL &#183; CANCEL ANYTIME</p>
         </div>
       </div>
     </div>
@@ -870,7 +870,15 @@ function showIntelBlock() {
 function submitIntelNotify() {
   const email = document.getElementById('intel-email').value
   if (!email) { alert('Please enter your email.'); return }
-  document.getElementById('intel-block').innerHTML = `<p style="font-family:'Space Mono'; font-size:10px; color:#4ade80; letter-spacing:0.15em;">✓ WE'LL EMAIL YOU AT ${email.toUpperCase()} WHEN INTEL SUPPORT LAUNCHES</p>`
+  const block = document.getElementById('intel-block')
+  block.replaceChildren()
+  const msg = document.createElement('p')
+  msg.style.fontFamily = 'Space Mono'
+  msg.style.fontSize = '10px'
+  msg.style.color = '#4ade80'
+  msg.style.letterSpacing = '0.15em'
+  msg.textContent = `✓ WE'LL EMAIL YOU AT ${email.toUpperCase()} WHEN INTEL SUPPORT LAUNCHES`
+  block.appendChild(msg)
 }
 
 function obCheckout() {
@@ -882,7 +890,7 @@ function obCheckout() {
     emailEl.focus()
     return
   }
-  // Redirect to Stripe with pre-filled email — 3-day free trial, then $20/mo
+  // Redirect to Stripe with pre-filled email.
   window.location.href = `https://buy.stripe.com/00w7sLc034yv1IRg3ifnO00?prefilled_email=${encodeURIComponent(email)}`
 }
 </script>
