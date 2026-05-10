@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smith Cut — Get Started</title>
+<title>Smith Cut — Start Your Free Trial</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ctext x='2' y='24' font-family='Arial Black,sans-serif' font-weight='900' font-size='18' fill='%23DC2626'%3ESC%3C/text%3E%3C/svg%3E">
@@ -673,19 +673,19 @@ footer {
         </div>
         <div class="ob-step" id="ob-5">
           <p class="ob-label">YOU'RE IN</p>
-          <h2 style="font-family:'Bebas Neue'; font-size:clamp(40px,6vw,64px); line-height:0.95; margin-bottom:24px;">START WITH<br><span style="color:var(--red);">SMITH CUT.</span></h2>
+          <h2 style="font-family:'Bebas Neue'; font-size:clamp(40px,6vw,64px); line-height:0.95; margin-bottom:24px;">START YOUR<br><span style="color:var(--red);">FREE TRIAL.</span></h2>
           <div style="background:var(--gray); border:1px solid var(--mgray); border-top:2px solid var(--red); padding:24px; margin-bottom:20px;">
             <p style="font-family:'Space Mono'; font-size:9px; letter-spacing:0.2em; color:var(--xlgray); text-transform:uppercase; margin-bottom:14px;">WHAT'S INCLUDED</p>
             <div style="display:flex; flex-direction:column; gap:10px;">
-              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>Premiere CEP panel</div>
-              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>Beat-sync rough cuts on duplicate sequences</div>
-              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>AI subtitles, social captions, and interview cleanup</div>
-              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>License-based AI credits and top-ups</div>
+              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>Unlimited simple generations</div>
+              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>0 AI generations during trial</div>
+              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>Full media stays local &#8212; no raw uploads</div>
+              <div style="font-family:'Space Mono'; font-size:10px; color:var(--white); display:flex; gap:12px;"><span style="color:#4ade80;">&#10003;</span>Full Premiere Pro automation</div>
             </div>
           </div>
           <input id="ob-email" class="ob-input" placeholder="your@email.com" type="email" style="margin-bottom:10px;" />
           <button class="ob-btn-primary" style="width:100%;" onclick="obCheckout()">SUBSCRIBE &#8212; $20/MONTH &#8594;</button>
-          <p style="font-family:'Space Mono'; font-size:8px; letter-spacing:0.12em; color:var(--lgray); text-align:center; margin-top:10px;">MONTHLY BILLING &#183; LICENSE KEY BY EMAIL &#183; CANCEL ANYTIME</p>
+          <p style="font-family:'Space Mono'; font-size:8px; letter-spacing:0.12em; color:var(--lgray); text-align:center; margin-top:10px;">3-DAY FREE TRIAL &#183; 0 AI GENERATIONS DURING TRIAL &#183; CANCEL ANYTIME</p>
         </div>
       </div>
     </div>
@@ -890,7 +890,7 @@ function obCheckout() {
     emailEl.focus()
     return
   }
-  // Redirect to Stripe with pre-filled email.
+  // Redirect to Stripe with pre-filled email — 3-day free trial, then $20/mo
   window.location.href = `https://buy.stripe.com/00w7sLc034yv1IRg3ifnO00?prefilled_email=${encodeURIComponent(email)}`
 }
 </script>
